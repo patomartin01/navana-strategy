@@ -125,19 +125,9 @@
             color: var(--nv-ink-hi);
         }
 
-        /* Soporte Multilenguaje con atributos lang */
-        [lang="es"] {
-            display: block;
-        }
-        [lang="en"] {
-            display: none;
-        }
-
-        body.lang-en [lang="es"] {
-            display: none;
-        }
-        body.lang-en [lang="en"] {
-            display: block;
+        /* Soporte Multilenguaje Seguro */
+        .lang-hidden {
+            display: none !important;
         }
 
         /* Contenedor Editorial en Carbón Base */
@@ -1255,37 +1245,35 @@
     </footer>
 
     <!-- INTERACTIVIDAD CON JAVASCRIPT -->
-    <script>
         function setLanguage(lang) {
-            // Alternar clases en body
+            const esElements = document.querySelectorAll('[lang="es"]');
+            const enElements = document.querySelectorAll('[lang="en"]');
+            
             if (lang === 'es') {
-                document.body.classList.remove('lang-en');
+                esElements.forEach(el => el.classList.remove('lang-hidden'));
+                enElements.forEach(el => el.classList.add('lang-hidden'));
+                
                 document.getElementById('btn-es').classList.add('active');
                 document.getElementById('btn-en').classList.remove('active');
                 document.documentElement.setAttribute('lang', 'es');
             } else {
-                document.body.classList.add('lang-en');
+                enElements.forEach(el => el.classList.remove('lang-hidden'));
+                esElements.forEach(el => el.classList.add('lang-hidden'));
+                
                 document.getElementById('btn-en').classList.add('active');
                 document.getElementById('btn-es').classList.remove('active');
                 document.documentElement.setAttribute('lang', 'en');
             }
-            
-            // Guardar preferencia local
             localStorage.setItem('navana-preferred-lang', lang);
         }
 
-        // Cargar preferencia guardada o detectar idioma del navegador
+        // Forzar ESPAÑOL como idioma por defecto absoluto para evitar auto-detectar inglés
         window.addEventListener('DOMContentLoaded', () => {
             const savedLang = localStorage.getItem('navana-preferred-lang');
-            if (savedLang) {
-                setLanguage(savedLang);
+            if (savedLang === 'en') {
+                setLanguage('en');
             } else {
-                const userLang = navigator.language || navigator.userLanguage;
-                if (userLang.startsWith('en')) {
-                    setLanguage('en');
-                } else {
-                    setLanguage('es');
-                }
+                setLanguage('es');
             }
         });
     </script>
