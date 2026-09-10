@@ -1,0 +1,8 @@
+# Ignore large/local assets we don't want on the public web repo (e.g. heavy PDFs, local configs)
+Navana Brand Book.pdf
+Navana_F&F_Investor_Deck (1).pdf
+*.xlsx
+chrome_err.txt
+Estrategia_Corporativa_Navana_Español.pdf
+Estrategia_Corporativa_Navana_Español.html
+.gemini/
