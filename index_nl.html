@@ -1014,10 +1014,12 @@
             }
             .pdf-btn {
                 margin-right: 0 !important;
-                width: 100% !important;
+                width: auto !important;
                 justify-content: center !important;
                 order: 2;
                 margin-top: 8px;
+                padding: 6px 14px !important;
+                font-size: 10px !important;
             }
             .lang-btn {
                 padding: 6px 12px !important;
@@ -1755,11 +1757,18 @@
                     .then(() => console.log('Premium fonts loaded and verified.'));
             }
 
-            // Check if user is partner (exclude mode active) OR already unlocked
+            // If partner is detected, pre-fill fields so they don't have to type their name/email
             if (localStorage.getItem("exclude_navana_telemetry") === "true") {
-                document.getElementById("auth-overlay").style.display = "none";
-                console.log("Partner detected: Bypassing auth overlay.");
-                return;
+                const nameInput = document.getElementById("user-name");
+                const emailInput = document.getElementById("user-email");
+                const excludeCheckbox = document.getElementById("exclude-telemetry");
+                const excludeContainer = document.getElementById("exclude-telemetry-container");
+                
+                if (nameInput) nameInput.value = "Socio NAVANA";
+                if (emailInput) emailInput.value = "socio@navana.co";
+                if (excludeCheckbox) excludeCheckbox.checked = true;
+                if (excludeContainer) excludeContainer.style.display = "flex";
+                console.log("Partner detected: Pre-filling credentials for quick click-through.");
             }
 
             // Check if user has already unlocked during this session
