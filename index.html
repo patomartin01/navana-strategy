@@ -1779,17 +1779,6 @@
                 }
             };
 
-            // If partner is detected, pre-fill and trigger hiding of inputs
-            if (localStorage.getItem("exclude_navana_telemetry") === "true") {
-                const excludeCheckbox = document.getElementById("exclude-telemetry");
-                const excludeContainer = document.getElementById("exclude-telemetry-container");
-                
-                if (excludeCheckbox) excludeCheckbox.checked = true;
-                if (excludeContainer) excludeContainer.style.display = "flex";
-                window.updatePartnerFormState(true);
-                console.log("Partner detected: Hiding name and email inputs.");
-            }
-
             // Also listen to checkbox manual change
             document.getElementById("exclude-telemetry")?.addEventListener("change", function(e) {
                 window.updatePartnerFormState(e.target.checked);
