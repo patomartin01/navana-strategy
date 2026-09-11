@@ -228,9 +228,9 @@
 
         /* Contenedor Editorial en Carbón Base */
         .container {
-            max-width: 960px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 64px 48px;
+            padding: 80px 72px;
             background-color: var(--nv-bg);
             border-radius: var(--nv-radius-xl);
             margin-top: 48px;
@@ -241,11 +241,18 @@
             overflow: hidden;
         }
 
+        /* Maximizar legibilidad del texto en pantallas anchas manteniendo la elegancia */
+        .container > p, .container > ul, .container > ol {
+            max-width: 880px;
+            margin-left: 0;
+            margin-right: auto;
+        }
+
         /* Header Editorial con Fondo Oscuro Hondo */
         header {
             background-color: var(--nv-bg-deep);
             color: var(--nv-ink-hi);
-            padding: 88px 32px;
+            padding: 96px 48px;
             text-align: center;
             border-bottom: 1px solid var(--nv-line-strong);
             border-radius: var(--nv-radius-xl) var(--nv-radius-xl) 0 0;
