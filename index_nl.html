@@ -953,6 +953,137 @@
             color: var(--nv-ink-hi);
         }
 
+        /* Mobile Premium Responsiveness (No afecta la versión desktop) */
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 20px !important;
+                margin-top: 16px !important;
+                margin-bottom: 16px !important;
+                border-radius: var(--nv-radius-lg) !important;
+            }
+            header {
+                padding: 56px 20px 40px 20px !important;
+                border-radius: var(--nv-radius-lg) var(--nv-radius-lg) 0 0 !important;
+            }
+            .logo-text {
+                font-size: 24px !important;
+                letter-spacing: 6px !important;
+            }
+            .logo-sub {
+                font-size: 9px !important;
+                letter-spacing: 3px !important;
+                margin-bottom: 20px !important;
+            }
+            .doc-title {
+                font-size: 18px !important;
+                line-height: 1.35 !important;
+            }
+            h2 {
+                font-size: 17px !important;
+                margin-top: 36px !important;
+                margin-bottom: 16px !important;
+            }
+            h3 {
+                font-size: 14px !important;
+                margin-top: 24px !important;
+            }
+            p, ul, ol, li {
+                font-size: 13.5px !important;
+                line-height: 1.6 !important;
+            }
+            .card {
+                padding: 20px !important;
+            }
+            .callout {
+                padding: 20px !important;
+                margin: 24px 0 !important;
+            }
+            /* Table optimization */
+            table {
+                font-size: 11.5px !important;
+            }
+            th, td {
+                padding: 10px 8px !important;
+            }
+            /* Language bar adjustments */
+            .language-bar {
+                padding: 12px !important;
+                gap: 8px !important;
+                flex-wrap: wrap;
+                justify-content: center !important;
+            }
+            .pdf-btn {
+                margin-right: 0 !important;
+                width: 100% !important;
+                justify-content: center !important;
+                order: 2;
+                margin-top: 8px;
+            }
+            .lang-btn {
+                padding: 6px 12px !important;
+                font-size: 10px !important;
+                letter-spacing: 1px !important;
+            }
+            /* Auth card layout */
+            .auth-card {
+                padding: 32px 20px !important;
+                border-radius: var(--nv-radius-lg) !important;
+            }
+            .auth-logo {
+                font-size: 24px !important;
+                letter-spacing: 2px !important;
+            }
+            /* Telemetry Dashboard Mobile scaling */
+            #telemetry-dashboard {
+                padding: 16px !important;
+            }
+            .dash-header {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 16px !important;
+            }
+            .dash-title {
+                font-size: 18px !important;
+            }
+            .dash-close-btn {
+                width: 100% !important;
+                text-align: center !important;
+            }
+            .metric-value {
+                font-size: 24px !important;
+            }
+            .session-row {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 12px !important;
+            }
+            .session-stats {
+                text-align: left !important;
+                width: 100% !important;
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                border-top: 1px solid var(--nv-line-soft) !important;
+                padding-top: 8px !important;
+            }
+            .heatmap-row {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 8px !important;
+            }
+            .heatmap-label {
+                width: 100% !important;
+            }
+            .heatmap-track {
+                width: 100% !important;
+                margin: 4px 0 !important;
+            }
+            .heatmap-value {
+                width: 100% !important;
+                text-align: right !important;
+            }
+        }
+
         /* Hide full dashboard on print completely */
         @media print {
             #telemetry-dashboard, #dash-auth-overlay, .admin-lock-anchor {
