@@ -619,6 +619,330 @@
             text-transform: uppercase;
             border-radius: 0 0 var(--nv-radius-xl) var(--nv-radius-xl);
         }
+
+        /* Subtle, Hidden Admin Lock Icon */
+        .admin-lock-anchor {
+            display: inline-block;
+            margin-top: 24px;
+            color: rgba(138, 123, 101, 0.05); /* Almost completely invisible */
+            cursor: pointer;
+            transition: color 0.5s ease;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .admin-lock-anchor:hover {
+            color: rgba(138, 123, 101, 0.3); /* Slightly visible on hover */
+        }
+
+        /* Dashboard Password Overlay */
+        #dash-auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(12, 10, 8, 0.95);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000000;
+            padding: 24px;
+            box-sizing: border-box;
+        }
+
+        /* Dashboard Full-screen Panel */
+        #telemetry-dashboard {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #0c0a08;
+            background-image: radial-gradient(circle at 50% 50%, #15110d 0%, #080605 100%);
+            display: none;
+            z-index: 999999;
+            overflow-y: auto;
+            color: var(--nv-ink);
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        .dash-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .dash-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--nv-line-strong);
+            padding-bottom: 24px;
+            margin-bottom: 32px;
+        }
+
+        .dash-title-group {
+            text-align: left;
+        }
+
+        .dash-title {
+            font-family: var(--nv-font-display);
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--nv-ink-hi);
+            margin: 0 0 6px 0;
+            text-transform: uppercase;
+        }
+
+        .dash-subtitle {
+            font-family: var(--nv-font-body);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--nv-accent);
+            margin: 0;
+        }
+
+        .dash-close-btn {
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--nv-line);
+            color: var(--nv-ink);
+            padding: 10px 20px;
+            font-family: var(--nv-font-body);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: var(--nv-radius-md);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dash-close-btn:hover {
+            background-color: var(--navana-terracotta);
+            border-color: var(--navana-terracotta);
+            color: white;
+        }
+
+        /* Analytics Grid */
+        .dash-grid-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .metric-card {
+            background-color: var(--nv-bg-elevated);
+            border: 1px solid var(--nv-line-strong);
+            border-radius: var(--nv-radius-lg);
+            padding: 24px;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: var(--nv-accent);
+        }
+
+        .metric-card.alert::before {
+            background-color: var(--navana-terracotta);
+        }
+
+        .metric-title {
+            font-family: var(--nv-font-body);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--nv-ink-muted);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-family: var(--nv-font-display);
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--nv-ink-hi);
+            margin-bottom: 4px;
+        }
+
+        .metric-desc {
+            font-family: var(--nv-font-body);
+            font-size: 12px;
+            color: var(--nv-ink-muted);
+        }
+
+        /* Two-Column Analytics Layout */
+        .dash-layout-split {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+
+        @media (max-width: 1024px) {
+            .dash-layout-split {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dash-panel {
+            background-color: var(--nv-bg-elevated);
+            border: 1px solid var(--nv-line);
+            border-radius: var(--nv-radius-xl);
+            padding: 32px;
+            text-align: left;
+        }
+
+        .panel-heading {
+            font-family: var(--nv-font-display);
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--nv-ink-hi);
+            margin-top: 0;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--nv-line-soft);
+            padding-bottom: 12px;
+            letter-spacing: 1px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Session List layout */
+        .session-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-height: 520px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .session-row {
+            background-color: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--nv-line-soft);
+            border-radius: var(--nv-radius-md);
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .session-row:hover {
+            border-color: var(--nv-accent);
+            background-color: rgba(255, 255, 255, 0.04);
+        }
+
+        .session-row.active {
+            border-color: var(--nv-accent);
+            background-color: rgba(132, 114, 77, 0.06);
+        }
+
+        .session-meta {
+            text-align: left;
+        }
+
+        .session-name {
+            font-family: var(--nv-font-display);
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--nv-ink-hi);
+            margin-bottom: 4px;
+        }
+
+        .session-email {
+            font-family: var(--nv-font-body);
+            font-size: 12px;
+            color: var(--nv-ink-muted);
+        }
+
+        .session-stats {
+            text-align: right;
+        }
+
+        .session-duration {
+            font-family: var(--nv-font-body);
+            font-size: 13px;
+            font-weight: bold;
+            color: var(--nv-accent-hover);
+        }
+
+        .session-date {
+            font-family: var(--nv-font-body);
+            font-size: 11px;
+            color: var(--nv-ink-muted);
+            margin-top: 4px;
+        }
+
+        /* Section times heatmap indicators */
+        .heatmap-container {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .heatmap-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: var(--nv-font-body);
+            font-size: 13px;
+        }
+
+        .heatmap-label {
+            width: 180px;
+            text-align: left;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            font-weight: 500;
+        }
+
+        .heatmap-track {
+            flex-grow: 1;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: var(--nv-radius-full);
+            margin: 0 16px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .heatmap-bar {
+            height: 100%;
+            background: linear-gradient(to right, var(--nv-accent), var(--navana-terracotta));
+            border-radius: var(--nv-radius-full);
+            width: 0%;
+            transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .heatmap-value {
+            width: 60px;
+            text-align: right;
+            font-weight: bold;
+            color: var(--nv-ink-hi);
+        }
+
+        /* Hide full dashboard on print completely */
+        @media print {
+            #telemetry-dashboard, #dash-auth-overlay, .admin-lock-anchor {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1120,7 +1444,94 @@
 
     <footer>
         NAVANA ECO-LUXURY CABINS • S.A.P.I. DE C.V. • 2026
+        <br>
+        <span class="admin-lock-anchor" onclick="openDashAuthOverlay(event)">🔒</span>
     </footer>
+
+    <!-- PASSWORD OVERLAY FOR TELEMETRY DASHBOARD -->
+    <div id="dash-auth-overlay">
+        <div class="auth-card" style="max-width: 380px;">
+            <div class="auth-logo">NAVANA</div>
+            <div class="auth-sub">Telemetry Terminal</div>
+            <div class="auth-title">Administrative Access</div>
+            <div class="auth-desc">Please enter the authorization password to access the metrics and viewer behavioral panel.</div>
+            
+            <form id="dash-auth-form" onsubmit="handleDashAuthSubmit(event)">
+                <div class="auth-input-group" style="margin-bottom: 24px;">
+                    <label class="auth-label" for="dash-pwd">Password</label>
+                    <input class="auth-input" type="password" id="dash-pwd" required placeholder="••••••••">
+                </div>
+                <button class="auth-submit-btn" type="submit" id="dash-auth-submit-btn">Unlock Console</button>
+            </form>
+            <button class="dash-close-btn" onclick="closeDashAuthOverlay()" style="margin-top: 16px; width: 100%;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- FULL SCREEN INTERACTIVE TELEMETRY DASHBOARD -->
+    <div id="telemetry-dashboard">
+        <div class="dash-container">
+            <div class="dash-header">
+                <div class="dash-title-group">
+                    <h1 class="dash-title">NAVANA Performance Terminal</h1>
+                    <p class="dash-subtitle">Reader Attention, Engagement Maps & Audience Metrics Console</p>
+                </div>
+                <button class="dash-close-btn" onclick="closeTelemetryDashboard()">Close Terminal</button>
+            </div>
+
+            <!-- Global KPI Cards -->
+            <div class="dash-grid-metrics">
+                <div class="metric-card">
+                    <div class="metric-title">Total Sessions</div>
+                    <div class="metric-value" id="kpi-total-views">0</div>
+                    <div class="metric-desc">Registered reading sessions</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-title">Avg Read Time</div>
+                    <div class="metric-value" id="kpi-avg-time">0m 0s</div>
+                    <div class="metric-desc">Overall reader attention span</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-title">Avg Scroll Depth</div>
+                    <div class="metric-value" id="kpi-avg-scroll">0%</div>
+                    <div class="metric-desc">Maximum reading scroll reached</div>
+                </div>
+                <div class="metric-card alert">
+                    <div class="metric-title">Bounce Rate</div>
+                    <div class="metric-value" id="kpi-bounce-rate">0%</div>
+                    <div class="metric-desc">Readers exiting in less than 15s</div>
+                </div>
+            </div>
+
+            <!-- Two Column Live Analytics -->
+            <div class="dash-layout-split">
+                <!-- Left: List of Reader Sessions -->
+                <div class="dash-panel">
+                    <h3 class="panel-heading">
+                        <span>Recent Audiences (Active Streams)</span>
+                        <span style="font-size: 11px; font-weight: normal; color: var(--nv-accent); text-transform: uppercase;">Select a reader to view their attention heatmap</span>
+                    </h3>
+                    <div class="session-list" id="dash-sessions-container">
+                        <div style="text-align: center; color: var(--nv-ink-muted); padding: 40px;">Fetching streams...</div>
+                    </div>
+                </div>
+
+                <!-- Right: Active Map & Time Per Section Heatmap -->
+                <div class="dash-panel">
+                    <h3 class="panel-heading">Attention Map & Heat-Zones</h3>
+                    <div style="margin-bottom: 24px; padding: 12px 16px; background: rgba(255,255,255,0.02); border: 1px solid var(--nv-line-soft); border-radius: var(--nv-radius-md); text-align: left;">
+                        <p style="margin: 0 0 4px 0; font-size: 11px; text-transform: uppercase; color: var(--nv-accent); letter-spacing: 1px;">Selected Reader:</p>
+                        <p style="margin: 0; font-family: var(--nv-font-display); font-size: 16px; font-weight: bold; color: var(--nv-ink-hi);" id="active-viewer-name">-</p>
+                        <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--nv-ink-muted);" id="active-viewer-email">-</p>
+                    </div>
+
+                    <!-- Progress tracking bars for section times -->
+                    <div class="heatmap-container" id="dash-heatmap-bars">
+                        <div style="text-align: center; color: var(--nv-ink-muted); padding: 40px;">Select a reader session from the left column.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- DYNAMIC PERFORMANCE INTERACTIVITY & TELEMETRY ENGINE (FIREBASE ESM) -->
     <script type="module">
@@ -1364,6 +1775,283 @@
             if (heartBeatTimer) clearInterval(heartBeatTimer);
             pushTelemetryHeartbeat();
         });
+
+        // =========================================================================
+        // --- ADMINISTRATIVE METRICS DASHBOARD ENGINE ---
+        // =========================================================================
+        let loadedSessionsCache = [];
+
+        // Open password overlay modal
+        window.openDashAuthOverlay = function(event) {
+            if (event) event.preventDefault();
+            document.getElementById("dash-pwd").value = "";
+            document.getElementById("dash-auth-overlay").style.display = "flex";
+        };
+
+        // Close password overlay modal
+        window.closeDashAuthOverlay = function() {
+            document.getElementById("dash-auth-overlay").style.display = "none";
+        };
+
+        // Validate Administrative Password
+        window.handleDashAuthSubmit = function(event) {
+            event.preventDefault();
+            const btn = document.getElementById("dash-auth-submit-btn");
+            const passwordVal = document.getElementById("dash-pwd").value;
+
+            if (passwordVal === "Navana2026.") {
+                btn.innerText = "Authorizing...";
+                setTimeout(() => {
+                    closeDashAuthOverlay();
+                    openTelemetryDashboard();
+                }, 400);
+            } else {
+                alert("Incorrect administrative password.");
+                document.getElementById("dash-pwd").value = "";
+            }
+        };
+
+        // Close full telemetry dashboard view
+        window.closeTelemetryDashboard = function() {
+            document.getElementById("telemetry-dashboard").style.display = "none";
+            document.body.style.overflow = "auto"; // Unlock page scrolling
+        };
+
+        // Load and Open Telemetry Dashboard Panel
+        async function openTelemetryDashboard() {
+            document.getElementById("telemetry-dashboard").style.display = "block";
+            document.body.style.overflow = "hidden"; // Lock background page scrolling
+
+            await fetchActiveSessions();
+        }
+
+        // Fetch session data from Firestore or LocalStorage backup
+        async function fetchActiveSessions() {
+            const container = document.getElementById("dash-sessions-container");
+            container.innerHTML = `<div style="text-align: center; color: var(--nv-ink-muted); padding: 40px;">Consolidating real-time audience streams...</div>`;
+
+            let sessions = [];
+
+            // A. Attempt loading from remote Firestore first
+            if (db) {
+                try {
+                    // Import Firestore query operators dynamically
+                    const { collection, getDocs, query, orderBy } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
+                    const q = query(collection(db, "viewer_sessions"), orderBy("loginTime", "desc"));
+                    const querySnapshot = await getDocs(q);
+                    
+                    querySnapshot.forEach((doc) => {
+                        sessions.push({ id: doc.id, ...doc.data() });
+                    });
+                } catch (err) {
+                    console.warn("Could not query firestore remotely. Falling back to local mock streams.", err.message);
+                }
+            }
+
+            // B. If remote db is empty or offline, compile from local storage sessions
+            if (sessions.length === 0) {
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key.startsWith("session_")) {
+                        try {
+                            const parsed = JSON.parse(localStorage.getItem(key));
+                            sessions.push({ id: key.replace("session_", ""), ...parsed });
+                        } catch (e) {}
+                    }
+                }
+                // Sort local sessions descending by login time
+                sessions.sort((a, b) => new Date(b.loginTime) - new Date(a.loginTime));
+            }
+
+            // C. If absolutely no sessions exist, seed beautiful mockup telemetry metrics for demonstration
+            if (sessions.length === 0) {
+                sessions = [
+                    {
+                        id: "socio_san_miguel",
+                        viewerName: "Diego - PropCo Partner",
+                        viewerEmail: "diego.partner@propco.com",
+                        loginTime: new Date(Date.now() - 3600000).toISOString(),
+                        totalTimeSeconds: 412,
+                        maxScrollDepthPercent: 100,
+                        sectionAttentionTimes: {
+                            "1. Investment Thesis": 45,
+                            "2. Dual OpCo/PropCo Corporate Model": 110,
+                            "4. Cap Table & Structural Dividends": 85,
+                            "5. Modular Unit Economics": 72,
+                            "6. Financial Performance Projections": 90,
+                            "11. Conclusion": 10
+                        },
+                        scrollDepthBreakdown: { "25%": "18:10:02", "50%": "18:12:30", "75%": "18:15:15", "100%": "18:18:40" }
+                    },
+                    {
+                        id: "investor_isla",
+                        viewerName: "Daniela - Family Office",
+                        viewerEmail: "daniela.investor@fo-cap.mx",
+                        loginTime: new Date(Date.now() - 7200000).toISOString(),
+                        totalTimeSeconds: 198,
+                        maxScrollDepthPercent: 50,
+                        sectionAttentionTimes: {
+                            "1. Investment Thesis": 30,
+                            "2. Dual OpCo/PropCo Corporate Model": 95,
+                            "3. Strategic Manufacturing Partner": 73
+                        },
+                        scrollDepthBreakdown: { "25%": "17:35:10", "50%": "17:38:22" }
+                    }
+                ];
+            }
+
+            loadedSessionsCache = sessions;
+            renderDashboardData(sessions);
+        }
+
+        // Render entire analytics calculations, KPIs and list views
+        function renderDashboardData(sessions) {
+            // 1. Calculate Global KPIs
+            const totalViews = sessions.length;
+            let totalSeconds = 0;
+            let totalMaxScroll = 0;
+            let bounceCount = 0;
+
+            sessions.forEach(s => {
+                totalSeconds += s.totalTimeSeconds || 0;
+                totalMaxScroll += s.maxScrollDepthPercent || 0;
+                if ((s.totalTimeSeconds || 0) < 15) {
+                    bounceCount++;
+                }
+            });
+
+            const avgSeconds = totalViews > 0 ? Math.round(totalSeconds / totalViews) : 0;
+            const avgScroll = totalViews > 0 ? Math.round(totalMaxScroll / totalViews) : 0;
+            const bounceRate = totalViews > 0 ? Math.round((bounceCount / totalViews) * 100) : 0;
+
+            // Formatter for average reading duration
+            const avgMin = Math.floor(avgSeconds / 60);
+            const avgSec = avgSeconds % 60;
+
+            // Update DOM KPIs
+            document.getElementById("kpi-total-views").innerText = totalViews;
+            document.getElementById("kpi-avg-time").innerText = `${avgMin}m ${avgSec}s`;
+            document.getElementById("kpi-avg-scroll").innerText = `${avgScroll}%`;
+            document.getElementById("kpi-bounce-rate").innerText = `${bounceRate}%`;
+
+            // 2. Render session list rows
+            const container = document.getElementById("dash-sessions-container");
+            container.innerHTML = "";
+
+            sessions.forEach((s, idx) => {
+                const row = document.createElement("div");
+                row.className = `session-row ${idx === 0 ? 'active' : ''}`;
+                row.onclick = () => selectSessionForHeatmap(s.id, row);
+
+                const mins = Math.floor((s.totalTimeSeconds || 0) / 60);
+                const secs = (s.totalTimeSeconds || 0) % 60;
+                const dateStr = new Date(s.loginTime).toLocaleDateString("en-US", {
+                    month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
+                });
+
+                row.innerHTML = `
+                    <div class="session-meta">
+                        <div class="session-name">${s.viewerName}</div>
+                        <div class="session-email">${s.viewerEmail}</div>
+                    </div>
+                    <div class="session-stats">
+                        <div class="session-duration">⏱️ ${mins}m ${secs}s</div>
+                        <div class="session-date">${dateStr}</div>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+
+            // Auto-select the first session in list to display details
+            if (sessions.length > 0) {
+                selectSessionForHeatmap(sessions[0].id);
+            }
+        }
+
+        // Display individual section reading times & scroll-zone bars
+        window.selectSessionForHeatmap = function(sessionId, rowElement) {
+            // Manage visual selection states
+            if (rowElement) {
+                document.querySelectorAll(".session-row").forEach(r => r.classList.remove("active"));
+                rowElement.classList.add("active");
+            }
+
+            const session = loadedSessionsCache.find(s => s.id === sessionId);
+            if (!session) return;
+
+            // Update selection card details
+            document.getElementById("active-viewer-name").innerText = session.viewerName;
+            document.getElementById("active-viewer-email").innerText = session.viewerEmail;
+
+            // Render Heatmap bars
+            const heatmapContainer = document.getElementById("dash-heatmap-bars");
+            heatmapContainer.innerHTML = "";
+
+            // Find maximum time in any section to normalize bars proportionally (100% width)
+            let maxTimeSeconds = 1;
+            const timesMap = session.sectionAttentionTimes || {};
+            Object.keys(timesMap).forEach(key => {
+                if (timesMap[key] > maxTimeSeconds) {
+                    maxTimeSeconds = timesMap[key];
+                }
+            });
+
+            // Map all English document headings
+            const sectionsToRender = [
+                "1. Investment Thesis",
+                "2. Dual OpCo/PropCo Corporate Model",
+                "3. Strategic Manufacturing Partner",
+                "4. Cap Table & Structural Dividends",
+                "5. Modular Unit Economics",
+                "6. Financial Performance Projections",
+                "7. Expansion Funding Allocation",
+                "8. Dual-Structure Legal Architecture",
+                "9. 18-Month Operational Rollout",
+                "10. Risk Mitigation & Structural Safeguards",
+                "11. Conclusion"
+            ];
+
+            sectionsToRender.forEach(sectionTitle => {
+                const elapsedSeconds = timesMap[sectionTitle] || 0;
+                const barPercent = Math.min(Math.round((elapsedSeconds / maxTimeSeconds) * 100), 100);
+
+                const row = document.createElement("div");
+                row.className = "heatmap-row";
+
+                row.innerHTML = `
+                    <div class="heatmap-label" title="${sectionTitle}">${sectionTitle}</div>
+                    <div class="heatmap-track">
+                        <div class="heatmap-bar" style="width: ${barPercent}%"></div>
+                    </div>
+                    <div class="heatmap-value">${elapsedSeconds}s</div>
+                `;
+                heatmapContainer.appendChild(row);
+            });
+
+            // Render Scroll-Depth Checklist
+            const scrollMeta = document.createElement("div");
+            scrollMeta.style.cssText = "margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--nv-line-soft); text-align: left;";
+            
+            const depth = session.maxScrollDepthPercent || 0;
+            const breakMap = session.scrollDepthBreakdown || {};
+
+            let checklistHTML = `<p style="margin: 0 0 10px 0; font-size: 11px; text-transform: uppercase; color: var(--nv-accent); letter-spacing: 1px;">Reading Scroll Depth (Scroll Heatmap):</p>`;
+            checklistHTML += `<div style="display: flex; gap: 16px; font-size: 12px; font-family: var(--nv-font-body);">`;
+            
+            [25, 50, 75, 100].forEach(percent => {
+                const reached = depth >= percent;
+                const timeStr = breakMap[percent + "%"] ? ` (${breakMap[percent + "%"]})` : "";
+                checklistHTML += `
+                    <div style="flex: 1; padding: 10px; background: rgba(255,255,255,0.01); border: 1px solid ${reached ? 'var(--nv-accent)' : 'var(--nv-line)'}; border-radius: var(--nv-radius-md); text-align: center; color: ${reached ? 'var(--nv-ink-hi)' : 'var(--nv-ink-muted)'}">
+                        <strong>${percent}%</strong><br>
+                        ${reached ? '✅ Reached' + timeStr : '❌ Not reached'}
+                    </div>
+                `;
+            });
+            checklistHTML += `</div>`;
+            scrollMeta.innerHTML = checklistHTML;
+            heatmapContainer.appendChild(scrollMeta);
+        };
     </script>
 
 </body>
