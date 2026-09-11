@@ -226,6 +226,138 @@
             }
         }
 
+        /* Auth Screen Styles */
+        #auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #0c0a08;
+            background-image: radial-gradient(circle at 50% 50%, #1c1510 0%, #0c0a08 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999999;
+            padding: 24px;
+            box-sizing: border-box;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .auth-card {
+            background-color: var(--nv-bg-elevated);
+            border: 1px solid var(--nv-line-strong);
+            border-radius: var(--nv-radius-xl);
+            width: 100%;
+            max-width: 440px;
+            padding: 40px 32px;
+            box-sizing: border-box;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            text-align: center;
+        }
+
+        .auth-logo {
+            font-family: var(--nv-font-display);
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: var(--nv-ink-hi);
+            margin-bottom: 4px;
+        }
+
+        .auth-sub {
+            font-family: var(--nv-font-body);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--nv-accent);
+            margin-bottom: 24px;
+        }
+
+        .auth-title {
+            font-family: var(--nv-font-display);
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--nv-ink);
+            margin-bottom: 8px;
+        }
+
+        .auth-desc {
+            font-family: var(--nv-font-body);
+            font-size: 13px;
+            color: var(--nv-ink-muted);
+            margin-bottom: 24px;
+            line-height: 1.4;
+        }
+
+        .auth-input-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .auth-label {
+            display: block;
+            font-family: var(--nv-font-body);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--nv-ink-muted);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .auth-input {
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--nv-line);
+            border-radius: var(--nv-radius-md);
+            padding: 12px 16px;
+            font-family: var(--nv-font-body);
+            font-size: 14px;
+            color: var(--nv-ink-hi);
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .auth-input:focus {
+            border-color: var(--nv-accent);
+            background-color: rgba(0, 0, 0, 0.35);
+        }
+
+        .auth-submit-btn {
+            width: 100%;
+            background-color: var(--navana-terracotta);
+            border: none;
+            border-radius: var(--nv-radius-md);
+            padding: 14px;
+            font-family: var(--nv-font-body);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        .auth-submit-btn:hover {
+            background-color: #a33822;
+            box-shadow: 0 4px 15px rgba(139, 46, 27, 0.4);
+        }
+
+        .auth-submit-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Hide auth elements on print completely */
+        @media print {
+            #auth-overlay {
+                display: none !important;
+            }
+        }
+
         /* Contenedor Editorial en Carbón Base */
         .container {
             max-width: 1200px;
@@ -490,6 +622,28 @@
     </style>
 </head>
 <body>
+
+    <!-- Auth / Telemetry Overlay Screen -->
+    <div id="auth-overlay">
+        <div class="auth-card">
+            <div class="auth-logo">NAVANA</div>
+            <div class="auth-sub">Eco-Luxury Cabins</div>
+            <div class="auth-title" id="auth-card-title">Financial Brief Access</div>
+            <div class="auth-desc" id="auth-card-desc">For security and confidentiality, please provide your full name and corporate email address to unlock this document.</div>
+            
+            <form id="auth-form" onsubmit="handleAuthSubmit(event)">
+                <div class="auth-input-group">
+                    <label class="auth-label" for="user-name">Full Name</label>
+                    <input class="auth-input" type="text" id="user-name" required placeholder="Enter your name">
+                </div>
+                <div class="auth-input-group">
+                    <label class="auth-label" for="user-email">Email Address</label>
+                    <input class="auth-input" type="email" id="user-email" required placeholder="name@company.com">
+                </div>
+                <button class="auth-submit-btn" type="submit" id="auth-submit-btn">Access Document</button>
+            </form>
+        </div>
+    </div>
 
     <div class="language-bar">
         <button class="pdf-btn" onclick="window.print()">
@@ -968,28 +1122,247 @@
         NAVANA ECO-LUXURY CABINS • S.A.P.I. DE C.V. • 2026
     </footer>
 
-    <!-- INTERACTIVIDAD CON JAVASCRIPT -->
-    <script>
-        // Pre-flight de carga de fuentes para asegurar impresión perfecta (Regla #2 del checklist)
+    <!-- DYNAMIC PERFORMANCE INTERACTIVITY & TELEMETRY ENGINE (FIREBASE ESM) -->
+    <script type="module">
+        // Import classic, fast and secure modular Firebase SDKs directly via modern ESModule CDN
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, doc, setDoc, updateDoc, increment, arrayUnion } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Firebase Web Config for NAVANA (Free, Serverless and Dynamic Setup)
+        const firebaseConfig = {
+            apiKey: "AIzaSyAs-FakeKeyForLocalTestingPurposesOnly",
+            authDomain: "navana-telemetry.firebaseapp.com",
+            projectId: "navana-telemetry",
+            storageBucket: "navana-telemetry.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abcdef123456789"
+        };
+
+        // Initialize Firebase Ecosistema
+        let app, db;
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            console.log("Firebase initialized successfully (EN).");
+        } catch (err) {
+            console.warn("Firebase initialization skipped or running offline mode: ", err.message);
+        }
+
+        // --- Telemetry state variables ---
+        let sessionDocId = null;
+        let userData = { name: "", email: "" };
+        let activeSection = "Home / Cover";
+        let sectionStartTime = Date.now();
+        let sectionTimes = {};      // Accumulates duration in milliseconds per section
+        let scrollHeatmap = {};     // Tracks maximum scroll depth levels (0%, 25%, 50%, 75%, 100%)
+        let heartBeatTimer = null;
+
+        // Map scroll depth levels to track
+        const scrollThresholds = [25, 50, 75, 100];
+
+        // Match headings to track which physical section the reader is actively viewing
+        const docSections = [
+            { id: "S1", title: "1. Investment Thesis", query: "h2:nth-of-type(1)" },
+            { id: "S2", title: "2. Dual Corporate Setup", query: "h2:nth-of-type(2)" },
+            { id: "S3", title: "3. Manufacturing JV Partner", query: "h2:nth-of-type(3)" },
+            { id: "S4", title: "4. Cap Table", query: "h2:nth-of-type(4)" },
+            { id: "S5", title: "5. Unit Economics", query: "h2:nth-of-type(5)" },
+            { id: "S6", title: "6. Group Financials", query: "h2:nth-of-type(6)" },
+            { id: "S7", title: "7. Funding Strategy", query: "h2:nth-of-type(7)" },
+            { id: "S8", title: "8. Legal Structuring", query: "h2:nth-of-type(8)" },
+            { id: "S9", title: "9. Deployment Roadmap", query: "h2:nth-of-type(9)" },
+            { id: "S10", title: "10. Risk Management Matrix", query: "h2:nth-of-type(10)" },
+            { id: "S11", title: "11. Strategic Conclusion", query: "h2:nth-of-type(11)" }
+        ];
+
+        // Pre-flight de carga de fuentes para asegurar impresión perfecta
         window.addEventListener('DOMContentLoaded', () => {
             if (document.fonts) {
                 const families = [
-                    '300 16px "Ranade"',
-                    '400 16px "Ranade"',
-                    '500 16px "Ranade"',
-                    '700 16px "Ranade"',
-                    '300 16px "Space Grotesk"',
-                    '400 16px "Space Grotesk"',
-                    '500 16px "Space Grotesk"',
-                    '600 16px "Space Grotesk"',
-                    '700 16px "Space Grotesk"'
+                    '300 16px "Ranade"', '400 16px "Ranade"', '500 16px "Ranade"', '700 16px "Ranade"',
+                    '300 16px "Space Grotesk"', '400 16px "Space Grotesk"', '500 16px "Space Grotesk"', '600 16px "Space Grotesk"', '700 16px "Space Grotesk"'
                 ];
                 Promise.all(families.map(f => document.fonts.load(f).catch(() => {})))
                     .then(() => document.fonts.ready)
-                    .then(() => {
-                        console.log('Premium fonts successfully loaded and verified.');
-                    });
+                    .then(() => console.log('Premium fonts loaded and verified (EN).'));
             }
+
+            // Check if user has already unlocked during this session
+            const cachedUser = sessionStorage.getItem("navana_viewer");
+            if (cachedUser) {
+                try {
+                    const parsed = JSON.parse(cachedUser);
+                    userData.name = parsed.name;
+                    userData.email = parsed.email;
+                    document.getElementById("auth-overlay").style.display = "none";
+                    startTelemetrySession();
+                } catch (e) {
+                    sessionStorage.removeItem("navana_viewer");
+                }
+            }
+        });
+
+        // --- AUTH SUBMISSION ---
+        window.handleAuthSubmit = function(event) {
+            event.preventDefault();
+            const btn = document.getElementById("auth-submit-btn");
+            const nameVal = document.getElementById("user-name").value.trim();
+            const emailVal = document.getElementById("user-email").value.trim();
+
+            if (!nameVal || !emailVal) return;
+
+            btn.disabled = true;
+            btn.innerText = "Authorizing Access...";
+
+            userData.name = nameVal;
+            userData.email = emailVal;
+
+            // Cache credentials in session storage to avoid asking on page refresh
+            sessionStorage.setItem("navana_viewer", JSON.stringify(userData));
+
+            // Fade out auth overlay beautifully
+            const overlay = document.getElementById("auth-overlay");
+            overlay.style.opacity = "0";
+            setTimeout(() => {
+                overlay.style.display = "none";
+            }, 500);
+
+            startTelemetrySession();
+        };
+
+        // --- TELEMETRY SESSION ENGINE ---
+        async function startTelemetrySession() {
+            // Generate a unique session token
+            sessionDocId = userData.email.replace(/[^a-zA-Z0-9]/g, "_") + "_" + Date.now();
+            console.log("Telemetry session started (EN): " + sessionDocId);
+
+            // Record initial log in Firestore
+            const initialPayload = {
+                viewerName: userData.name,
+                viewerEmail: userData.email,
+                loginTime: new Date().toISOString(),
+                userAgent: navigator.userAgent,
+                language: navigator.language || "en",
+                lastActiveTime: new Date().toISOString(),
+                totalTimeSeconds: 0,
+                maxScrollDepthPercent: 0,
+                sectionAttentionTimes: {},
+                scrollDepthBreakdown: {},
+                devicePlatform: navigator.platform || "unknown"
+            };
+
+            // Save locally in localStorage as a backup
+            localStorage.setItem("session_" + sessionDocId, JSON.stringify(initialPayload));
+
+            if (db) {
+                try {
+                    await setDoc(doc(db, "viewer_sessions", sessionDocId), initialPayload);
+                    console.log("Real-time telemetry established with Cloud Firestore (EN).");
+                } catch (err) {
+                    console.warn("Firestore save skipped: Local telemetry mode running.", err.message);
+                }
+            }
+
+            // Start monitoring section reading focus and scroll heatmap
+            window.addEventListener("scroll", handleScrollTelemetry);
+            
+            // Heartbeat update every 10 seconds to push telemetry updates
+            heartBeatTimer = setInterval(pushTelemetryHeartbeat, 10000);
+        }
+
+        // --- TELEMETRY CALCULATION & ANALYSIS ---
+        function handleScrollTelemetry() {
+            const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
+            if (documentHeight <= 0) return;
+
+            // 1. Calculate Scroll Depth Percentage (Heatmap)
+            const currentScroll = window.scrollY;
+            const scrollPercent = Math.min(Math.round((currentScroll / documentHeight) * 100), 100);
+
+            scrollThresholds.forEach(thresh => {
+                if (scrollPercent >= thresh && !scrollHeatmap[thresh + "%"]) {
+                    scrollHeatmap[thresh + "%"] = new Date().toLocaleTimeString();
+                    console.log(`Heatmap: User reached ${thresh}% scroll threshold (EN).`);
+                }
+            });
+
+            // 2. Track Active Read-focus Section based on scroll positions
+            let currentlyReading = "Home / Cover";
+            docSections.forEach(section => {
+                const element = document.querySelector(section.query);
+                if (element) {
+                    const rect = element.getBoundingClientRect();
+                    // If heading is in top portion of the screen, user has likely scrolled into it
+                    if (rect.top <= 200) {
+                        currentlyReading = section.title;
+                    }
+                }
+            });
+
+            if (currentlyReading !== activeSection) {
+                // Accumulate elapsed reading time for the exited section
+                const elapsed = Date.now() - sectionStartTime;
+                sectionTimes[activeSection] = (sectionTimes[activeSection] || 0) + elapsed;
+
+                console.log(`Active segment shifted. Exited: "${activeSection}" (${Math.round(elapsed / 1000)}s). Now reading: "${currentlyReading}"`);
+
+                activeSection = currentlyReading;
+                sectionStartTime = Date.now();
+            }
+        }
+
+        // --- HEARTBEAT & REMOTE PUSH ---
+        async function pushTelemetryHeartbeat() {
+            if (!sessionDocId) return;
+
+            // Flush times of the currently active section
+            const elapsed = Date.now() - sectionStartTime;
+            sectionTimes[activeSection] = (sectionTimes[activeSection] || 0) + elapsed;
+            sectionStartTime = Date.now(); // reset start interval anchor
+
+            // Determine maximum depth reached
+            let maxDepth = 0;
+            scrollThresholds.forEach(thresh => {
+                if (scrollHeatmap[thresh + "%"]) maxDepth = thresh;
+            });
+
+            // Clean times map to human readable seconds format
+            const cleanSectionSeconds = {};
+            let totalSecs = 0;
+            Object.keys(sectionTimes).forEach(secKey => {
+                const s = Math.round(sectionTimes[secKey] / 1000);
+                cleanSectionSeconds[secKey] = s;
+                totalSecs += s;
+            });
+
+            const updatePayload = {
+                lastActiveTime: new Date().toISOString(),
+                totalTimeSeconds: totalSecs,
+                maxScrollDepthPercent: maxDepth,
+                sectionAttentionTimes: cleanSectionSeconds,
+                scrollDepthBreakdown: scrollHeatmap
+            };
+
+            // Save state backup in local storage
+            localStorage.setItem("session_" + sessionDocId, JSON.stringify({
+                ...JSON.parse(localStorage.getItem("session_" + sessionDocId) || "{}"),
+                ...updatePayload
+            }));
+
+            if (db) {
+                try {
+                    await updateDoc(doc(db, "viewer_sessions", sessionDocId), updatePayload);
+                    console.log("Telemetry updated cleanly (EN).", cleanSectionSeconds);
+                } catch (err) {
+                    // Fail silently
+                }
+            }
+        }
+
+        // Flush telemetry when tab is closed / navigated away
+        window.addEventListener("beforeunload", () => {
+            if (heartBeatTimer) clearInterval(heartBeatTimer);
+            pushTelemetryHeartbeat();
         });
     </script>
 
