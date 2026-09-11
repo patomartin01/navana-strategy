@@ -2180,7 +2180,6 @@
         // Delete Session from both Firestore and LocalStorage
         window.deleteSession = async function(sessionId, event) {
             if (event) event.stopPropagation();
-            if (!confirm("Weet u zeker dat u deze telemetriesessie wilt verwijderen?")) return;
 
             // 1. Delete from remote Firestore if connected
             if (db) {
