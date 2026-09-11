@@ -2061,8 +2061,11 @@
                     const q = query(collection(db, "viewer_sessions"), orderBy("loginTime", "desc"));
                     const querySnapshot = await getDocs(q);
                     
+                    const deletedList = JSON.parse(localStorage.getItem("deleted_sessions") || "[]");
                     querySnapshot.forEach((doc) => {
-                        sessions.push({ id: doc.id, ...doc.data() });
+                        if (!deletedList.includes(doc.id)) {
+                            sessions.push({ id: doc.id, ...doc.data() });
+                        }
                     });
                 } catch (err) {
                     console.warn("Could not query firestore remotely. Falling back to local mock streams.", err.message);
@@ -2071,13 +2074,17 @@
 
             // B. If remote db is empty or offline, compile from local storage sessions
             if (sessions.length === 0) {
+                const deletedList = JSON.parse(localStorage.getItem("deleted_sessions") || "[]");
                 for (let i = 0; i < localStorage.length; i++) {
                     const key = localStorage.key(i);
                     if (key.startsWith("session_")) {
-                        try {
-                            const parsed = JSON.parse(localStorage.getItem(key));
-                            sessions.push({ id: key.replace("session_", ""), ...parsed });
-                        } catch (e) {}
+                        const sessId = key.replace("session_", "");
+                        if (!deletedList.includes(sessId)) {
+                            try {
+                                const parsed = JSON.parse(localStorage.getItem(key));
+                                sessions.push({ id: sessId, ...parsed });
+                            } catch (e) {}
+                        }
                     }
                 }
                 // Sort local sessions descending by login time
@@ -2188,6 +2195,15 @@
 
             // 2. Delete from local storage
             localStorage.removeItem("session_" + sessionId);
+
+            // Save to locally deleted list to filter out if Firestore delete is blocked
+            try {
+                const deletedList = JSON.parse(localStorage.getItem("deleted_sessions") || "[]");
+                if (!deletedList.includes(sessionId)) {
+                    deletedList.push(sessionId);
+                    localStorage.setItem("deleted_sessions", JSON.stringify(deletedList));
+                }
+            } catch (e) {}
 
             // 3. Re-fetch active sessions to update UI
             await fetchActiveSessions();
