@@ -1624,6 +1624,13 @@
                     .then(() => console.log('Premium fonts loaded and verified.'));
             }
 
+            // Check if user is partner (exclude mode active) OR already unlocked
+            if (localStorage.getItem("exclude_navana_telemetry") === "true") {
+                document.getElementById("auth-overlay").style.display = "none";
+                console.log("Partner detected: Bypassing auth overlay.");
+                return;
+            }
+
             // Check if user has already unlocked during this session
             const cachedUser = sessionStorage.getItem("navana_viewer");
             if (cachedUser) {
