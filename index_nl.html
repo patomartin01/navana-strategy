@@ -1106,11 +1106,11 @@
             <div class="auth-desc" id="auth-card-desc">Om redenen van vertrouwelijkheid, vul uw naam en zakelijk e-mailadres in om de weergave van dit document te autoriseren.</div>
             
             <form id="auth-form" onsubmit="handleAuthSubmit(event)">
-                <div class="auth-input-group">
+                <div class="auth-input-group" id="name-group">
                     <label class="auth-label" for="user-name">Volledige Naam</label>
                     <input class="auth-input" type="text" id="user-name" required placeholder="Voer uw naam in">
                 </div>
-                <div class="auth-input-group">
+                <div class="auth-input-group" id="email-group">
                     <label class="auth-label" for="user-email">E-mailadres</label>
                     <input class="auth-input" type="email" id="user-email" required placeholder="voorbeeld@bedrijf.com">
                 </div>
@@ -1757,19 +1757,41 @@
                     .then(() => console.log('Premium fonts loaded and verified.'));
             }
 
-            // If partner is detected, pre-fill fields so they don't have to type their name/email
-            if (localStorage.getItem("exclude_navana_telemetry") === "true") {
+            // Helper function to manage the hiding/showing and required attributes
+            window.updatePartnerFormState = function(isPartner) {
+                const nameGroup = document.getElementById("name-group");
+                const emailGroup = document.getElementById("email-group");
                 const nameInput = document.getElementById("user-name");
                 const emailInput = document.getElementById("user-email");
+
+                if (isPartner) {
+                    if (nameGroup) nameGroup.style.display = "none";
+                    if (emailGroup) emailGroup.style.display = "none";
+                    if (nameInput) nameInput.removeAttribute("required");
+                    if (emailInput) emailInput.removeAttribute("required");
+                } else {
+                    if (nameGroup) nameGroup.style.display = "block";
+                    if (emailGroup) emailGroup.style.display = "block";
+                    if (nameInput) nameInput.setAttribute("required", "required");
+                    if (emailInput) emailInput.setAttribute("required", "required");
+                }
+            };
+
+            // If partner is detected, pre-fill and trigger hiding of inputs
+            if (localStorage.getItem("exclude_navana_telemetry") === "true") {
                 const excludeCheckbox = document.getElementById("exclude-telemetry");
                 const excludeContainer = document.getElementById("exclude-telemetry-container");
                 
-                if (nameInput) nameInput.value = "Socio NAVANA";
-                if (emailInput) emailInput.value = "socio@navana.co";
                 if (excludeCheckbox) excludeCheckbox.checked = true;
                 if (excludeContainer) excludeContainer.style.display = "flex";
-                console.log("Partner detected: Pre-filling credentials for quick click-through.");
+                window.updatePartnerFormState(true);
+                console.log("Partner detected: Hiding name and email inputs.");
             }
+
+            // Also listen to checkbox manual change
+            document.getElementById("exclude-telemetry")?.addEventListener("change", function(e) {
+                window.updatePartnerFormState(e.target.checked);
+            });
 
             // Check if user has already unlocked during this session
             const cachedUser = sessionStorage.getItem("navana_viewer");
@@ -1793,11 +1815,17 @@
             if (container) {
                 if (container.style.display === "none") {
                     container.style.display = "flex";
-                    if (checkbox) checkbox.checked = true; // Auto-check for convenience!
+                    if (checkbox) {
+                        checkbox.checked = true;
+                        window.updatePartnerFormState(true);
+                    }
                     console.log("Partner mode activated via logo click.");
                 } else {
                     container.style.display = "none";
-                    if (checkbox) checkbox.checked = false;
+                    if (checkbox) {
+                        checkbox.checked = false;
+                        window.updatePartnerFormState(false);
+                    }
                 }
             }
         };
@@ -1806,11 +1834,12 @@
         window.handleAuthSubmit = function(event) {
             event.preventDefault();
             const btn = document.getElementById("auth-submit-btn");
-            const nameVal = document.getElementById("user-name").value.trim();
-            const emailVal = document.getElementById("user-email").value.trim();
             const excludeVal = document.getElementById("exclude-telemetry")?.checked;
+            
+            const nameVal = document.getElementById("user-name").value.trim() || (excludeVal ? "Socio NAVANA" : "");
+            const emailVal = document.getElementById("user-email").value.trim() || (excludeVal ? "socio@navana.co" : "");
 
-            if (!nameVal || !emailVal) return;
+            if (!excludeVal && (!nameVal || !emailVal)) return;
 
             btn.disabled = true;
             btn.innerText = "Autorizando Acceso...";
