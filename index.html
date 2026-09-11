@@ -125,17 +125,17 @@
             color: var(--nv-ink-hi);
         }
 
-        /* Soporte Multilenguaje Seguro */
-        /* Ocultar inglés por defecto */
-        [lang="en"] {
+        /* Soporte Multilenguaje Seguro (No ocultar jamás la raíz html o body) */
+        /* Ocultar inglés por defecto en elementos del contenido */
+        :not(html):not(body)[lang="en"] {
             display: none !important;
         }
 
         /* Si el body tiene la clase lang-en, ocultar español y mostrar inglés respetando su layout */
-        body.lang-en [lang="es"] {
+        body.lang-en :not(html):not(body)[lang="es"] {
             display: none !important;
         }
-        body.lang-en [lang="en"] {
+        body.lang-en :not(html):not(body)[lang="en"] {
             display: unset !important;
         }
         /* Garantizar comportamiento de celdas de tabla */
