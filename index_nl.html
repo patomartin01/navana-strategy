@@ -966,7 +966,7 @@
     <!-- Auth / Telemetry Overlay Screen -->
     <div id="auth-overlay">
         <div class="auth-card">
-            <img src="logo_gold.png" alt="NAVANA" class="auth-logo-img">
+            <img src="logo_gold.png" alt="NAVANA" class="auth-logo-img" onclick="togglePartnerMode()" style="cursor: pointer;">
             <div class="auth-logo">NAVANA</div>
             <div class="auth-sub">Eco-Luxury Cabins</div>
             <div class="auth-title" id="auth-card-title">Toegang tot Financieel Dossier</div>
@@ -981,7 +981,7 @@
                     <label class="auth-label" for="user-email">E-mailadres</label>
                     <input class="auth-input" type="email" id="user-email" required placeholder="voorbeeld@bedrijf.com">
                 </div>
-                <div class="auth-input-group" style="display: flex; align-items: center; gap: 8px; margin-top: 12px; margin-bottom: 8px;">
+                <div id="exclude-telemetry-container" class="auth-input-group" style="display: none; align-items: center; gap: 8px; margin-top: 12px; margin-bottom: 8px;">
                     <input type="checkbox" id="exclude-telemetry" style="width: auto; cursor: pointer; accent-color: var(--navana-terracotta);">
                     <label for="exclude-telemetry" style="margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--nv-ink-muted); cursor: pointer; user-select: none;">Mijn bezoeken niet meten (Partnermodus)</label>
                 </div>
@@ -1638,6 +1638,22 @@
                 }
             }
         });
+
+        // --- EASTER-EGG PARTNER EXCLUSION TOGGLE ---
+        window.togglePartnerMode = function() {
+            const container = document.getElementById("exclude-telemetry-container");
+            const checkbox = document.getElementById("exclude-telemetry");
+            if (container) {
+                if (container.style.display === "none") {
+                    container.style.display = "flex";
+                    if (checkbox) checkbox.checked = true; // Auto-check for convenience!
+                    console.log("Partner mode activated via logo click.");
+                } else {
+                    container.style.display = "none";
+                    if (checkbox) checkbox.checked = false;
+                }
+            }
+        };
 
         // --- AUTH SUBMISSION ---
         window.handleAuthSubmit = function(event) {
