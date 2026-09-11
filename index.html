@@ -125,6 +125,10 @@
         }
 
         @media print {
+            @page {
+                size: letter;
+                margin: 15mm 15mm 20mm 15mm;
+            }
             .language-bar, .pdf-btn {
                 display: none !important;
             }
@@ -133,18 +137,31 @@
                 color: var(--nv-ink) !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
+                font-size: 13.5px !important;
+                line-height: 1.5 !important;
             }
             .container {
                 border: none !important;
                 box-shadow: none !important;
                 background-color: var(--nv-bg) !important;
-                padding: 40px 24px !important;
-                margin: 0 auto !important;
+                padding: 0px !important;
+                margin: 0 !important;
                 width: 100% !important;
                 max-width: 100% !important;
             }
+            /* Desplegar rejillas de 2 columnas de manera vertical en el PDF para evitar distorsión o textos apretados */
+            .grid-2 {
+                display: block !important;
+            }
+            .card {
+                width: 100% !important;
+                margin-bottom: 24px !important;
+                box-sizing: border-box !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
             /* Evitar cortes feos en filas de tabla y elementos de lista individuales */
-            tr, li, blockquote {
+            tr, li, blockquote, .callout {
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
             }
@@ -160,6 +177,11 @@
             table {
                 width: 100% !important;
                 table-layout: auto !important;
+                page-break-inside: avoid !important;
+            }
+            th, td {
+                padding: 8px 10px !important;
+                font-size: 11.5px !important;
             }
         }
 
