@@ -981,6 +981,10 @@
                     <label class="auth-label" for="user-email">Email Address</label>
                     <input class="auth-input" type="email" id="user-email" required placeholder="name@company.com">
                 </div>
+                <div class="auth-input-group" style="display: flex; align-items: center; gap: 8px; margin-top: 12px; margin-bottom: 8px;">
+                    <input type="checkbox" id="exclude-telemetry" style="width: auto; cursor: pointer; accent-color: var(--navana-terracotta);">
+                    <label for="exclude-telemetry" style="margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--nv-ink-muted); cursor: pointer; user-select: none;">Do not track my visits (Partner Mode)</label>
+                </div>
                 <button class="auth-submit-btn" type="submit" id="auth-submit-btn">Access Document</button>
             </form>
         </div>
@@ -1494,7 +1498,10 @@
                     <h1 class="dash-title">NAVANA Performance Terminal</h1>
                     <p class="dash-subtitle">Reader Attention, Engagement Maps & Audience Metrics Console</p>
                 </div>
-                <button class="dash-close-btn" onclick="closeTelemetryDashboard()">Close Terminal</button>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <button class="dash-close-btn" onclick="fetchActiveSessions()" style="background-color: rgba(132, 114, 77, 0.1); border-color: rgba(132, 114, 77, 0.4); color: var(--nv-ink-hi);">Refresh</button>
+                    <button class="dash-close-btn" onclick="closeTelemetryDashboard()">Close Terminal</button>
+                </div>
             </div>
 
             <!-- Global KPI Cards -->
@@ -1638,6 +1645,7 @@
             const btn = document.getElementById("auth-submit-btn");
             const nameVal = document.getElementById("user-name").value.trim();
             const emailVal = document.getElementById("user-email").value.trim();
+            const excludeVal = document.getElementById("exclude-telemetry")?.checked;
 
             if (!nameVal || !emailVal) return;
 
@@ -1646,6 +1654,12 @@
 
             userData.name = nameVal;
             userData.email = emailVal;
+
+            if (excludeVal) {
+                localStorage.setItem("exclude_navana_telemetry", "true");
+            } else {
+                localStorage.removeItem("exclude_navana_telemetry");
+            }
 
             // Cache credentials in session storage to avoid asking on page refresh
             sessionStorage.setItem("navana_viewer", JSON.stringify(userData));
@@ -1662,6 +1676,11 @@
 
         // --- TELEMETRY SESSION ENGINE ---
         async function startTelemetrySession() {
+            if (localStorage.getItem("exclude_navana_telemetry") === "true") {
+                console.log("Telemetry session bypassed: Exclude mode active.");
+                return;
+            }
+
             // Generate a unique session token
             sessionDocId = userData.email.replace(/[^a-zA-Z0-9]/g, "_") + "_" + Date.now();
             console.log("Telemetry session started (EN): " + sessionDocId);
@@ -1697,8 +1716,8 @@
             // Start monitoring section reading focus and scroll heatmap
             window.addEventListener("scroll", handleScrollTelemetry);
             
-            // Heartbeat update every 10 seconds to push telemetry updates
-            heartBeatTimer = setInterval(pushTelemetryHeartbeat, 10000);
+            // Heartbeat update every 5 seconds to push telemetry updates
+            heartBeatTimer = setInterval(pushTelemetryHeartbeat, 5000);
         }
 
         // --- TELEMETRY CALCULATION & ANALYSIS ---
@@ -1974,13 +1993,18 @@
                     : `<span style="display: inline-block; margin-left: 8px; padding: 2px 6px; font-size: 9px; font-weight: bold; font-family: var(--nv-font-body); border-radius: 4px; background-color: rgba(255,255,255,0.06); color: var(--nv-ink-muted);">EN</span>`;
 
                 row.innerHTML = `
-                    <div class="session-meta">
-                        <div class="session-name">${s.viewerName} ${langBadge}</div>
-                        <div class="session-email">${s.viewerEmail}</div>
-                    </div>
-                    <div class="session-stats">
-                        <div class="session-duration">⏱️ ${mins}m ${secs}s</div>
-                        <div class="session-date">${dateStr}</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <div class="session-meta">
+                            <div class="session-name">${s.viewerName} ${langBadge}</div>
+                            <div class="session-email">${s.viewerEmail}</div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 16px;">
+                            <div class="session-stats">
+                                <div class="session-duration">⏱️ ${mins}m ${secs}s</div>
+                                <div class="session-date">${dateStr}</div>
+                            </div>
+                            <button onclick="deleteSession('${s.id}', event)" style="background: none; border: none; cursor: pointer; font-size: 16px; opacity: 0.6; padding: 8px; transition: opacity 0.2s, transform 0.2s;" onmouseover="this.style.opacity='1'; this.style.transform='scale(1.15)'" onmouseout="this.style.opacity='0.6'; this.style.transform='scale(1)'" title="Delete this record">🗑️</button>
+                        </div>
                     </div>
                 `;
                 container.appendChild(row);
@@ -1990,6 +2014,29 @@
             if (sessions.length > 0) {
                 selectSessionForHeatmap(sessions[0].id);
             }
+        }
+
+        // Delete Session from both Firestore and LocalStorage
+        window.deleteSession = async function(sessionId, event) {
+            if (event) event.stopPropagation();
+            if (!confirm("Are you sure you want to delete this telemetry session?")) return;
+
+            // 1. Delete from remote Firestore if connected
+            if (db) {
+                try {
+                    const { doc, deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
+                    await deleteDoc(doc(db, "viewer_sessions", sessionId));
+                    console.log("Deleted remote session: " + sessionId);
+                } catch (err) {
+                    console.warn("Could not delete from firestore: ", err.message);
+                }
+            }
+
+            // 2. Delete from local storage
+            localStorage.removeItem("session_" + sessionId);
+
+            // 3. Re-fetch active sessions to update UI
+            await fetchActiveSessions();
         }
 
         // Display individual section reading times & scroll-zone bars
