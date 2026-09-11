@@ -2094,43 +2094,6 @@
                 sessions.sort((a, b) => new Date(b.loginTime) - new Date(a.loginTime));
             }
 
-            // C. If absolutely no sessions exist, seed beautiful mockup telemetry metrics for demonstration
-            if (sessions.length === 0) {
-                sessions = [
-                    {
-                        id: "socio_san_miguel",
-                        viewerName: "Lars - PropCo Partner",
-                        viewerEmail: "lars.partner@propco.nl",
-                        loginTime: new Date(Date.now() - 3600000).toISOString(),
-                        totalTimeSeconds: 412,
-                        maxScrollDepthPercent: 100,
-                        sectionAttentionTimes: {
-                            "1. Tesis de Inversión": 45,
-                            "2. Duale Structuur": 110,
-                            "4. Cap Table": 85,
-                            "5. Unit Economics": 72,
-                            "6. Desempeño Financiero": 90,
-                            "11. Conclusión": 10
-                        },
-                        scrollDepthBreakdown: { "25%": "18:10:02", "50%": "18:12:30", "75%": "18:15:15", "100%": "18:18:40" }
-                    },
-                    {
-                        id: "investor_isla",
-                        viewerName: "Emma - Family Office",
-                        viewerEmail: "emma.investor@fo-cap.nl",
-                        loginTime: new Date(Date.now() - 7200000).toISOString(),
-                        totalTimeSeconds: 198,
-                        maxScrollDepthPercent: 50,
-                        sectionAttentionTimes: {
-                            "1. Tesis de Inversión": 30,
-                            "2. Duale Structuur": 95,
-                            "3. Productiepartner": 73
-                        },
-                        scrollDepthBreakdown: { "25%": "17:35:10", "50%": "17:38:22" }
-                    }
-                ];
-            }
-
             loadedSessionsCache = sessions;
             renderDashboardData(sessions);
         }
@@ -2168,6 +2131,14 @@
             // 2. Render session list rows
             const container = document.getElementById("dash-sessions-container");
             container.innerHTML = "";
+
+            if (sessions.length === 0) {
+                container.innerHTML = `<div style="text-align: center; color: var(--nv-ink-muted); padding: 32px; font-family: var(--nv-font-body); font-size: 13px;">Geen telemetriesessies geregistreerd.</div>`;
+                document.getElementById("active-viewer-name").innerText = "-";
+                document.getElementById("active-viewer-email").innerText = "-";
+                document.getElementById("dash-heatmap-bars").innerHTML = "";
+                return;
+            }
 
             sessions.forEach((s, idx) => {
                 const row = document.createElement("div");

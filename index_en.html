@@ -2094,43 +2094,6 @@
                 sessions.sort((a, b) => new Date(b.loginTime) - new Date(a.loginTime));
             }
 
-            // C. If absolutely no sessions exist, seed beautiful mockup telemetry metrics for demonstration
-            if (sessions.length === 0) {
-                sessions = [
-                    {
-                        id: "socio_san_miguel",
-                        viewerName: "Diego - PropCo Partner",
-                        viewerEmail: "diego.partner@propco.com",
-                        loginTime: new Date(Date.now() - 3600000).toISOString(),
-                        totalTimeSeconds: 412,
-                        maxScrollDepthPercent: 100,
-                        sectionAttentionTimes: {
-                            "1. Investment Thesis": 45,
-                            "2. Dual OpCo/PropCo Corporate Model": 110,
-                            "4. Cap Table & Structural Dividends": 85,
-                            "5. Modular Unit Economics": 72,
-                            "6. Financial Performance Projections": 90,
-                            "11. Conclusion": 10
-                        },
-                        scrollDepthBreakdown: { "25%": "18:10:02", "50%": "18:12:30", "75%": "18:15:15", "100%": "18:18:40" }
-                    },
-                    {
-                        id: "investor_isla",
-                        viewerName: "Daniela - Family Office",
-                        viewerEmail: "daniela.investor@fo-cap.mx",
-                        loginTime: new Date(Date.now() - 7200000).toISOString(),
-                        totalTimeSeconds: 198,
-                        maxScrollDepthPercent: 50,
-                        sectionAttentionTimes: {
-                            "1. Investment Thesis": 30,
-                            "2. Dual OpCo/PropCo Corporate Model": 95,
-                            "3. Strategic Manufacturing Partner": 73
-                        },
-                        scrollDepthBreakdown: { "25%": "17:35:10", "50%": "17:38:22" }
-                    }
-                ];
-            }
-
             loadedSessionsCache = sessions;
             renderDashboardData(sessions);
         }
@@ -2168,6 +2131,14 @@
             // 2. Render session list rows
             const container = document.getElementById("dash-sessions-container");
             container.innerHTML = "";
+
+            if (sessions.length === 0) {
+                container.innerHTML = `<div style="text-align: center; color: var(--nv-ink-muted); padding: 32px; font-family: var(--nv-font-body); font-size: 13px;">No telemetry sessions recorded.</div>`;
+                document.getElementById("active-viewer-name").innerText = "-";
+                document.getElementById("active-viewer-email").innerText = "-";
+                document.getElementById("dash-heatmap-bars").innerHTML = "";
+                return;
+            }
 
             sessions.forEach((s, idx) => {
                 const row = document.createElement("div");
