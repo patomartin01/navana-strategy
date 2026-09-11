@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corporate and Financial Structuring - NAVANA GROUP</title>
+    <style>
+        /* Import official Navana Fonts from CDN */
+        @import url('https://api.fontshare.com/v2/css?f[]=ranade@300,400,500,700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            /* Colores Primarios Oficiales del Navana Brand Book */
+            --navana-terracotta: #8B2E1B;
+            --navana-olive: #6B6826;
+            --navana-sand: #A8956A;
+            --navana-slate: #607384;
+            --navana-earth: #5C4C32;
+            --navana-cream: #DED9CB;
+            
+            /* Paleta Operativa Oscura (AGENTS.md) */
+            --nv-bg: #1A1410;          /* carbón cálido base */
+            --nv-bg-deep: #16130F;     /* secciones hondas / headers */
+            --nv-bg-elevated: #1E1C18; /* cards / paneles */
+            --nv-bg-raised: #232119;   /* hover */
+            
+            --nv-ink-hi: #E8E2D6;      /* títulos (crema alto) */
+            --nv-ink: #DCD7C9;         /* texto principal */
+            --nv-ink-muted: #8A7B65;   /* captions / secundario */
+            
+            --nv-accent: #84724D;      /* bronce */
+            --nv-accent-hover: #B8AE9C;/* piedra */
+            --nv-text-gradient: linear-gradient(to right, #DCD7C9, #84724D);
+            --nv-accent-gradient: linear-gradient(to right, #DCD7C9, #B8AE9C);
+            
+            --nv-line: rgba(255, 255, 255, 0.08);
+            --nv-line-soft: rgba(255, 255, 255, 0.05);
+            --nv-line-strong: rgba(255, 255, 255, 0.14);
+            --nv-veil: rgba(255, 255, 255, 0.03);
+            --nv-veil-hover: rgba(255, 255, 255, 0.06);
+            
+            /* Tipografía */
+            --nv-font-display: 'Ranade', 'Gill Sans', Optima, sans-serif;
+            --nv-font-body: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+            
+            --nv-radius-md: 12px;
+            --nv-radius-lg: 16px;
+            --nv-radius-xl: 24px;
+            --nv-radius-full: 9999px;
+            
+            --nv-dur: 420ms;
+            --nv-ease: cubic-bezier(.22,.61,.36,1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--nv-font-body);
+            color: var(--nv-ink);
+            background-color: var(--nv-bg-deep);
+            line-height: 1.7;
+            font-size: 15px;
+            padding: 0;
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        /* Barra de Control de Idioma arriba en Pantalla (Oculta al imprimir) */
+        .language-bar {
+            background-color: var(--nv-bg-deep);
+            border-bottom: 1px solid var(--nv-line);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* Botón de Descarga PDF Premium */
+        .pdf-btn {
+            background: linear-gradient(135deg, var(--navana-terracotta), #a93c27);
+            border: none;
+            color: var(--nv-ink-hi) !important;
+            padding: 8px 20px;
+            font-family: var(--nv-font-body);
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 700;
+            border-radius: var(--nv-radius-full);
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(139, 46, 27, 0.4);
+            transition: all var(--nv-dur) var(--nv-ease);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-right: auto; /* Alinear a la izquierda de la barra */
+        }
+
+        .pdf-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 46, 27, 0.6);
+            filter: brightness(1.1);
+        }
+
+        .pdf-btn:active {
+            transform: translateY(0);
+        }
+
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--nv-line-strong);
+            color: var(--nv-ink-muted);
+            padding: 8px 18px;
+            font-family: var(--nv-font-body);
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+            border-radius: var(--nv-radius-full);
+            cursor: pointer;
+            transition: all var(--nv-dur) var(--nv-ease);
+        }
+
+        .lang-btn.active {
+            background: var(--navana-terracotta);
+            color: var(--nv-ink-hi);
+            border-color: var(--navana-terracotta);
+            box-shadow: 0 4px 15px rgba(139, 46, 27, 0.3);
+        }
+
+        .lang-btn:hover {
+            border-color: var(--nv-accent-hover);
+            color: var(--nv-ink-hi);
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 0; /* Margen 0 para sangrado completo (full-bleed) de fondo y ocultar encabezados del navegador */
+            }
+            .language-bar, .pdf-btn {
+                display: none !important;
+            }
+            body {
+                background-color: var(--nv-bg-deep) !important;
+                color: var(--nv-ink) !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                font-size: 13.5px !important;
+                line-height: 1.5 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            header {
+                border-radius: 0 !important;
+                border-bottom: 1px solid var(--nv-line-strong) !important;
+                padding: 24mm 20mm 16mm 20mm !important; /* Espaciado premium para la portada del PDF */
+                background-color: var(--nv-bg-deep) !important;
+                margin: 0 !important;
+            }
+            .container {
+                border: none !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                background-color: var(--nv-bg) !important;
+                padding: 16mm 20mm !important; /* Márgenes premium interiores que respiran con holgura */
+                margin: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                box-sizing: border-box !important;
+            }
+            footer {
+                border-radius: 0 !important;
+                margin-top: 0 !important;
+                padding: 12mm 20mm !important;
+                background-color: var(--nv-bg-deep) !important;
+                page-break-inside: avoid !important;
+            }
+            /* Desplegar rejillas de 2 columnas de manera vertical en el PDF para evitar distorsión o textos apretados */
+            .grid-2 {
+                display: block !important;
+            }
+            .card {
+                width: 100% !important;
+                margin-bottom: 24px !important;
+                box-sizing: border-box !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                background-color: var(--nv-veil) !important;
+                border: 1px solid var(--nv-line-soft) !important;
+            }
+            /* Evitar cortes feos en filas de tabla y elementos de lista individuales */
+            tr, li, blockquote, .callout {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+            h2, h3, h4 {
+                page-break-after: avoid !important;
+                break-after: avoid !important;
+            }
+            /* Forzar tabla responsive a ancho completo en impresión */
+            .table-responsive {
+                overflow: visible !important;
+                width: 100% !important;
+            }
+            table {
+                width: 100% !important;
+                table-layout: auto !important;
+                page-break-inside: avoid !important;
+            }
+            th, td {
+                padding: 8px 10px !important;
+                font-size: 11.5px !important;
+            }
+        }
+
+        /* Contenedor Editorial en Carbón Base */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 64px 48px;
+            background-color: var(--nv-bg);
+            border-radius: var(--nv-radius-xl);
+            margin-top: 48px;
+            margin-bottom: 48px;
+            border: 1px solid var(--nv-line);
+            box-shadow: 0 12px 40px rgba(12, 9, 6, 0.44);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Header Editorial con Fondo Oscuro Hondo */
+        header {
+            background-color: var(--nv-bg-deep);
+            color: var(--nv-ink-hi);
+            padding: 88px 32px;
+            text-align: center;
+            border-bottom: 1px solid var(--nv-line-strong);
+            border-radius: var(--nv-radius-xl) var(--nv-radius-xl) 0 0;
+            position: relative;
+        }
+
+        .logo-text {
+            font-family: var(--nv-font-display);
+            font-size: 52px;
+            letter-spacing: 14px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: var(--nv-ink-hi);
+            text-transform: uppercase;
+        }
+
+        .logo-sub {
+            font-family: var(--nv-font-body);
+            font-size: 11px;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: var(--nv-accent);
+            font-weight: 600;
+            margin-bottom: 28px;
+        }
+
+        .doc-title {
+            font-family: var(--nv-font-display);
+            font-size: 28px;
+            font-weight: 400;
+            max-width: 720px;
+            margin: 0 auto;
+            line-height: 1.25;
+            letter-spacing: var(--nv-tracking-tight);
+            color: var(--nv-ink-hi);
+        }
+
+        .confidential-tag {
+            font-family: var(--nv-font-body);
+            display: inline-block;
+            background-color: rgba(132, 114, 77, 0.12);
+            color: var(--nv-accent-hover);
+            border: 1px solid rgba(132, 114, 77, 0.3);
+            padding: 6px 18px;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-radius: var(--nv-radius-full);
+            margin-top: 24px;
+            font-weight: 500;
+        }
+
+        /* Firma Visual: Overline con Línea antes de cada H2 */
+        h2 {
+            font-family: var(--nv-font-display);
+            font-size: 22px;
+            color: var(--nv-ink-hi);
+            margin-top: 64px;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            text-transform: capitalize;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            position: relative;
+            page-break-after: avoid !important;
+            break-after: avoid !important;
+        }
+
+        h2::before {
+            content: '';
+            display: block;
+            width: 32px;
+            height: 1px;
+            background-color: rgba(220, 215, 201, 0.22);
+            margin-bottom: 12px;
+        }
+
+        h3 {
+            font-family: var(--nv-font-display);
+            font-size: 17px;
+            color: var(--nv-accent-hover);
+            margin-top: 40px;
+            margin-bottom: 14px;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+        }
+
+        p {
+            margin-bottom: 20px;
+            text-align: justify;
+            color: var(--nv-ink);
+            font-weight: 400;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        strong {
+            color: var(--nv-ink-hi);
+            font-weight: 500;
+        }
+
+        /* Grid en base a Cards de Vidrio */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin: 32px 0;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background-color: var(--nv-veil);
+            border: 1px solid var(--nv-line-soft);
+            padding: 28px;
+            border-radius: var(--nv-radius-lg);
+            transition: border-color var(--nv-dur) var(--nv-ease), background-color var(--nv-dur) var(--nv-ease);
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+
+        .card:hover {
+            background-color: var(--nv-veil-hover);
+            border-color: rgba(220, 215, 201, 0.2);
+        }
+
+        .card.gold {
+            border-top: 4px solid var(--nv-accent);
+            background-color: rgba(132, 114, 77, 0.04);
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+        
+        .card.gold:hover {
+            background-color: rgba(132, 114, 77, 0.07);
+        }
+
+        .card-title {
+            font-family: var(--nv-font-display);
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--nv-ink-hi);
+            margin-bottom: 14px;
+            letter-spacing: -0.01em;
+        }
+
+        /* Callout Corporativo de Marca */
+        .callout {
+            background-color: rgba(255, 255, 255, 0.02);
+            border-radius: var(--nv-radius-lg);
+            padding: 28px;
+            margin: 36px 0;
+            border: 1px solid var(--nv-line-soft);
+            border-left: 4px solid var(--nv-accent);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            margin: 32px 0;
+            border-radius: var(--nv-radius-lg);
+            border: 1px solid var(--nv-line-soft);
+            background-color: rgba(255, 255, 255, 0.01);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--nv-line-soft);
+            color: var(--nv-ink);
+        }
+
+        th {
+            background-color: rgba(132, 114, 77, 0.1);
+            color: var(--nv-ink-hi);
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            border-bottom: 1px solid var(--nv-line-strong);
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.01);
+        }
+        
+        tr:hover {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .font-bold {
+            font-weight: 600;
+            color: var(--nv-ink-hi);
+        }
+
+        ul, ol {
+            margin-left: 24px;
+            margin-bottom: 24px;
+            color: var(--nv-ink);
+            font-weight: 400;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        /* Alineación Tabular de Números en Cifras */
+        td, .tabular-nums {
+            font-variant-numeric: tabular-nums;
+        }
+
+        footer {
+            margin-top: 96px;
+            background-color: var(--nv-bg-deep);
+            color: var(--nv-ink-muted);
+            padding: 48px 32px;
+            text-align: center;
+            border-top: 1px solid var(--nv-line-strong);
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-radius: 0 0 var(--nv-radius-xl) var(--nv-radius-xl);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="language-bar">
+        <button class="pdf-btn" onclick="window.print()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Download PDF
+        </button>
+        <button class="lang-btn active" onclick="location.href='index_en.html'">English</button>
+        <button class="lang-btn" onclick="location.href='index.html'">Español</button>
+    </div>
+
+    <div class="container">
+
+        <header>
+            <div class="logo-text">NAVANA</div>
+            <div class="logo-sub">Eco-Luxury Cabins</div>
+            <div class="doc-title">Master Financial Modeling & Corporate Structuring Brief</div>
+            <div class="confidential-tag">Board Alignment Document - Confidential</div>
+        </header>
+
+        <!-- Secciones de Contenido -->
+        <h2>1. Business Definition & Investment Thesis</h2>
+        <p><strong>NAVANA</strong> is a premier PropTech / Hospitality platform designed to develop, deploy, and operate high-design, eco-friendly modular cabins (built onto heavy-duty trailer frames) optimized for short-term vacation rentals.</p>
+        <p>Our objective is to scale operations from an initial proof-of-concept (POC) to 1,000+ active operating units across Mexico and the Caribbean over 5 years, driving two highly lucrative, distinct exits:</p>
+        <ul>
+            <li><strong>Real Estate Exit:</strong> Selling stabilized regional cabin clusters to global real estate funds (FIBRAs / REITs) valued on institutional Cap Rates.</li>
+            <li><strong>Technology / Platform Exit:</strong> Selling the parent operating company (brand, IP, and direct booking technology) to venture capital firms or global hospitality conglomerates valued on high EBITDA multiples.</li>
+        </ul>
+
+        <h2>2. Corporate Architecture (The Dual OpCo/PropCo Model)</h2>
+        <p>To shield the business from physical real estate liabilities, maximize tech multiples, and scale rapidly without diluting founders, NAVANA separates its operations into two distinct corporate entities:</p>
+
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-title">A. NAVANA OpCo (Operating Company - "The Mind")</div>
+                <p><strong>Assets:</strong> Global brand rights, proprietary OTA booking software, architectural IP, business model, and specialized pop-up manufacturing methods. (Owns zero physical real estate).</p>
+                <p><strong>Revenue Streams:</strong></p>
+                <ul style="font-size: 13.5px; margin-left: 15px; margin-bottom: 12px;">
+                    <li>Design, installation, and deployment markup fees per modular cabin.</li>
+                    <li>Fixed Brand Management Fee ($50,000 MXN annually per operating cabin).</li>
+                    <li>Platform Revenue Share (15% platform fee on gross bookings driven via our proprietary OTA).</li>
+                </ul>
+                <p><strong>Valuation:</strong> Priced at premium asset-light tech and hospitality multiples (12x - 15x EBITDA).</p>
+            </div>
+
+            <div class="card gold">
+                <div class="card-title" style="color: var(--nv-ink-hi);">B. NAVANA PropCo (Property Company - "The Muscle")</div>
+                <p><strong>Assets:</strong> Physical ownership of cabins on trailers, and land lease / joint-venture revenue-sharing agreements with landowners.</p>
+                <p><strong>Revenue Streams:</strong> Gross booking rents (driven entirely by Navana's direct booking OTA channel).</p>
+                <p><strong>Structure:</strong> Managed through regional Trust Funds (Fideicomisos) per cluster, operating under an institutional <strong>Consolidated Rental Pool</strong>. Investors (including Family Offices, Real Estate Funds, HNWIs, and F&F circles) provide construction CAPEX in exchange for unified equity shares or trust certificates.</p>
+                <p><strong>Valuation:</strong> Valued on institutional real estate metrics (Cap Rate of 10% - 12% upon bulk portfolio exit).</p>
+            </div>
+        </div>
+
+        <!-- Estrategia de Ubicación y Tierras -->
+        <div class="callout" style="border-left-color: var(--navana-olive); background-color: rgba(107, 104, 38, 0.05); margin-top: 15px; margin-bottom: 20px;">
+            <p style="font-size: 14px; font-weight: bold; color: var(--nv-accent-hover); margin-top: 0; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+                Land Acquisition and Location Strategy (Optimal Cluster Size):
+            </p>
+            <p style="font-size: 13.5px; margin-bottom: 0; line-height: 1.6; text-align: justify; color: var(--nv-ink);">
+                To maximize raw land search efficiency, streamline corporate administration, and optimize on-site hospitality operations (managed by OpCo), NAVANA exclusively sources land parcels capable of hosting an <strong>optimal cluster size of 30 to 50 cabins</strong>. This unified scale guarantees guests complete privacy and eco-luxury seclusion, while building the critical mass and operational efficiency required to comfortably exceed the occupancy targets set in PropCo's financial model.
+            </p>
+        </div>
+
+        <h2>3. The Great Logistic Pivot (Framecrete Technology)</h2>
+        <p>The traditional bottleneck to scaling to 1,000+ cabins was high freight costs and slow factory production. This is resolved through a joint venture with our <strong>Industrial Manufacturing Partner</strong>, utilizing a cutting-edge, decentralized industrial setup.</p>
+        <div class="callout" style="border-left-color: var(--navana-olive); background-color: rgba(107, 104, 38, 0.05);">
+            <p style="font-size: 14px; font-weight: bold; color: var(--nv-accent-hover); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">The Hybrid Production Strategy ("Pop-Up Assembly Yards"):</p>
+            <ul style="font-size: 13.5px; margin-left: 15px; margin-bottom: 12px; color: var(--nv-ink);">
+                <li><strong>Framecrete Technology (CNC Light Steel):</strong> Structures do not use heavy structural timber, traditional welding, or slow custom craftwork. We utilize robur-galvanized cold-formed light-gauge steel, precision pre-cut by automated CNC tooling (Framecrete) and fast-assembled on-site using heavy rivets (idiot-proof, hardware-guided assembly).</li>
+                <li><strong>Central Tech Sourcing Hub (Consolidation):</strong> A single central plant extrudes Framecrete structural skeletons, wraps them in compact "Flat-Packs" (IKEA-style shipping bundles), and consolidates bulk logistics of technology components (smart hybrid inverters, batteries, solar setups).</li>
+                <li><strong>Regional "Pop-Up" Assembly Yards:</strong> Our building partners lease flexible, low-cost warehouse space close to final deployment locations (San Miguel, Jalisco coast, Caribbean). Flat-packs are shipped on standard flatbeds for a fraction of raw cargo freight costs. Local crews assemble structures onto heavy trailer systems, lock in smart insulation panels, and move cabins to sites.</li>
+            </ul>
+            <p style="margin-top: 10px; margin-bottom: 0; font-size: 13.5px; color: var(--nv-ink-hi);"><strong>Financial Impact:</strong> Cuts total hardware CAPEX by <strong>-30%</strong> compared to traditional modular suppliers.</p>
+        </div>
+
+        <h2>4. The Round Table & Corporate Equity (Cap Table)</h2>
+        <p>NAVANA is structuring its strategic "Round Table" capitalization and founding partnership. The dilution, asset ownership, and role divisions are structured as follows:</p>
+        <ul>
+            <li><strong>The Founders (Patricio, Diego, Daniela):</strong> Provide the global brand, operational IP, web booking architecture, organic digital marketing assets, and overall ecosystem design. They retain complete corporate control of OpCo and build secure real estate wealth by optionally co-investing OpCo's cash reserves directly into PropCo's physical yields.</li>
+            <li><strong>Industrial Manufacturing Partner (Industrial Co-Founder):</strong> Integrates directly into OpCo as a core operational stakeholder. They manage high-precision steel extrusion (Framecrete), central flat-pack material logistics, training of regional pop-up yard assembly crews, and delivery schedule optimization. Accrual of OpCo equity is bound to an active Vesting Schedule, strictly tied to hitting industrial milestones—most notably locking in the 30% discount on global cabin CAPEX.</li>
+            <li><strong>Pure Capital Investors (Family Offices, Real Estate Funds, HNWIs, and F&F circles):</strong> Capital is injected directly into PropCo's regional Trust Funds under a <strong>Consolidated Rental Pool</strong> structure. They receive high asset-backed cash flows (projections of ~35-40% annual EBITDA) and participate in bulk portfolio exits, while leaving OpCo's corporate cap table completely undiluted.</li>
+        </ul>
+
+        <h2>5. Unit Economics (Baseline Model Figures)</h2>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Unit Concept</th>
+                        <th>Amount (MXN)</th>
+                        <th>Technical / Operational Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="font-bold">Fully Equipped Cabin Cost (JV Partner)</td>
+                        <td>$525,000</td>
+                        <td>Industrialized manufacturing cost, fully furnished and solar-ready.</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">OpCo Markup (Design & Assembly)</td>
+                        <td>$26,250</td>
+                        <td>5% service markup captured by Navana OpCo upon delivery.</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">Logistics, Transport, and Plates</td>
+                        <td>$35,000</td>
+                        <td>Variable regional transport (San Miguel de Allende baseline). Includes flatbed shipping, site crane installation, and trailer road registration.</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">Site Utilities and Infrastructure</td>
+                        <td>$70,000</td>
+                        <td>On-site solar arrays, local biodigesters, clean water tanks, and deck build-outs.</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">Turnkey CAPEX per Unit</td>
+                        <td class="font-bold">$656,250</td>
+                        <td>Total capital deployed per cabin, fully funded by PropCo investors.</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">ADR (Average Daily Rate)</td>
+                        <td>$3,000</td>
+                        <td>Target night-rate, conservatively modeled on comparable eco-luxury rentals.</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">Target Occupancy Rate</td>
+                        <td>65%</td>
+                        <td>Stabilized average annual occupancy, achieved by month 6 of cluster operations.</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">Monthly Cabin Revenue</td>
+                        <td>$58,500</td>
+                        <td>Projected gross monthly unit yield ($3,000 ADR * 30 days * 65% occupancy).</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">Monthly Hospitality OPEX</td>
+                        <td>$17,550</td>
+                        <td>On-site operations, deep cleaning, linens, check-in, and guest care (30% of gross).</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">Platform Fee (OTA Royalty)</td>
+                        <td>$8,775</td>
+                        <td>15% platform and branding fee captured directly by Navana OpCo.</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">Monthly EBITDA per Cabin</td>
+                        <td class="font-bold">$32,175</td>
+                        <td>Net operational monthly cash flow per unit paid to PropCo's pool (55% EBITDA Margin).</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2>6. Consolidated Financial Projections (5-Year Plan)</h2>
+        <p>The total operating network of active NAVANA cabins scales globally as follows:</p>
+        <ul>
+            <li><strong>Year 1:</strong> 50 active cabins (1 pilot flagship cluster).</li>
+            <li><strong>Year 2:</strong> 150 active cabins (expansion into 3 regional clusters).</li>
+            <li><strong>Year 3:</strong> 350 active cabins (national scale consolidations).</li>
+            <li><strong>Year 4:</strong> 650 active cabins (deployment in international beach and valley sites).</li>
+            <li><strong>Year 5:</strong> 1,000+ active cabins (consolidated global network).</li>
+        </ul>
+
+        <p>With 1,000 stabilized cabins operating at Year 5, NAVANA locks in premier institutional metrics:</p>
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-title">Operating Company (OpCo) Metrics - Year 5</div>
+                <p><strong>Annual OpCo Revenue:</strong></p>
+                <ul>
+                    <li>Booking Platform Fee (15%): $105,300,000 MXN.</li>
+                    <li>Brand Management Fee: $50,000,000 MXN.</li>
+                    <li><strong>Total Revenue: $155,300,000 MXN.</strong></li>
+                </ul>
+                <p><strong>Projected EBITDA (65% Margin): $100,945,000 MXN (~$5,000,000 USD).</strong></p>
+                <p><strong>OpCo Exit Valuation (12x multiple): $1,211,340,000 MXN (~$60,000,000 USD).</strong></p>
+            </div>
+
+            <div class="card gold">
+                <div class="card-title" style="color: var(--nv-ink-hi);">Asset Holdings (PropCo) Metrics - Year 5</div>
+                <p><strong>Gross Network Revenue (1,000 Cabins): $702,000,000 MXN.</strong></p>
+                <p><strong>Network EBITDA (55%): $386,100,000 MXN (~$19,300,000 USD).</strong></p>
+                <p><strong>Average Investor ROI: 35.1% annually.</strong></p>
+                <p><strong>Physical Portfolio CAPEX Cost: $656,250,000 MXN.</strong></p>
+                <p><strong>PropCo Portfolio Exit (10% Cap Rate): $3,861,000,000 MXN (~$193,000,000 USD).</strong></p>
+            </div>
+        </div>
+
+        <h2>7. Funding Strategy & 5-Year Valuation Projections</h2>
+        <p>Depending on our capitalization model, funding goals and long-term founder equity stakes shift drastically:</p>
+
+        <div class="grid-2">
+            <div class="card" style="border-top-color: var(--navana-terracotta); background-color: #1E1715;">
+                <div class="card-title" style="color: var(--navana-terracotta); font-weight: bold;">Scenario A: Dual OpCo/PropCo Structure (Recommended)</div>
+                <p>Fosters an independent, dual-rail funding path optimized for rapid scale:</p>
+                <p><strong>RAIL 1 - SEED CAPITAL FOR OPCO (SOFTWARE & RUNWAY):</strong></p>
+                <ul style="font-size: 13.5px; margin-left: 15px;">
+                    <li><strong>Seed Capital Target:</strong> $3,500,000 MXN.</li>
+                    <li><strong>Use of Funds:</strong> Software core features, OTA booking system build-out, payroll, and marketing.</li>
+                    <li><strong>Instrument:</strong> SAFE with a $35,000,000 MXN Valuation Cap and 20% discount (~10% of future OpCo).</li>
+                    <li><strong>Year 5 Valuation:</strong> Operating 1,000 cabins, OpCo drives a $107,208,327 MXN EBITDA. Evaluated on a 12x software-brand multiple, OpCo is worth $1,287,499,920 MXN ($73,571,118 USD). The 10.0% seed slice is worth $128,749,992 MXN, locking in a 36.78x multiple.</li>
+                </ul>
+                <p><strong>RAIL 2 - ASSET CAPEX FOR PROPCO (CABINS):</strong></p>
+                <ul style="font-size: 13.5px; margin-left: 15px;">
+                    <li><strong>Sourcing:</strong> Trust-backed Rental Pools. Year 1 deployment of 50 flagship cabins requires $18,400,250 MXN (with cumulative CAPEX of $32,812,500 MXN).</li>
+                    <li><strong>Investor Yields:</strong> At Year 5, with 1,000 stabilized cabins, PropCo yields $129,510,128 MXN in net operating profit, returning a high annual ROI of 21.75% to asset owners (payback in 2.05 years).</li>
+                    <li><strong>Exit:</strong> Valued as a stabilized yield portfolio at 8x EBITDA, PropCo is acquired by global real estate funds for $3,002,881,872 MXN ($153,101,118 USD).</li>
+                </ul>
+            </div>
+
+            <div class="card" style="border-top-color: var(--navana-slate); background-color: #171B1F;">
+                <div class="card-title" style="color: var(--navana-slate); font-weight: bold;">Scenario B: Traditional All-in-One Capital Structure</div>
+                <p>No separation between operating company and assets. Funding is injected directly into a single, global holding company:</p>
+                <ul style="font-size: 13.5px; margin-left: 15px;">
+                    <li><strong>Dilution Risk:</strong> To fund physical construction, founders must raise the full $18,400,250 MXN in Year 1 directly in the parent company, causing founders to lose majority corporate control during Year 1.</li>
+                    <li><strong>Valuation Compression:</strong> Institutional acquirers will refuse to pay high tech software multiples (12x) on heavy physical assets. The company is valued globally on standard real estate multiples (8x - 10x EBITDA), cutting founder exit net value in half.</li>
+                    <li><strong>Systemic Liability:</strong> Local land, operational, or legal disputes on a physical cluster expose the parent brand and software entity to direct, devastating lawsuits.</li>
+                </ul>
+                <p style="margin-top: 10px; margin-bottom: 0; font-size: 13.5px; color: var(--nv-ink-hi);"><strong>Strategic Conclusion:</strong> The <strong>Dual Structure (Scenario A)</strong> is the only model that protects founder control, isolates liabilities, and maximizes overall portfolio valuation.</p>
+            </div>
+        </div>
+
+        <h2>8. Founder Equity Retention Strategies in OpCo</h2>
+        <p>To avoid diluting the parent operating company (OpCo) when funding physical cabins (PropCo), we structure three distinct strategies:</p>
+
+        <div class="grid-2">
+            <div class="card" style="border-top-color: var(--navana-sand); background-color: #1E1C15;">
+                <div class="card-title" style="color: var(--navana-sand);">Option A: OpCo Profit Reinvestment in PropCo (GP Co-Investment)</div>
+                <p>NAVANA OpCo utilizes capital markups and cash-flow surpluses from installations to purchase trust units in PropCo's physical yields.</p>
+                <p><strong>The Strategy:</strong> As the network scales, OpCo organically accumulates real estate assets. By Year 5, OpCo owns a massive chunk of physical cash flows without diluting founder control in OpCo.</p>
+                <p><strong>Flexibility:</strong> High discretion. The model simulates acquiring up to 24.95% of PropCo by Year 5, but founders can pause or adjust this to distribute dividends or fund software marketing as needed.</p>
+                <p><strong>Outcome:</strong> Acts as an optional wealth accelerator, building solid physical assets directly onto the light-tech parent company.</p>
+            </div>
+
+            <div class="card" style="border-top-color: var(--navana-slate); background-color: #1A1815;">
+                <div class="card-title" style="color: var(--navana-slate);">Option B: Carried Interest (Sweat Equity via Operations)</div>
+                <p>On clusters funded 100% by heavyweight institutional networks, NAVANA's hospitality management expertise is rewarded through operational performance tiers.</p>
+                <p><strong>The Strategy:</strong> Contractually agreed that once capital investors recoup initial layouts and lock in their preferred rate of return (Hurdle Rate, e.g., 12% annually), a percentage of surplus yields (e.g., 20%) is automatically converted into physical equity units for the founders.</p>
+                <p><strong>Outcome:</strong> Direct real estate ownership earned purely through operating excellence, without draining OpCo's working capital.</p>
+            </div>
+        </div>
+
+        <div class="callout" style="border-left-color: var(--navana-terracotta); background-color: rgba(182, 107, 75, 0.05); margin-top: 15px; margin-bottom: 20px;">
+            <p style="font-size: 14px; font-weight: bold; color: var(--navana-terracotta); margin-top: 0; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+                Option C: Discretionary Co-Investment (GP/LP Structure):
+            </p>
+            <p style="font-size: 13.5px; margin-bottom: 0; line-height: 1.6; text-align: justify; color: var(--nv-ink);">
+                Under institutional funds, founders act as General Partners (GP) and capital providers as Limited Partners (LP). Instead of automated reinvesting, founders can selectively co-invest small ticket-sizes (e.g., 1% to 5%) in premier clusters. This satisfies institutional mandates for skin-in-the-game while ensuring OpCo maintains strong cash runway reserves.
+            </p>
+        </div>
+
+        <h2>9. Advanced Manufacturing Plan: Pop-Up Assembly Yards (Hub & Spoke)</h2>
+        <p>To scale quality control internationally while dodging the prohibitive highway freight costs of moving massive fully-assembled cabins, logistics are deconstructed into a hybrid Hub & Spoke framework:</p>
+
+        <ul>
+            <li><strong>The Central Tech Sourcing Hub (Consolidation):</strong> A single fixed logistics plant handles bulk procurement of high-precision components, smart automation, and luxury finishes: smart solar panels, hybrid grid inverters, custom millwork, modular kitchens, pre-measured insulated panels, and designer furniture. These are systematically bundled into ultra-compact, flat flat-pack crates (<strong>Tech-Kits</strong>) and shipped regionally for a fraction of traditional freight costs.</li>
+            <li><strong>The "Pop-Up" Regional Assembly Yards:</strong> Our manufacturing partners strategically lease or joint-venture localized warehouse bays close to final cabin sites. Steel framing sections are delivered raw, mounted onto heavy-duty highway trailer frames, and assembled locally. Regional carpentry and installation crews build out the interiors under the direct, physical supervision of a certified NAVANA Quality Inspector to lock in build integrity.</li>
+            <li><strong>The Standardization Quality Hack (Master Assembly Jigs):</strong> To ensure absolute millimetric precision and rapid turnaround times across separate pop-up sites, our industrial partner deploys <strong>Master Steel Assembly Jigs</strong>. These heavy, calibrated structural guides guarantee that every steel joint, window trim, structural wall, and plumbing line fits the Tech-Kit components perfectly. This leverages local labor efficiently, speeds up production cycles, and cuts on-site material waste to virtually zero.</li>
+        </ul>
+
+        <h2>10. International Expansion Strategy (Scalability Without Borders)</h2>
+        <p>One of the primary benefits of the <strong>Dual OpCo/PropCo structure</strong> and localized <strong>Pop-Up Yards</strong> is their immediate, frictionless replicability. When physical footprint or market absorption in Mexico reaches natural thresholds, the global playbook can be seamlessly deployed in new international markets:</p>
+        
+        <div class="callout" style="border-left-color: var(--navana-olive); background-color: #1A1815; margin-top: 10px;">
+            <p><strong>The Global "Plug & Play" Scaling Framework:</strong></p>
+            <ul style="font-size: 13px; margin-left: 15px; margin-bottom: 0;">
+                <li style="margin-bottom: 6px;">
+                    <strong>Localized Sourcing Alliances:</strong> Instead of shipping physical cabins across complex international borders, NAVANA OpCo simply exports technology, designs, and assembly IP. We establish strategic alliances with certified light-steel plants and modular fabricators in the destination country (e.g., USA, Colombia, or Costa Rica), training them to utilize our proprietary <strong>Master Jigs</strong> and build out the tech kits locally.
+                </li>
+                <li style="margin-bottom: 6px;">
+                    <strong>Localized Capital Pools (Country-Specific PropCos):</strong> To fund physical rollout CAPEX in new markets, we structure regional Rental Pools and trusts with local Family Offices and real estate investment networks. The central operating company (NAVANA OpCo) manages the global booking technology and captures its un-diluted 15% booking royalties and brand management fees directly.
+                </li>
+                <li>
+                    <strong>Pure Asset-Light Scalability:</strong> This methodology completely insulates corporate operations from local real estate market fluctuations or currency risks. NAVANA positions itself as a premier, fast-deployment global eco-hospitality brand capable of entering new territories in a matter of months with zero centralized balance sheet debt.
+                </li>
+            </ul>
+        </div>
+
+        <h2>11. Conclusion and Next Steps for Board Partners</h2>
+        <p>The synthesis of the <strong>Dual Corporate Model (OpCo/PropCo)</strong> and the decentralized <strong>Pop-Up Assembly Yards</strong> represents the most agile, valuation-maximizing, and scalable architecture in modern hospitality. It completely shields founders from capital-heavy physical debt, unlocks premium multipliers, and paves the way to securing long-term real estate wealth.</p>
+
+    </div>
+
+    <footer>
+        NAVANA ECO-LUXURY CABINS • S.A.P.I. DE C.V. • 2026
+    </footer>
+
+    <!-- INTERACTIVIDAD CON JAVASCRIPT -->
+    <script>
+        // Pre-flight de carga de fuentes para asegurar impresión perfecta (Regla #2 del checklist)
+        window.addEventListener('DOMContentLoaded', () => {
+            if (document.fonts) {
+                const families = [
+                    '300 16px "Ranade"',
+                    '400 16px "Ranade"',
+                    '500 16px "Ranade"',
+                    '700 16px "Ranade"',
+                    '300 16px "Space Grotesk"',
+                    '400 16px "Space Grotesk"',
+                    '500 16px "Space Grotesk"',
+                    '600 16px "Space Grotesk"',
+                    '700 16px "Space Grotesk"'
+                ];
+                Promise.all(families.map(f => document.fonts.load(f).catch(() => {})))
+                    .then(() => document.fonts.ready)
+                    .then(() => {
+                        console.log('Premium fonts successfully loaded and verified.');
+                    });
+            }
+        });
+    </script>
+
+</body>
+</html>

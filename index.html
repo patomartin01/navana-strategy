@@ -9,12 +9,6 @@
         @import url('https://api.fontshare.com/v2/css?f[]=ranade@300,400,500,700&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
-        /* Ocultar encabezados y pies de página predeterminados al imprimir a PDF, con fondo oscuro fluido de sangrado completo */
-        @page {
-            size: A4;
-            margin: 0; /* Margen 0 para sangrado completo (full-bleed) de fondo */
-        }
-
         :root {
             /* Colores Primarios Oficiales del Navana Brand Book */
             --navana-terracotta: #8B2E1B;
@@ -124,6 +118,33 @@
             transform: translateY(0);
         }
 
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--nv-line-strong);
+            color: var(--nv-ink-muted);
+            padding: 8px 18px;
+            font-family: var(--nv-font-body);
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+            border-radius: var(--nv-radius-full);
+            cursor: pointer;
+            transition: all var(--nv-dur) var(--nv-ease);
+        }
+
+        .lang-btn.active {
+            background: var(--navana-terracotta);
+            color: var(--nv-ink-hi);
+            border-color: var(--navana-terracotta);
+            box-shadow: 0 4px 15px rgba(139, 46, 27, 0.3);
+        }
+
+        .lang-btn:hover {
+            border-color: var(--nv-accent-hover);
+            color: var(--nv-ink-hi);
+        }
+
         @media print {
             @page {
                 size: A4;
@@ -203,51 +224,6 @@
                 padding: 8px 10px !important;
                 font-size: 11.5px !important;
             }
-        }
-
-        .lang-btn {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--nv-line-strong);
-            color: var(--nv-ink-muted);
-            padding: 8px 18px;
-            font-family: var(--nv-font-body);
-            font-size: 11px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            font-weight: 600;
-            border-radius: var(--nv-radius-full);
-            cursor: pointer;
-            transition: all var(--nv-dur) var(--nv-ease);
-        }
-
-        .lang-btn.active {
-            background: var(--navana-terracotta);
-            color: var(--nv-ink-hi);
-            border-color: var(--navana-terracotta);
-            box-shadow: 0 4px 15px rgba(139, 46, 27, 0.3);
-        }
-
-        .lang-btn:hover {
-            border-color: var(--nv-accent-hover);
-            color: var(--nv-ink-hi);
-        }
-
-        /* Soporte Multilenguaje Seguro (No ocultar jamás la raíz html o body) */
-        /* Ocultar inglés por defecto en elementos del contenido */
-        :not(html):not(body)[lang="en"] {
-            display: none !important;
-        }
-
-        /* Si el body tiene la clase lang-en, ocultar español y mostrar inglés respetando su layout */
-        body.lang-en :not(html):not(body)[lang="es"] {
-            display: none !important;
-        }
-        body.lang-en :not(html):not(body)[lang="en"] {
-            display: unset !important;
-        }
-        /* Garantizar comportamiento de celdas de tabla */
-        body.lang-en th[lang="en"], body.lang-en td[lang="en"] {
-            display: table-cell !important;
         }
 
         /* Contenedor Editorial en Carbón Base */
@@ -508,825 +484,274 @@
 </head>
 <body>
 
-    <!-- Selector de Idioma Flotante (Oculto en PDF) -->
     <div class="language-bar">
         <button class="pdf-btn" onclick="window.print()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-            <span lang="es">Descargar PDF</span>
-            <span lang="en">Download PDF</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Descargar PDF
         </button>
-        <button class="lang-btn active" id="btn-es" onclick="setLanguage('es')">Español</button>
-        <button class="lang-btn" id="btn-en" onclick="setLanguage('en')">English</button>
+        <button class="lang-btn" onclick="location.href='index_en.html'">English</button>
+        <button class="lang-btn active" onclick="location.href='index.html'">Español</button>
     </div>
-
-    <!-- ENCABEZADO MULTILINGÜE -->
-    <header>
-        <div class="logo-text">NAVANA</div>
-        <div class="logo-sub">ECO-LUXURY CABINS</div>
-        
-        <!-- Versión Español -->
-        <h1 class="doc-title" lang="es">Expediente Maestro de Modelado Financiero y Estructuración Corporativa</h1>
-        <div class="confidential-tag" lang="es">Material de Alineación de Socios • Confidencial</div>
-        
-        <!-- Versión Inglés -->
-        <h1 class="doc-title" lang="en">Financial Modeling and Corporate Structuring Master Playbook</h1>
-        <div class="confidential-tag" lang="en">Partner Alignment Material • Confidential</div>
-    </header>
 
     <div class="container">
 
-        <!-- ========================================== -->
-        <!-- SECCIÓN 1: TESIS DE NEGOCIO / DEFINICIÓN   -->
-        <!-- ========================================== -->
-        <h2 lang="es">1. Definición del Negocio y Tesis de Inversión</h2>
-        <h2 lang="en">1. Business Definition and Investment Thesis</h2>
+        <header>
+            <div class="logo-text">NAVANA</div>
+            <div class="logo-sub">Eco-Luxury Cabins</div>
+            <div class="doc-title">Expediente Maestro de Modelado Financiero y Estructuración Corporativa</div>
+            <div class="confidential-tag">Material de Alineación de Socios - Confidencial</div>
+        </header>
 
-        <p lang="es"><strong>NAVANA</strong> es una plataforma PropTech / Hospitality diseñada para desarrollar, desplegar y operar ecosistemas de alojamiento ecológico y de alto diseño (tiny houses / cabañas sobre remolques) para rentas de corta estancia.</p>
-        <p lang="en"><strong>NAVANA</strong> is a PropTech / Hospitality platform designed to develop, deploy, and operate high-design, eco-friendly lodging ecosystems (tiny houses / cabins on trailers) optimized for short-term rentals.</p>
-
-        <p lang="es">El objetivo es escalar de un piloto (POC) a 1,000+ unidades operativas a nivel internacional (México y Caribe) en 5 años, logrando dos salidas financieras (Exits):</p>
-        <p lang="en">The roadmap focuses on scaling from a proof-of-concept (POC) to 1,000+ operational units internationally (Mexico and Caribbean) within 5 years, unlocking two high-yield financial exits:</p>
-
-        <ul lang="es">
-            <li><strong>Exit Inmobiliario:</strong> Venta de los clústeres de cabañas estabilizados a fondos de Real Estate (FIBRAs/REITs) bajo métricas de Cap Rate.</li>
+        <!-- Secciones de Contenido -->
+        <h2>1. Definición del Negocio y Tesis de Inversión</h2>
+        <p><strong>NAVANA</strong> es una plataforma PropTech / Hospitality diseñada para desarrollar, desplegar y operar ecosistemas de alojamiento ecológicos y de alto diseño (tiny houses / cabañas sobre remolques) para rentas de corta estancia.</p>
+        <p>El objetivo es escalar de un piloto (POC) a 1,000+ unidades operativas a nivel internacional (México y Caribe) en 5 años, logrando dos salidas financieras (Exits):</p>
+        <ul>
+            <li><strong>Exit Inmobiliario:</strong> Venta de los clústeres de cabañas estabilizadas a fondos de Real Estate (FIBRAs/REITs) bajo métricas de Cap Rate.</li>
             <li><strong>Exit Tecnológico/Plataforma:</strong> Venta de la empresa matriz (Operadora y Marca) a un fondo de Venture Capital o Conglomerado Hotelero bajo métricas de Múltiplo de EBITDA.</li>
         </ul>
-        <ul lang="en">
-            <li><strong>Real Estate Exit:</strong> Sale of stabilized cabin clusters to real estate funds (FIBRAs/REITs) priced on Cap Rate metrics.</li>
-            <li><strong>Technology/Platform Exit:</strong> Sale of the parent company (Operator and Brand IP) to a Venture Capital fund or Hospitality Conglomerate valued on EBITDA multiples.</li>
-        </ul>
 
-
-        <!-- ========================================== -->
-        <!-- SECCIÓN 2: MODELO DUAL / ARQUITECTURA      -->
-        <!-- ========================================== -->
-        <h2 lang="es">2. Arquitectura Corporativa (El Modelo Dual)</h2>
-        <h2 lang="en">2. Corporate Architecture (The Dual Model)</h2>
-
-        <p lang="es">Para aislar el riesgo físico, optimizar las valuaciones y permitir el escalamiento masivo sin diluir a los fundadores, el modelo de negocio está estrictamente separado en dos vehículos corporativos:</p>
-        <p lang="en">To insulate physical risk, optimize company valuations, and allow massive scalability without diluting core founders, the business is strictly divided into two distinct corporate vehicles:</p>
+        <h2>2. Arquitectura Corporativa (El Modelo Dual)</h2>
+        <p>Para aislar el riesgo físico, optimizar las valuaciones y permitir el escalamiento masivo sin diluir a los fundadores, el modelo de negocio está estrictamente separado en dos vehículos corporativos:</p>
 
         <div class="grid-2">
-            <!-- Bloque OpCo -->
-            <div class="card" style="border-top: 4px solid var(--navana-terracotta);">
-                <!-- Español -->
-                <div class="card-title" style="color: var(--nv-ink-hi);" lang="es">A. NAVANA OpCo (Operating Company - "La Mente")</div>
-                <p lang="es"><strong>Activos:</strong> Marca, software, diseño arquitectónico, IP, modelo de negocio, tecnología de manufactura. (No posee inmuebles fijos).</p>
-                <p lang="es"><strong>Fuentes de Ingreso:</strong></p>
-                <ul lang="es">
+            <div class="card">
+                <div class="card-title">A. NAVANA OpCo (Operating Company - "La Mente")</div>
+                <p><strong>Activos:</strong> Marca, software, diseño arquitectónico, IP, modelo de negocio, tecnología de manufactura. (No posee inmuebles fijos).</p>
+                <p><strong>Fuentes de Ingreso:</strong></p>
+                <ul style="font-size: 13.5px; margin-left: 15px; margin-bottom: 12px;">
                     <li>Markup de despliegue/instalación por cabaña física.</li>
-                    <li>Brand Management Fee ($30,000 MXN anual fijo por cabaña).</li>
+                    <li>Brand Management Fee ($50,000 MXN anual fijo por cabaña).</li>
                     <li>Platform Revenue Share (15% sobre ingresos brutos de renta mediante la OTA).</li>
                 </ul>
-                <p lang="es"><strong>Valuación:</strong> Cotiza a múltiplos de tecnología/hospitalidad Asset-Light (12x - 15x EBITDA).</p>
-
-                <!-- Inglés -->
-                <div class="card-title" style="color: var(--nv-ink-hi);" lang="en">A. NAVANA OpCo (Operating Company - "The Mind")</div>
-                <p lang="en"><strong>Assets:</strong> Brand IP, booking engine software, architectural design, proprietary operational playbooks, and manufacturing technology. (Completely asset-light).</p>
-                <p lang="en"><strong>Revenue Streams:</strong></p>
-                <ul lang="en">
-                    <li>Setup & installation markup per physical cabin deployed.</li>
-                    <li>Annual Brand Management Fee ($30,000 MXN flat per cabin).</li>
-                    <li>Platform Revenue Share (15% platform fee on gross bookings driven via our proprietary OTA).</li>
-                </ul>
-                <p lang="en"><strong>Valuation:</strong> Priced at premium asset-light tech and hospitality multiples (12x - 15x EBITDA).</p>
+                <p><strong>Valuación:</strong> Cotiza a múltiplos de tecnología/hospitalidad Asset-Light (12x - 15x EBITDA).</p>
             </div>
 
-            <!-- Bloque PropCo -->
             <div class="card gold">
-                <!-- Español -->
-                <div class="card-title" style="color: var(--nv-ink-hi);" lang="es">B. NAVANA PropCo (Property Company - "El Músculo")</div>
-                <p lang="es"><strong>Activos:</strong> Propiedad física de las cabañas sobre remolques, contratos de arrendamiento/revenue share con dueños de terrenos.</p>
-                <p lang="es"><strong>Fuentes de Ingreso:</strong> Rentas por hospedaje (vía la OTA/Plataforma directa de Navana).</p>
-                <p lang="es"><strong>Estructura:</strong> Funciona mediante Fideicomisos por Clúster operando bajo un esquema institucional de <strong>Pool de Rentas Consolidadas</strong>. Los inversionistas (Family Offices, Fondos Inmobiliarios, HNWIs y F&F) aportan capital semilla para la construcción a cambio de acciones o certificados de participación patrimonial unificada.</p>
-                <p lang="es"><strong>Valuación:</strong> Cotiza bajo métricas de bienes raíces (Cap Rate del 10% - 12% en el Exit consolidado).</p>
-
-                <!-- Inglés -->
-                <div class="card-title" style="color: var(--nv-ink-hi);" lang="en">B. NAVANA PropCo (Property Company - "The Muscle")</div>
-                <p lang="en"><strong>Assets:</strong> Physical ownership of cabins on trailers, and land lease / joint-venture revenue-sharing agreements with landowners.</p>
-                <p lang="en"><strong>Revenue Streams:</strong> Gross booking rents (driven entirely by Navana's direct booking OTA channel).</p>
-                <p lang="en"><strong>Structure:</strong> Managed through regional Trust Funds (Fideicomisos) per cluster, operating under an institutional <strong>Consolidated Rental Pool</strong>. Investors (including Family Offices, Real Estate Funds, HNWIs, and F&F circles) provide construction CAPEX in exchange for unified equity shares or trust certificates.</p>
-                <p lang="en"><strong>Valuation:</strong> Valued on institutional real estate metrics (Cap Rate of 10% - 12% upon bulk portfolio exit).</p>
+                <div class="card-title" style="color: var(--nv-ink-hi);">B. NAVANA PropCo (Property Company - "El Músculo")</div>
+                <p><strong>Activos:</strong> Propiedad física de las cabañas sobre remolques, contratos de arrendamiento/revenue share con dueños de terrenos.</p>
+                <p><strong>Fuentes de Ingreso:</strong> Rentas por hospedaje (vía la OTA/Plataforma directa de Navana).</p>
+                <p><strong>Estructura:</strong> Funciona mediante Fideicomisos por Clúster operando bajo un esquema institucional de <strong>Pool de Rentas Consolidadas</strong>. Los inversionistas (Family Offices, Fondos Inmobiliarios, HNWIs y F&F) aportan capital semilla para la construcción a cambio de acciones o certificados de participación patrimonial unificada.</p>
+                <p><strong>Valuación:</strong> Cotiza bajo métricas de bienes raíces (Cap Rate del 10% - 12% en el Exit consolidado).</p>
             </div>
         </div>
 
         <!-- Estrategia de Ubicación y Tierras -->
         <div class="callout" style="border-left-color: var(--navana-olive); background-color: rgba(107, 104, 38, 0.05); margin-top: 15px; margin-bottom: 20px;">
-            <!-- Español -->
-            <p style="font-size: 14px; font-weight: bold; color: var(--nv-accent-hover); margin-top: 0; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;" lang="es">
+            <p style="font-size: 14px; font-weight: bold; color: var(--nv-accent-hover); margin-top: 0; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
                 Estrategia de Ubicación y Tierras (Clúster Óptimo):
             </p>
-            <p style="font-size: 13.5px; margin-bottom: 0; line-height: 1.6; text-align: justify; color: var(--nv-ink);" lang="es">
+            <p style="font-size: 13.5px; margin-bottom: 0; line-height: 1.6; text-align: justify; color: var(--nv-ink);">
                 Para maximizar la eficiencia en la búsqueda de tierra, la administración corporativa y la operación logística en sitio (atribución de OpCo), NAVANA selecciona exclusivamente terrenos con capacidad de alojar un <strong>clúster óptimo de entre 30 y 50 cabañas</strong>. Esta escala unificada garantiza la privacidad, el aislamiento y la experiencia de lujo para el huésped, al tiempo que genera la masa crítica y la demanda operativa necesarias para superar holgadamente las tasas de ocupación proyectadas en el modelo financiero de PropCo.
-            </p>
-
-            <!-- Inglés -->
-            <p style="font-size: 14px; font-weight: bold; color: var(--nv-accent-hover); margin-top: 0; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;" lang="en">
-                Land Acquisition and Location Strategy (Optimal Cluster Size):
-            </p>
-            <p style="font-size: 13.5px; margin-bottom: 0; line-height: 1.6; text-align: justify; color: var(--nv-ink);" lang="en">
-                To maximize raw land search efficiency, streamline corporate administration, and optimize on-site hospitality operations (managed by OpCo), NAVANA exclusively sources land parcels capable of hosting an <strong>optimal cluster size of 30 to 50 cabins</strong>. This unified scale guarantees guests complete privacy and eco-luxury seclusion, while building the critical mass and operational efficiency required to comfortably exceed the occupancy targets set in PropCo's financial model.
             </p>
         </div>
 
-
-        <!-- ========================================== -->
-        <!-- SECCIÓN 3: PIVOTE LOGÍSTICO / FRAMECRETE   -->
-        <!-- ========================================== -->
-        <h2 lang="es">3. El Gran Pivote Logístico (Tecnología Framecrete)</h2>
-        <h2 lang="en">3. The Great Logistic Pivot (Framecrete Technology)</h2>
-
-        <p lang="es">El cuello de bottleneck para escalar a 1,000 cabañas era la producción y el flete. Esto se resuelve mediante la alianza con un <strong>Socio Industrial de Manufactura</strong>, integrando un esquema de manufactura industrial avanzada.</p>
-        <p lang="en">The traditional bottleneck to scaling to 1,000+ cabins was high freight costs and slow factory production. This is resolved through a joint venture with our <strong>Industrial Manufacturing Partner</strong>, utilizing a cutting-edge, decentralized industrial setup.</p>
-
+        <h2>3. El Gran Pivote Logístico (Tecnología Framecrete)</h2>
+        <p>El cuello de botella para escalar a 1,000 cabañas era la producción y el flete. Esto se resuelve mediante la alianza con un <strong>Socio Industrial de Manufactura</strong>, integrando un esquema de manufactura industrial avanzada.</p>
         <div class="callout" style="border-left-color: var(--navana-olive); background-color: rgba(107, 104, 38, 0.05);">
-            <!-- Español -->
-            <p style="font-size: 14px; font-weight: bold; color: var(--nv-accent-hover); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;" lang="es">La Estrategia de Producción Híbrida ("Micro-Fábricas Pop-Up"):</p>
-            <ul style="font-size: 13.5px; margin-left: 15px; margin-bottom: 12px; color: var(--nv-ink);" lang="es">
+            <p style="font-size: 14px; font-weight: bold; color: var(--nv-accent-hover); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">La Estrategia de Producción Híbrida ("Micro-Fábricas Pop-Up"):</p>
+            <ul style="font-size: 13.5px; margin-left: 15px; margin-bottom: 12px; color: var(--nv-ink);">
                 <li><strong>Tecnología Framecrete (Acero CNC):</strong> Las estructuras no usan acero tradicional ni soldadura que dependa de mano de obra experta. Se utiliza acero galvanizado conformado en frío (Light Gauge Steel), cortado milimétricamente por máquinas robóticas (Framecrete), que se ensambla únicamente con remaches (ensamble "Idiot-proof").</li>
                 <li><strong>Hub Central (Consolidación):</strong> Una planta central donde se extruye el acero Framecrete, se empaqueta en "Flat-Packs" (paquetes planos, tipo IKEA) y se consolidan las compras de volumen tecnológico (paneles solares, inversores, electrodomésticos).</li>
                 <li><strong>Unidades de Ensamble (Pop-Up):</strong> Se rentan naves industriales temporales cerca de los destinos finales (San Miguel, Jalisco, Caribe). El "Flat-Pack" llega vía remolque/contenedor por centavos (comparado con mover cabañas armadas). Mano de obra local ensambla el acero remachado sobre remolques, se montan paneles y techos, y se transporta fácilmente al terreno.</li>
             </ul>
-            <p style="margin-top: 10px; margin-bottom: 0; font-size: 13.5px; color: var(--nv-ink-hi);" lang="es"><strong>Impacto Financiero de la Alianza:</strong> Reducción del CAPEX unitario en un <strong>-30%</strong> frente a proveedores tradicionales.</p>
-
-            <!-- Inglés -->
-            <p style="font-size: 14px; font-weight: bold; color: var(--nv-accent-hover); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;" lang="en">The Hybrid Production Strategy ("Pop-Up Assembly Yards"):</p>
-            <ul style="font-size: 13.5px; margin-left: 15px; margin-bottom: 12px; color: var(--nv-ink);" lang="en">
-                <li><strong>Framecrete Technology (CNC Light Steel):</strong> Structures avoid heavy welding or artisanal labor. Cold-formed galvanized steel (Light Gauge Steel) is millimetrically extruded by robotic CNC machines (Framecrete) and assembled quickly using rivets in a modular "idiot-proof" setup.</li>
-                <li><strong>Central Consolidation Hub:</strong> A single master plant extrudes the Framecrete steel, packages them into flat-packs (IKEA-style flat shipping boxes), and consolidates bulk tech purchases (solar panels, smart home systems, luxury finishes).</li>
-                <li><strong>Pop-Up Assembly Yards:</strong> Temporary logistics bays are leased close to final cluster destinations (e.g., San Miguel, Jalisco, Caribbean). Shipping flat-packs costs pennies compared to hauling fully-built cabins. Local crews assemble the frame onto heavy-duty trailer frames, mount tech components, and transport the finished units directly to the land.</li>
-            </ul>
-            <p style="margin-top: 10px; margin-bottom: 0; font-size: 13.5px; color: var(--nv-ink-hi);" lang="en"><strong>Financial Impact of the Partnership:</strong> Guaranteed <strong>30% reduction</strong> in baseline cabin manufacturing CAPEX compared to industry competitors.</p>
+            <p style="margin-top: 10px; margin-bottom: 0; font-size: 13.5px; color: var(--nv-ink-hi);"><strong>Impacto Financiero de la Alianza:</strong> Reducción del CAPEX unitario en un <strong>-30%</strong> frente a proveedores tradicionales.</p>
         </div>
 
-
-        <!-- ========================================== -->
-        <!-- SECCIÓN 4: CAP TABLE / MESA REDONDA        -->
-        <!-- ========================================== -->
-        <h2 lang="es">4. La Mesa Redonda y Estructura de Equity (Cap Table)</h2>
-        <h2 lang="en">4. Capital Structure and Partner Alignment (Cap Table)</h2>
-
-        <p lang="es">NAVANA se encuentra en un proceso de levantamiento y estructuración para la "Mesa Redonda". Las reglas de dilución y de participación de socios en el corporativo son las siguientes:</p>
-        <p lang="en">NAVANA is currently structuring equity allocations and dilution rules for its executive roundtable. Corporate governance defines specific alignment tracks for each core partner class:</p>
-
-        <ul lang="es">
+        <h2>4. La Mesa Redonda y Estructura de Equity (Cap Table)</h2>
+        <p>NAVANA se encuentra en un proceso de levantamiento y estructuración para la "Mesa Redonda". Las reglas de dilución y de participación de socios en el corporativo son las siguientes:</p>
+        <ul>
             <li><strong>Los Fundadores (Patricio, Diego, Daniela):</strong> Aportan la propiedad intelectual (IP), la marca, la estrategia de marketing digital, el desarrollo de la plataforma OTA de reservas y la comercialización del ecosistema global. Mantienen el control de OpCo y construyen su patrimonio co-invirtiendo de manera opcional utilidades de OpCo en los clústeres físicos de PropCo.</li>
             <li><strong>Socio Estratégico de Manufactura (Co-Fundador Industrial):</strong> Se integra como un pilar técnico-operativo fundamental en OpCo. Su aportación consiste en la industrialización de la arquitectura (Tecnología Framecrete), la logística centralizada de materiales, el despliegue de las Unidades de Ensamble (Pop-Up) regionales, la coordinación de las cuadrillas locales de montaje, y la optimización de los tiempos de entrega. Su participación accionaria en OpCo está sujeta a un esquema de liberación gradual de acciones (Vesting) ligado al cumplimiento de hitos industriales compartidos, enfocados principalmente en garantizar y consolidar la reducción del 30% del CAPEX global del portafolio.</li>
-            <li><strong>Inversionistas de Capital Puro (Family Offices, Fondos Inmobiliarios, HNWIs y F&F):</strong> Su dinero se inyecta en los Fideicomisos de PropCo bajo el modelo de <strong>Pool de Rentas Consolidadas</strong>. Tienen la copropiedad unificada de los activos físicos que fondean, recibiendo un ROI esperado del ~35-40% anual (EBITDA), pero NO diluyen a la empresa matriz (OpCo) y se benefician de la plusvalía de un exit conjunto.</li>
-        </ul>
-        <ul lang="en">
-            <li><strong>Founding Members (Patricio, Diego, Daniela):</strong> Provide global branding, marketing strategy, proprietary booking OTA software, and overall development. They retain absolute corporate control of OpCo and build secure real estate wealth by optionally reinvesting OpCo cash reserves into PropCo physical assets.</li>
-            <li><strong>Strategic Manufacturing Partner (Industrial Co-Founder):</strong> Acts as a technical and operations cornerstone inside OpCo. Their contribution includes the industrialization of cabin architecture (Framecrete technology), central material supply chains, regional pop-up yard setup, local assembly supervision, and timeline optimization. Their OpCo equity is subject to a strict <strong>vesting schedule</strong> tied to the long-term achievement of the target 30% CAPEX reduction.</li>
-            <li><strong>Pure Capital Investors (Family Offices, Real Estate Funds, HNWIs, & F&F):</strong> Infuse liquidity directly into regional PropCo Trusts under a <strong>Consolidated Rental Pool</strong> structure. They enjoy outright fractioned property ownership, a high projected ROI of ~35-40% (EBITDA level), and exit appreciation, but DO NOT dilute the technology parent company (OpCo).</li>
+            <li><strong>Inversionistas de Capital Puro (Family Offices, Fondos Inmobiliarios, Inversionistas de Alto Patrimonio - HNWIs y F&F):</strong> Su dinero se inyecta en los Fideicomisos de PropCo bajo el modelo de <strong>Pool de Rentas Consolidadas</strong>. Tienen la copropiedad unificada de los activos físicos que fondean, recibiendo un ROI esperado del ~35-40% anual (EBITDA), pero NO diluyen a la empresa matriz (OpCo) y se benefician de la plusvalía de un exit conjunto.</li>
         </ul>
 
-
-        <!-- ========================================== -->
-        <!-- SECCIÓN 5: UNIT ECONOMICS                  -->
-        <!-- ========================================== -->
-        <h2 lang="es">5. Unit Economics (Cifras Base para el Modelo)</h2>
-        <h2 lang="en">5. Unit Economics (Baseline Operational Figures)</h2>
-
+        <h2>5. Unit Economics (Cifras Base para el Modelo)</h2>
         <div class="table-responsive">
             <table>
                 <thead>
                     <tr>
-                        <th lang="es">Concepto Unitario</th>
-                        <th lang="en">Unit Metric</th>
-                        <th lang="es">Monto (MXN)</th>
-                        <th lang="en">Amount (MXN)</th>
-                        <th lang="es">Descripción Técnica / Operativa</th>
-                        <th lang="en">Technical / Operational Details</th>
+                        <th>Concepto Unitario</th>
+                        <th>Monto (MXN)</th>
+                        <th>Descripción Técnica / Operativa</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="font-bold" lang="es">Costo de Cabaña 100% Equipada (Socio Manufactura)</td>
-                        <td class="font-bold" lang="en">Fully-Equipped Cabin Cost (Manufacturing Partner)</td>
-                        <td lang="es">$525,000</td>
-                        <td lang="en">$525,000</td>
-                        <td lang="es">Costo de fabricación industrializado, optimizado y 100% equipado.</td>
-                        <td lang="en">Optimized fabrication cost, completely equipped and turn-key.</td>
+                        <td class="font-bold">Costo de Cabaña 100% Equipada (Socio Manufactura)</td>
+                        <td>$525,000</td>
+                        <td>Costo de fabricación industrializado, optimizado y 100% equipado.</td>
                     </tr>
                     <tr>
-                        <td class="font-bold" lang="es">Margen Cabaña OpCo (Markup)</td>
-                        <td class="font-bold" lang="en">OpCo Markup Margin (Setup Fee)</td>
-                        <td lang="es">$26,250</td>
-                        <td lang="en">$26,250</td>
-                        <td lang="es">Margen cobrado por Navana OpCo por diseño e instalación (5%).</td>
-                        <td lang="en">Sourcing and assembly markup fee earned by Navana OpCo (5%).</td>
+                        <td class="font-bold">Margen Cabaña OpCo (Markup)</td>
+                        <td>$26,250</td>
+                        <td>Margen cobrado por Navana OpCo por diseño e instalación (5%).</td>
                     </tr>
                     <tr>
-                        <td class="font-bold" lang="es">Logística, Traslado y Matrícula</td>
-                        <td class="font-bold" lang="en">Logistics, Delivery & Mobile Registration</td>
-                        <td lang="es">$35,000</td>
-                        <td lang="en">$35,000</td>
-                        <td lang="es">Costo variable (cotización base para San Miguel de Allende). Incluye flete, maniobra de izaje regional y gestoría de matrícula de circulación para el remolque.</td>
-                        <td lang="en">Variable freight (quoted baseline for San Miguel de Allende). Includes flat-pack shipping, on-site crane staging, and road trailer registration.</td>
+                        <td class="font-bold">Logística, Traslado y Matrícula</td>
+                        <td>$35,000</td>
+                        <td>Costo variable (cotización base para San Miguel de Allende). Incluye flete, maniobra de izaje regional y gestoría de matrícula de circulación para el remolque.</td>
                     </tr>
                     <tr>
-                        <td class="font-bold" lang="es">Adecuación e Infraestructura (Clúster)</td>
-                        <td class="font-bold" lang="en">On-Site Infrastructure & Utilities Prep</td>
-                        <td lang="es">$70,000</td>
-                        <td lang="en">$70,000</td>
-                        <td lang="es">Adecuación de sitio, biodigestor, cisternas y manuales.</td>
-                        <td lang="en">Civil land preparation, eco-biodigester, water cisterns, and on-site utility hookups.</td>
+                        <td class="font-bold">Adecuación e Infraestructura (Clúster)</td>
+                        <td>$70,000</td>
+                        <td>Adecuación de sitio, biodigestor, cisternas y manuales.</td>
                     </tr>
                     <tr>
-                        <td class="font-bold" lang="es">CAPEX Unitario Llave en Mano</td>
-                        <td class="font-bold" lang="en">Turn-Key Unit CAPEX</td>
-                        <td class="font-bold" lang="es">$656,250</td>
-                        <td class="font-bold" lang="en">$656,250</td>
-                        <td lang="es">CAPEX total llave en mano financiado por inversionistas de PropCo.</td>
-                        <td lang="en">Total turn-key capital expenditures financed by PropCo real estate investors.</td>
+                        <td class="font-bold">CAPEX Unitario Llave en Mano</td>
+                        <td class="font-bold">$656,250</td>
+                        <td>CAPEX total llave en mano financiado por inversionistas de PropCo.</td>
                     </tr>
                     <tr>
-                        <td class="font-bold" lang="es">ADR (Tarifa Promedio Noche)</td>
-                        <td class="font-bold" lang="en">ADR (Average Daily Rate)</td>
-                        <td lang="es">$3,000</td>
-                        <td lang="en">$3,000</td>
-                        <td lang="es">Tarifa base promedio inicial en pesos mexicanos.</td>
-                        <td lang="en">Target average nightly rate in Mexican Pesos (MXN).</td>
+                        <td class="font-bold">ADR (Tarifa Promedio Noche)</td>
+                        <td>$3,000</td>
+                        <td>Tarifa promedio por noche proyectada conservadoramente en base a mercado de lujo ecológico.</td>
                     </tr>
                     <tr>
-                        <td class="font-bold" lang="es">Ocupación Base Anual</td>
-                        <td class="font-bold" lang="en">Target Annual Occupancy Rate</td>
-                        <td lang="es">55%</td>
-                        <td lang="en">55%</td>
-                        <td lang="es">Tasa de ocupación inicial promedio conservadora (201 noches/año).</td>
-                        <td lang="en">Conservative baseline occupancy rate (201 bookable nights per year).</td>
+                        <td class="font-bold">Ocupación Promedio Estable</td>
+                        <td>65%</td>
+                        <td>Ocupación anual promedio estabilizada a partir del mes 6 de operación del clúster.</td>
                     </tr>
                     <tr>
-                        <td class="font-bold" lang="es">Distribución Egresos PropCo</td>
-                        <td class="font-bold" lang="en">PropCo Expenses Breakdown</td>
-                        <td lang="es">18% + 10% + 15% (+ Costos Operativos)</td>
-                        <td lang="en">18% + 10% + 15% (+ Operating Costs)</td>
-                        <td lang="es">15% Plataforma OTA (OpCo) + 3% Pasarela / 10% Landowner (Suelo) / $30,000 MXN Brand Fee. Adicionalmente incluye: Gastos Operativos (insumos, servicios, lavandería), Nómina de Operación, Seguro de Cabaña y Reserva de Reposición FF&E.</td>
-                        <td lang="en">15% booking channel fee (OpCo) + 3% payment gateway / 10% gross landowner split / $30,000 MXN brand fee. Also covers utilities, cleaning/supplies, localized staff payroll, asset insurance, and FF&E reserve.</td>
+                        <td class="font-bold">Ingreso Mensual por Cabaña</td>
+                        <td>$58,500</td>
+                        <td>Ingreso bruto proyectado mensual por unidad ($3,000 ADR * 30 días * 65% ocupación).</td>
                     </tr>
                     <tr>
-                        <td class="font-bold" lang="es">Brand Fee Anual OpCo</td>
-                        <td class="font-bold" lang="en">Annual OpCo Brand Royalty Fee</td>
-                        <td lang="es">$30,000 / Año</td>
-                        <td lang="en">$30,000 / Year</td>
-                        <td lang="es">Cuota fija anual por cabaña para administración de marca por OpCo.</td>
-                        <td lang="en">Fixed annual royalty paid to OpCo per deployed cabin for brand usage.</td>
+                        <td class="font-bold">Gasto Operativo Mensual (OPEX)</td>
+                        <td>$17,550</td>
+                        <td>Costo de operación hotelera de Navana (30% de ingresos brutos). Incluye limpieza, consumibles, mantenimiento y amenities.</td>
                     </tr>
                     <tr>
-                        <td class="font-bold" lang="es">Margen Operativo Neto PropCo</td>
-                        <td class="font-bold" lang="en">PropCo Net Operating Margin</td>
-                        <td lang="es">~44.2%</td>
-                        <td lang="en">~44.2%</td>
-                        <td lang="es">Margen neto promedio de flujo por cabaña al Año 1.</td>
-                        <td lang="en">Year 1 net cashflow margin generated per cabin.</td>
+                        <td class="font-bold">Platform Fee (Comisión OTA)</td>
+                        <td>$8,775</td>
+                        <td>Comisión de plataforma de Navana OpCo (15% sobre ingresos brutos).</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">EBITDA Mensual por Cabaña</td>
+                        <td class="font-bold">$32,175</td>
+                        <td>Utilidad neta operativa mensual por cabaña para el Pool de Rentas de PropCo (55% de margen EBITDA).</td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
+        <h2>6. Proyecciones Financieras Consolidadas (5 Años)</h2>
+        <p>El escalamiento de cabañas activas bajo la operación de NAVANA se proyecta de la siguiente manera:</p>
+        <ul>
+            <li><strong>Año 1:</strong> 50 cabañas operativas (1 clúster piloto consolidado).</li>
+            <li><strong>Año 2:</strong> 150 cabañas operativas (expansión a 3 clústeres regionales).</li>
+            <li><strong>Año 3:</strong> 350 cabañas operativas (consolidación nacional).</li>
+            <li><strong>Año 4:</strong> 650 cabañas operativas (inicio de expansión internacional y Caribe).</li>
+            <li><strong>Año 5:</strong> 1,000+ cabañas operativas (consolidación global de la red).</li>
+        </ul>
 
-        <!-- ========================================== -->
-        <!-- SECCIÓN 6: P&L CONSOLIDADO (5 AÑOS)        -->
-        <!-- ========================================== -->
-        <h2 lang="es">6. Desempeño Financiero y P&L Consolidado del Grupo (5 Años)</h2>
-        <h2 lang="en">6. Group Financial Performance and Consolidated P&L (5-Year Plan)</h2>
-
-        <p lang="es">Para analizar el negocio en su conjunto y entender la verdadera potencia de la estructura dual, a continuación se consolida el Estado de Resultados (P&L), el porcentaje de contribución al EBITDA total y el nivel de apalancamiento que logramos al reinvertir flujos:</p>
-        <p lang="en">To evaluate the business ecosystem holistically, the table below consolidates the Group Income Statement (P&L), EBITDA contribution percentages, and the immense leverage unlocked through systematic cashflow reinvestment:</p>
-
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr style="background-color: var(--navana-olive); color: white;">
-                        <th style="text-align: left;" lang="es">Concepto Financiero (MXN)</th>
-                        <th style="text-align: left;" lang="en">Financial Line Item (MXN)</th>
-                        <th lang="es">Año 1</th><th lang="en">Year 1</th>
-                        <th lang="es">Año 2</th><th lang="en">Year 2</th>
-                        <th lang="es">Año 3</th><th lang="en">Year 3</th>
-                        <th lang="es">Año 4</th><th lang="en">Year 4</th>
-                        <th lang="es">Año 5</th><th lang="en">Year 5</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr style="background-color: rgba(132, 114, 77, 0.08); font-weight: bold; color: var(--nv-accent-hover);">
-                        <td colspan="6" style="text-align: left; padding-left: 10px; text-transform: uppercase; letter-spacing: 1.5px; font-size: 11px;" lang="es">1. P&L CONSOLIDADO</td>
-                        <td colspan="6" style="text-align: left; padding-left: 10px; text-transform: uppercase; letter-spacing: 1.5px; font-size: 11px;" lang="en">1. CONSOLIDATED P&L</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: left; padding-left: 15px;" lang="es">Ingresos PropCo</td>
-                        <td style="text-align: left; padding-left: 15px;" lang="en">PropCo Revenues</td>
-                        <td>$15,056,250</td>
-                        <td>$66,398,063</td>
-                        <td>$183,009,660</td>
-                        <td>$403,536,300</td>
-                        <td>$735,862,566</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: left; padding-left: 15px;" lang="es">Egresos PropCo</td>
-                        <td style="text-align: left; padding-left: 15px;" lang="en">PropCo Expenses</td>
-                        <td>$9,199,988</td>
-                        <td>$39,620,109</td>
-                        <td>$106,704,358</td>
-                        <td>$230,036,117</td>
-                        <td>$410,366,457</td>
-                    </tr>
-                    <tr style="font-weight: bold; color: var(--nv-accent-hover);">
-                        <td style="text-align: left; padding-left: 15px;" lang="es">EBITDA PropCo</td>
-                        <td style="text-align: left; padding-left: 15px;" lang="en">PropCo EBITDA</td>
-                        <td>$5,856,263</td>
-                        <td>$26,777,953</td>
-                        <td>$76,305,301</td>
-                        <td>$173,500,183</td>
-                        <td>$325,496,109</td>
-                    </tr>
-                    <tr style="border-top: 1px dashed rgba(255, 255, 255, 0.12);">
-                        <td style="text-align: left; padding-left: 15px;" lang="es">Ingresos OpCo</td>
-                        <td style="text-align: left; padding-left: 15px;" lang="en">OpCo Revenues</td>
-                        <td>$4,320,938</td>
-                        <td>$17,047,209</td>
-                        <td>$44,907,699</td>
-                        <td>$94,957,320</td>
-                        <td>$166,891,095</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: left; padding-left: 15px;" lang="es">Egresos OpCo</td>
-                        <td style="text-align: left; padding-left: 15px;" lang="en">OpCo Expenses</td>
-                        <td>$2,881,953</td>
-                        <td>$11,063,216</td>
-                        <td>$22,156,290</td>
-                        <td>$38,956,528</td>
-                        <td>$59,602,768</td>
-                    </tr>
-                    <tr style="font-weight: bold; color: var(--nv-accent-hover);">
-                        <td style="text-align: left; padding-left: 15px;" lang="es">EBITDA OpCo</td>
-                        <td style="text-align: left; padding-left: 15px;" lang="en">OpCo EBITDA</td>
-                        <td>$1,438,984</td>
-                        <td>$5,983,994</td>
-                        <td>$22,751,409</td>
-                        <td>$56,000,792</td>
-                        <td>$107,288,327</td>
-                    </tr>
-                    <tr style="background-color: rgba(255, 255, 255, 0.03); font-weight: bold; border-top: 1.5px solid var(--nv-accent); border-bottom: 1.5px solid var(--nv-accent); color: var(--nv-ink-hi);">
-                        <td style="text-align: left;" lang="es">EBITDA Navana Consolidado</td>
-                        <td style="text-align: left;" lang="en">Group Consolidated EBITDA</td>
-                        <td>$7,295,247</td>
-                        <td>$32,761,947</td>
-                        <td>$99,056,710</td>
-                        <td>$229,500,975</td>
-                        <td>$432,784,436</td>
-                    </tr>
-                    
-                    <tr style="background-color: rgba(132, 114, 77, 0.08); font-weight: bold; color: var(--nv-accent-hover);">
-                        <td colspan="6" style="text-align: left; padding-left: 10px; text-transform: uppercase; letter-spacing: 1.5px; font-size: 11px;" lang="es">2. DISTRIBUCIÓN DE CONTRIBUCIÓN AL EBITDA CONSOLIDADO</td>
-                        <td colspan="6" style="text-align: left; padding-left: 10px; text-transform: uppercase; letter-spacing: 1.5px; font-size: 11px;" lang="en">2. CONSOLIDATED EBITDA CONTRIBUTION SHARE</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: left; padding-left: 15px;" lang="es">Contribución de PropCo %</td>
-                        <td style="text-align: left; padding-left: 15px;" lang="en">PropCo Share %</td>
-                        <td>80.28%</td>
-                        <td>81.73%</td>
-                        <td>77.03%</td>
-                        <td>75.60%</td>
-                        <td>75.21%</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: left; padding-left: 15px;" lang="es">Contribución de OpCo %</td>
-                        <td style="text-align: left; padding-left: 15px;" lang="en">OpCo Share %</td>
-                        <td>19.72%</td>
-                        <td>18.27%</td>
-                        <td>22.97%</td>
-                        <td>24.40%</td>
-                        <td>24.79%</td>
-                    </tr>
- 
-                    <tr style="background-color: rgba(132, 114, 77, 0.08); font-weight: bold; color: var(--nv-accent-hover);">
-                        <td colspan="6" style="text-align: left; padding-left: 10px; text-transform: uppercase; letter-spacing: 1.5px; font-size: 11px;" lang="es">3. CAPEX E INTENSIDAD DE CAPITAL (APALANCAMIENTO)</td>
-                        <td colspan="6" style="text-align: left; padding-left: 10px; text-transform: uppercase; letter-spacing: 1.5px; font-size: 11px;" lang="en">3. CAPEX AND CAPITAL INTENSITY (LEVERAGE)</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: left; padding-left: 15px;" lang="es">CAPEX PropCo Total Requerido</td>
-                        <td style="text-align: left; padding-left: 15px;" lang="en">Required PropCo CAPEX</td>
-                        <td>$32,812,500</td>
-                        <td>$68,906,250</td>
-                        <td>$144,703,125</td>
-                        <td>$227,907,422</td>
-                        <td>$282,377,296</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: left; padding-left: 15px;" lang="es">Inversión OpCo Total Requerida</td>
-                        <td style="text-align: left; padding-left: 15px;" lang="en">Required OpCo Investment</td>
-                        <td>$2,881,953</td>
-                        <td>$0</td>
-                        <td>$0</td>
-                        <td>$0</td>
-                        <td>$0</td>
-                    </tr>
-                    <tr style="font-weight: bold; color: var(--navana-terracotta); border-top: 1px solid var(--nv-line-strong);">
-                        <td style="text-align: left; padding-left: 15px; color: var(--navana-terracotta);" lang="es">CAPEX & INVERSIÓN TOTAL</td>
-                        <td style="text-align: left; padding-left: 15px; color: var(--navana-terracotta);" lang="en">TOTAL CAPEX & EQUITY ROLLOUT</td>
-                        <td>$35,694,453</td>
-                        <td>$68,906,250</td>
-                        <td>$144,703,125</td>
-                        <td>$227,907,422</td>
-                        <td>$282,377,296</td>
-                    </tr>
-                    <tr style="color: #8A7B65; font-size: 12px;">
-                        <td style="text-align: left; padding-left: 15px; font-style: italic;" lang="es">Déficit / Superávit de Caja del Año (Flujo Neto)</td>
-                        <td style="text-align: left; padding-left: 15px; font-style: italic;" lang="en">Annual Cash Deficit / Surplus (Net Liquidity)</td>
-                        <td>-$35,694,453</td>
-                        <td>-$61,611,003</td>
-                        <td>-$111,941,178</td>
-                        <td>-$128,850,711</td>
-                        <td>-$52,876,321</td>
-                    </tr>
-                    <tr style="font-weight: bold; color: var(--navana-earth);">
-                        <td style="text-align: left; padding-left: 15px;" lang="es">% de Apalancamiento de Expansión Sistémico</td>
-                        <td style="text-align: left; padding-left: 15px;" lang="en">% Systemic Expansion Reinvestment Leverage</td>
-                        <td>—</td>
-                        <td>10.59%</td>
-                        <td>22.64%</td>
-                        <td>43.46%</td>
-                        <td>81.27%</td>
-                    </tr>
-                    <tr style="font-weight: bold; color: var(--navana-terracotta);">
-                        <td style="text-align: left; padding-left: 15px;" lang="es">Capacidad Adquisición OpCo (Skin in the Game)</td>
-                        <td style="text-align: left; padding-left: 15px;" lang="en">OpCo Asset Purchase Capacity (Skin in the Game)</td>
-                        <td>2 cabañas</td>
-                        <td>9 cabañas</td>
-                        <td>31 cabañas</td>
-                        <td>74 cabañas</td>
-                        <td>135 cabañas</td>
-                    </tr>
-                    <tr style="font-weight: bold; background-color: rgba(255, 255, 255, 0.02); color: var(--nv-accent-hover); border-top: 1px dashed rgba(255, 255, 255, 0.12);">
-                        <td style="text-align: left; padding-left: 15px;" lang="es">Cabañas Propias Acumuladas OpCo</td>
-                        <td style="text-align: left; padding-left: 15px;" lang="en">Cumulative OpCo-Owned Cabins</td>
-                        <td>2 cabañas</td>
-                        <td>11 cabañas</td>
-                        <td>42 cabañas</td>
-                        <td>116 cabañas</td>
-                        <td>251 cabañas (24.95%)</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Justificación del Doble Apalancamiento -->
-        <div class="callout" style="border-left-color: var(--navana-olive); background-color: rgba(107, 104, 38, 0.05); margin-top: 15px;">
-            <!-- Español -->
-            <p lang="es"><strong>Doble Perspectiva de Apalancamiento y Patrimonio (Análisis Ajustado):</strong></p>
-            <p style="margin-top: 5px; margin-bottom: 8px; font-size: 13.5px;" lang="es">
-                Para presentar una tesis sólida a fondos institucionales, dividimos el análisis en dos métricas clave:
-            </p>
-            <ul style="font-size: 13px; margin-left: 15px; margin-bottom: 12px; color: var(--nv-ink);" lang="es">
-                <li style="margin-bottom: 6px;">
-                    <strong>1. Apalancamiento de Expansión Sistémico (81.27% en Año 5):</strong> Mide la capacidad del de ecosistema conjunto para reinvertir flujos consolidados. Demuestra que, asumiendo esquemas de fideicomiso y coinversión, el sistema es virtualmente autónomo en su madurez, requiriendo levantar muy poco capital externo nuevo para expandirse.
-                </li>
-                <li>
-                    <strong>2. Capacidad de Adquisición de Activos de OpCo (Skin in the Game):</strong> Representa el flujo libre de la operadora tecnológica (EBITDA de OpCo) utilizado de manera <strong>opcional</strong> para comprar y absorber propiedad física en PropCo. El modelo simula un escenario de reinversión donde al cierre del Año 5, los fundadores habrán adquirido acumuladamente un portafolio de <strong>251 cabañas físicas (el 24.95% del total del grupo)</strong> 100% de su propiedad, pagadas con las utilidades de su plataforma. ¡Esto representa un patrimonio inmobiliario libre de deuda de <strong>$164.7M MXN</strong> creado sin descapitalizarse!
-                </li>
-            </ul>
-
-            <!-- Inglés -->
-            <p lang="en"><strong>Dual Leverage and Wealth Generation Framework:</strong></p>
-            <p style="margin-top: 5px; margin-bottom: 8px; font-size: 13.5px;" lang="en">
-                To present an institutional-grade thesis, we break down system liquidity and asset acquisition into two key metrics:
-            </p>
-            <ul style="font-size: 13px; margin-left: 15px; margin-bottom: 12px; color: var(--nv-ink);" lang="en">
-                <li style="margin-bottom: 6px;">
-                    <strong>1. Systemic Reinvestment Leverage (81.27% in Year 5):</strong> Measures the consolidated ecosystem's capacity to fund its own physical cabin expansion. It proves that upon reaching maturity, the combined network is virtually self-sustaining, requiring almost no raw external capital to continue growing.
-                </li>
-                <li>
-                    <strong>2. OpCo Asset Acquisition Capacity (Skin in the Game):</strong> Models the strategic decision of the tech operating company to utilize its dry powder (free OpCo cashflow / EBITDA) to absorb physical cabins inside PropCo. By Year 5, this optional model shows founders accumulating a high-yield portfolio of <strong>251 fully-owned physical cabins (24.95% of the global network)</strong>. This builds a debt-free real estate empire valued at <strong>$164.7M MXN</strong>, funded entirely by technology platform royalties.
-                </li>
-            </ul>
-
-            <!-- Tabla de SOTP Exit -->
-            <p style="margin-top: 10px; margin-bottom: 8px; font-size: 13.5px; font-weight: bold; color: var(--nv-accent-hover);" lang="es">
-                Escenario de Exit Unificado para Socios Fundadores (Año 5 - Suma de las Partes / SOTP):
-            </p>
-            <p style="margin-top: 10px; margin-bottom: 8px; font-size: 13.5px; font-weight: bold; color: var(--nv-accent-hover);" lang="en">
-                Unified Founder Exit Scenario (Year 5 - Sum-of-the-Parts / SOTP Valuation):
-            </p>
-
-            <div class="table-container" style="margin-top: 5px; margin-bottom: 5px; background: rgba(0, 0, 0, 0.15); padding: 10px; border-radius: 6px; box-shadow: none; border: 1px solid var(--nv-line-soft);">
-                <table style="width: 100%; margin: 0; font-size: 12px;">
-                    <thead>
-                        <tr style="background-color: rgba(132, 114, 77, 0.15); color: var(--nv-ink-hi);">
-                            <th style="text-align: left; padding: 6px;" lang="es">Componente de Exit</th>
-                            <th style="text-align: left; padding: 6px;" lang="en">Exit Value Component</th>
-                            <th style="padding: 6px;" lang="es">Valor Estimado (MXN)</th>
-                            <th style="padding: 6px;" lang="en">Estimated Value (MXN)</th>
-                            <th style="padding: 6px;" lang="es">Criterio de Valuación</th>
-                            <th style="padding: 6px;" lang="en">Valuation Methodology</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="text-align: left; padding: 6px; font-weight: bold;" lang="es">Valuación Operadora (OpCo)</td>
-                            <td style="text-align: left; padding: 6px; font-weight: bold;" lang="en">Operating Company Valuation (OpCo)</td>
-                            <td>$1,287,459,926</td>
-                            <td>$1,287,459,926</td>
-                            <td lang="es">Múltiplo de 12x EBITDA Tecnológico ($107.2M)</td>
-                            <td lang="en">Industry multiplier of 12x Tech EBITDA ($107.2M)</td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: left; padding: 6px; font-weight: bold;" lang="es">Participación Física Adquirida (PropCo)</td>
-                            <td style="text-align: left; padding: 6px; font-weight: bold;" lang="en">Accumulated Real Estate Equity (PropCo)</td>
-                            <td>$649,796,443</td>
-                            <td>$649,796,443</td>
-                            <td lang="es">24.95% de los Activos de PropCo ($2.60B)</td>
-                            <td lang="en">24.95% share of total physical PropCo Assets ($2.60B)</td>
-                        </tr>
-                        <tr style="background-color: rgba(255, 255, 255, 0.02); font-weight: bold; color: var(--nv-accent-hover); border-top: 1.5px solid var(--nv-accent);">
-                            <td style="text-align: left; padding: 6px;" lang="es">SUMA DE LAS PARTES (EXIT TOTAL)</td>
-                            <td style="text-align: left; padding: 6px;" lang="en">SUM-OF-THE-PARTS (TOTAL EXIT VALUE)</td>
-                            <td>$1,937,256,369</td>
-                            <td>$1,937,256,369</td>
-                            <td lang="es">~110.5M USD Recolectados por Socios</td>
-                            <td lang="en">~110.5M USD realized value generated for founders</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <p style="margin-top: 8px; margin-bottom: 0; font-size: 12.5px; font-style: italic; color: var(--nv-ink-muted);" lang="es">
-                *Nota: Este análisis demuestra la enorme opcionalidad y la "suma de las partes" que ofrece el esquema dual. No obliga a los fundadores a reinvertir el 100% de la caja de OpCo en ladrillo físico, pero sí modela la potencia patrimonial de destinar excedentes de la plataforma hacia activos tangibles.
-            </p>
-            <p style="margin-top: 8px; margin-bottom: 0; font-size: 12.5px; font-style: italic; color: var(--nv-ink-muted);" lang="en">
-                *Note: This sum-of-the-parts (SOTP) model showcases maximum flexibility. Founders are not legally locked into purchasing physical cabins, but it charts the sheer asset-creation power of deploying software commissions into physical properties.
-            </p>
-        </div>
-
-
-        <!-- ========================================== -->
-        <!-- SECCIÓN 7: COMPARATIVA DE ESCENARIOS       -->
-        <!-- ========================================== -->
-        <h2 lang="es">7. El Tema del Financiamiento y Proyecciones de Valuación (5 Años)</h2>
-        <h2 lang="en">7. Funding Strategies and 5-Year Valuation Forecasts</h2>
-
-        <p lang="es">Dependiendo de la decisión estructural que se tome hoy, la estrategia de financiamiento, las metas de levantamiento de capital y el valor final del negocio cambian drásticamente:</p>
-        <p lang="en">The core corporate setup chosen today dictates the long-term funding roadmap, raw dilution profiles, and the final exit valuation of NAVANA:</p>
-
-        <!-- Comparativa Escenario A y Escenario B en 2 Recuadros (Grid) -->
+        <p>Con un portafolio de 1,000 cabañas estabilizadas al Año 5, las métricas del ecosistema consolidan un valor institucional de primer nivel:</p>
         <div class="grid-2">
-            
-            <!-- Recuadro Escenario A -->
-            <div class="card" style="border-top: 4px solid var(--navana-terracotta); background-color: rgba(255, 255, 255, 0.02); position: relative;">
-                <div style="position: absolute; top: -11px; right: 15px; background: var(--nv-accent); color: var(--nv-ink-hi); font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 1px 3px rgba(0,0,0,0.3);" lang="es">
-                    Óptimo / Estrategia Recomendada
-                </div>
-                <div style="position: absolute; top: -11px; right: 15px; background: var(--nv-accent); color: var(--nv-ink-hi); font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 1px 3px rgba(0,0,0,0.3);" lang="en">
-                    OPTIMAL / RECOMMENDED STRATEGY
-                </div>
+            <div class="card">
+                <div class="card-title">Métricas Consolidadas de la Operadora (OpCo) - Año 5</div>
+                <p><strong>Ingresos Anuales de OpCo:</strong></p>
+                <ul>
+                    <li>Por Booking Platform Fee (15%): $105,300,000 MXN.</li>
+                    <li>Por Brand Management Fee: $50,000,000 MXN.</li>
+                    <li><strong>Ingresos Totales: $155,300,000 MXN.</strong></li>
+                </ul>
+                <p><strong>EBITDA Proyectado (65% Margen): $100,945,000 MXN (~$5,000,000 USD).</strong></p>
+                <p><strong>Valuación de Salida de OpCo (Múltiplo 12x): $1,211,340,000 MXN (~$60,000,000 USD).</strong></p>
+            </div>
 
-                <div class="card-title" style="color: var(--nv-ink-hi); font-weight: bold; font-size: 15px; margin-top: 5px;" lang="es">
-                    Escenario A: Estructura Dual (OpCo y PropCo)
-                </div>
-                <div class="card-title" style="color: var(--nv-ink-hi); font-weight: bold; font-size: 15px; margin-top: 5px;" lang="en">
-                    Scenario A: Dual Structure (OpCo and PropCo)
-                </div>
+            <div class="card gold">
+                <div class="card-title" style="color: var(--nv-ink-hi);">Métricas Consolidadas de Activos (PropCo) - Año 5</div>
+                <p><strong>Ingresos Brutos de la Red (1,000 Cabañas): $702,000,000 MXN.</strong></p>
+                <p><strong>EBITDA de la Red (55%): $386,100,000 MXN (~$19,300,000 USD).</strong></p>
+                <p><strong>ROI Promedio Anual para Inversionistas: 35.1% anual.</strong></p>
+                <p><strong>Costo de Reemplazo Físico (CAPEX 1,000 Unidades): $656,250,000 MXN.</strong></p>
+                <p><strong>Valuación de Salida de PropCo (Cap Rate 10%): $3,861,000,000 MXN (~$193,000,000 USD).</strong></p>
+            </div>
+        </div>
 
-                <p lang="es">Este camino nos permite dividir el levantamiento en dos rieles independientes con objetivos específicos:</p>
-                <p lang="en">This architecture splits corporate capitalization into two independent, highly-targeted funding channels:</p>
-                
-                <h4 style="font-size: 13.5px; text-transform: uppercase; color: var(--nv-accent-hover); margin-top: 15px; margin-bottom: 6px; font-weight: bold;" lang="es">
-                    Riel 1 - Capital Semilla para OpCo (Software/Runway)
-                </h4>
-                <h4 style="font-size: 13.5px; text-transform: uppercase; color: var(--nv-accent-hover); margin-top: 15px; margin-bottom: 6px; font-weight: bold;" lang="en">
-                    Track 1 - OpCo Seed Capital (Software and Runway)
-                </h4>
+        <h2>7. El Tema Del Financiamiento Y Proyecciones De Valuación (5 Años)</h2>
+        <p>Dependiendo de la decisión estructural que se tome hoy, la estrategia de financiamiento, las metas de levantamiento de capital y el valor final del negocio cambian drásticamente:</p>
 
-                <ul style="font-size: 13px; margin-bottom: 12px; margin-left: 15px;" lang="es">
-                    <li><strong>Monto a Levantar:</strong> <strong>$3,500,000 MXN</strong>.</li>
+        <div class="grid-2">
+            <div class="card" style="border-top-color: var(--navana-terracotta); background-color: #1E1715;">
+                <div class="card-title" style="color: var(--navana-terracotta); font-weight: bold;">Escenario A: Estructura Dual (OpCo y PropCo)</div>
+                <p>Este camino nos permite dividir el levantamiento en dos rieles independientes con objetivos específicos:</p>
+                <p><strong>RIEL 1 - CAPITAL SEMILLA PARA OPCO (SOFTWARE/RUNWAY):</strong></p>
+                <ul style="font-size: 13.5px; margin-left: 15px;">
+                    <li><strong>Monto a Levantar:</strong> $3,500,000 MXN.</li>
                     <li><strong>Destino:</strong> Runway operativo de arranque (software de reservas de la plataforma, nómina central e integraciones).</li>
-                    <li><strong>Formato Legal:</strong> <strong>SAFE</strong> con un <strong>Valuation Cap de $35,000,000 MXN</strong> y <strong>20% de descuento</strong> (~10.0% de la OpCo futura).</li>
-                    <li><strong>Valuación al Año 5:</strong> Con 1,004 cabañas activas, la OpCo proyecta un EBITDA de <strong>$107,288,327 MXN</strong>. Con un múltiplo tecnológico de <strong>12x EBITDA</strong>, la OpCo se valúa en <strong>$1,287,459,926 MXN ($73.57M USD)</strong>. El 10.0% del inversionista semilla valdría <strong>$128,745,993 MXN</strong>, dando un retorno exacto de <strong>36.78x</strong>.</li>
+                    <li><strong>Formato Legal:</strong> SAFE con un Valuation Cap de $35,000,000 MXN y 20% de descuento (~10% de la OpCo futura).</li>
+                    <li><strong>Valuación al Año 5:</strong> Con 1,000 cabañas activas, la OpCo proyecta un EBITDA de $107,208,327 MXN. Con un múltiplo tecnológico de 12x EBITDA, la OpCo se valúa en $1,287,499,920 MXN ($73,571,118 USD). El 10.0% del inversionista semilla valdría $128,749,992 MXN, dando un retorno exacto de 36.78x.</li>
                 </ul>
-                <ul style="font-size: 13px; margin-bottom: 12px; margin-left: 15px;" lang="en">
-                    <li><strong>Target Raise:</strong> <strong>$3,500,000 MXN</strong>.</li>
-                    <li><strong>Use of Funds:</strong> Immediate runway (booking engine software development, marketing setup, core operational staff).</li>
-                    <li><strong>Instrument:</strong> <strong>SAFE</strong> note with a <strong>$35,000,000 MXN Valuation Cap</strong> and a <strong>20% discount</strong> (~10.0% post-conversion equity).</li>
-                    <li><strong>Year 5 Valuation:</strong> At scale (1,004 active cabins), OpCo projects a <strong>$107.2M MXN EBITDA</strong>. Applying a software multiplier of <strong>12x EBITDA</strong> yields an OpCo value of <strong>$1,287,459,926 MXN ($73.57M USD)</strong>. The seed investor's 10% share would grow to <strong>$128.7M MXN</strong>, achieving a net <strong>36.78x return</strong>.</li>
-                </ul>
-
-                <h4 style="font-size: 13.5px; text-transform: uppercase; color: var(--nv-accent-hover); margin-top: 15px; margin-bottom: 6px; font-weight: bold;" lang="es">
-                    Riel 2 - Capital para PropCo (CAPEX/Cabañas)
-                </h4>
-                <h4 style="font-size: 13.5px; text-transform: uppercase; color: var(--nv-accent-hover); margin-top: 15px; margin-bottom: 6px; font-weight: bold;" lang="en">
-                    Track 2 - PropCo Real Estate CAPEX (Physical Cabins)
-                </h4>
-
-                <ul style="font-size: 13px; margin-bottom: 0; margin-left: 15px;" lang="es">
-                    <li><strong>Estructura de Captación:</strong> Fideicomisos de <strong>Pool de Rentas Consolidadas</strong>. En el Año 1, el CAPEX total para las primeras 50 cabañas instaladas en operación asciende a un total de <strong>$16,406,250 MXN</strong> (con un CAPEX Llave en Mano acumulado de <strong>$32,812,500 MXN</strong>).</li>
-                    <li><strong>ROI y Flujos unificados:</strong> Al Año 5, con 1,004 cabañas estabilizadas, la PropCo genera un Flujo Neto (Utilidad Neta) anual de <strong>$325,496,109 MXN</strong> con un <strong>ROI promedio anualizado del 49.3%</strong> distribuido de manera proporcional a todos los tenedores de certificados de participación (payback de 2.03 años).</li>
-                    <li><strong>Valuación y Exit Consolidado:</strong> Tasándose como un portafolio de activos estables a <strong>8x EBITDA</strong>, la PropCo consolidada se valúa en <strong>$2,603,968,872 MXN ($148.80M USD)</strong> al momento de la venta unificada al fondo institucional de Real Estate.</li>
-                </ul>
-                <ul style="font-size: 13px; margin-bottom: 0; margin-left: 15px;" lang="en">
-                    <li><strong>Capitalization Vehicle:</strong> Cluster-level Real Estate Trust Funds (Fideicomisos). Year 1 baseline construction CAPEX for the first 50 cabins stands at <strong>$16,406,250 MXN</strong> (with a turn-key capitalized rollout of <strong>$32,812,500 MXN</strong>).</li>
-                    <li><strong>ROI & Payback:</strong> By Year 5, with 1,004 operational cabins, PropCo yields <strong>$325,496,109 MXN in annual net income</strong>, producing an annualized <strong>49.3% ROI</strong> paid pro-rata to unit-holders (average 2.03-year payback).</li>
-                    <li><strong>Valuation & Institutional Exit:</strong> Valued as a stabilized, high-margin asset portfolio at <strong>8x EBITDA</strong>, consolidated PropCo represents a <strong>$2,603,968,872 MXN ($148.80M USD) exit</strong> when acquired by an institutional buyer.</li>
+                <p><strong>RIEL 2 - CAPITAL PARA PROPCO (CAPEX/CABAÑAS):</strong></p>
+                <ul style="font-size: 13.5px; margin-left: 15px;">
+                    <li><strong>Estructura de Captación:</strong> Fideicomisos de Pool de Rentas Consolidadas. En el Año 1, el CAPEX total para las primeras 50 cabañas instaladas en operación asciende a un total de $18,400,250 MXN (con un CAPEX Llave en Mano acumulado de $32,812,500 MXN).</li>
+                    <li><strong>ROI y Flujos unificados:</strong> Al Año 5, con 1,000 cabañas estabilizadas, la PropCo genera un Flujo Neto (Utilidad Neta) anual de $129,510,128 MXN con un ROI promedio anualizado del 21.75% distribuido de manera proporcional a todos los tenedores de certificados de participación (payback de 2.05 años).</li>
+                    <li><strong>Valuación y Exit Consolidado:</strong> Tasándose como un portafolio de activos estables a 8x EBITDA, la PropCo consolidada se valúa en $3,002,881,872 MXN ($153,101,118 USD) al momento de la venta unificada al Fondo Institucional de Real Estate.</li>
                 </ul>
             </div>
 
-            <!-- Recuadro Escenario B -->
-            <div class="card gold" style="border-top: 4px solid var(--navana-slate); background-color: rgba(255, 255, 255, 0.015);">
-                <div class="card-title" style="color: var(--nv-ink-muted); font-weight: bold; font-size: 15px;" lang="es">
-                    Escenario B: Empresa Única Consolidada
-                </div>
-                <div class="card-title" style="color: var(--nv-ink-muted); font-weight: bold; font-size: 15px;" lang="en">
-                    Scenario B: Single Consolidated Company
-                </div>
-
-                <p style="opacity: 0.8;" lang="es">En este escenario unificado, todo el negocio opera bajo el mismo balance y se mezcla la tecnología con el capital de ladrillo:</p>
-                <p style="opacity: 0.8;" lang="en">In this monolithic model, technology IP and heavy brick-and-mortar assets are bundled onto a single corporate balance sheet:</p>
-
-                <h4 style="font-size: 13.5px; text-transform: uppercase; color: var(--nv-ink-muted); margin-top: 15px; margin-bottom: 6px; font-weight: bold;" lang="es">
-                    Financiamiento Consolidado (Día 1)
-                </h4>
-                <h4 style="font-size: 13.5px; text-transform: uppercase; color: var(--nv-ink-muted); margin-top: 15px; margin-bottom: 6px; font-weight: bold;" lang="en">
-                    Consolidated Capitalization (Day 1)
-                </h4>
-
-                <ul style="font-size: 13px; margin-bottom: 12px; margin-left: 15px; opacity: 0.8;" lang="es">
-                    <li><strong>Monto Total a Levantar:</strong> <strong>$19,906,250 MXN</strong> iniciales ($3.5M para software/runway + $16.4M de CAPEX del Año 1 de las primeras 50 cabañas).</li>
-                    <li><strong>Dilución Masiva de Fundadores:</strong> Al no separar el software, los fundadores tecnólogos tienen que diluirse drásticamente frente al capital que financia la construcción de cabañas desde el Día 1.</li>
+            <div class="card" style="border-top-color: var(--navana-slate); background-color: #171B1F;">
+                <div class="card-title" style="color: var(--navana-slate); font-weight: bold;">Escenario B: Estructura de Capital Tradicional</div>
+                <p>En este escenario no hay separación de OpCo y PropCo; todo el capital de los inversionistas entra directamente a una sola S.A.P.I. corporativa global:</p>
+                <ul style="font-size: 13.5px; margin-left: 15px;">
+                    <li><strong>Monto a Levantar:</strong> Se requiere levantar todo el CAPEX inicial directamente en la empresa madre. Para el Año 1, esto representa levantar $18,400,250 MXN para el piloto. Al diluir a la empresa madre con capital para construir activos pesados (fierros), los fundadores pierden el control mayoritario desde el Año 1.</li>
+                    <li><strong>La Mezcla de Multiplicadores:</strong> Un fondo de venture capital o un adquirente tecnológico de software no pagará un múltiplo de 12x EBITDA sobre activos físicos pesados (PropCo), sino que se tasará la empresa completa bajo múltiplos tradicionales de Real Estate de baja valuación (8x - 10x EBITDA global). Esto reduce a la mitad el valor de salida de los fundadores.</li>
+                    <li><strong>Riesgo Sistémico:</strong> Si un clúster físico tiene un problema legal o de ocupación local, contamina directamente a la S.A.P.I. controladora de la marca y de toda la red, asfixiando financieramente la operación del software central.</li>
                 </ul>
-                <ul style="font-size: 13px; margin-bottom: 12px; margin-left: 15px; opacity: 0.8;" lang="en">
-                    <li><strong>Total Target Raise:</strong> <strong>$19,906,250 MXN</strong> upfront ($3.5M for software runway + $16.4M for initial physical cabin construction).</li>
-                    <li><strong>Aggressive Founder Dilution:</strong> Because technology IP is not isolated, founders are severely diluted by construction capital on Day 1 to get the physical cabins built.</li>
-                </ul>
-
-                <h4 style="font-size: 13.5px; text-transform: uppercase; color: var(--nv-ink-muted); margin-top: 15px; margin-bottom: 6px; font-weight: bold;" lang="es">
-                    Desempeño y Múltiplo de Salida (Año 5)
-                </h4>
-                <h4 style="font-size: 13.5px; text-transform: uppercase; color: var(--nv-ink-muted); margin-top: 15px; margin-bottom: 6px; font-weight: bold;" lang="en">
-                    Performance and Exit Multiplier (Year 5)
-                </h4>
-
-                <ul style="font-size: 13px; margin-bottom: 0; margin-left: 15px; opacity: 0.8;" lang="es">
-                    <li><strong>EBITDA Consolidado al Año 5:</strong> El EBITDA conjunto reporta un total de <strong>$432,784,436 MXN</strong>.</li>
-                    <li><strong>Castigo de Múltiplo en el Exit:</strong> Al ser dueña de activos fijos físicos intensivos (Asset-Heavy), el mercado tasa a la empresa unificada como hotelera/inmobiliaria tradicional, aplicando un múltiplo castigado de <strong>6x a 8x EBITDA</strong>.</li>
-                    <li><strong>Pérdida de Valor Directo:</strong> 
-                        <ul>
-                            <li>A múltiplo de <strong>6x EBITDA</strong>, la empresa completa vale <strong>$2,596,706,616 MXN</strong>.</li>
-                            <li>A múltiplo de <strong>8x EBITDA</strong>, vale <strong>$3,462,275,488 MXN</strong>.</li>
-                        </ul>
-                    </li>
-                    <li style="color: var(--nv-accent-hover); margin-top: 6px;"><strong>Pérdida de Valor frente a Opción A:</strong> La marca Navana pierde entre <strong>$481.7M y $1,347.3M de pesos</strong> de valor de mercado por el castigo en múltiplos hoteleros comparado con la suma de las partes de la Opción A.</li>
-                </ul>
-                <ul style="font-size: 13px; margin-bottom: 0; margin-left: 15px; opacity: 0.8;" lang="en">
-                    <li><strong>Consolidated Year 5 EBITDA:</strong> The combined ecosystem reports a total EBITDA of <strong>$432,784,436 MXN</strong>.</li>
-                    <li><strong>Multiple Discount Penalty:</strong> Carrying heavy capital-intensive physical property forces public markets to value the entire unified company as a traditional hospitality/hotel play, capping multiples at a penalized <strong>6x to 8x EBITDA</strong>.</li>
-                    <li><strong>Market Cap Destruction:</strong> 
-                        <ul>
-                            <li>At a <strong>6x EBITDA</strong> multiple, the combined company is valued at <strong>$2,596,706,616 MXN</strong>.</li>
-                            <li>At a <strong>8x EBITDA</strong> multiple, it is valued at <strong>$3,462,275,488 MXN</strong>.</li>
-                        </ul>
-                    </li>
-                    <li style="color: var(--nv-accent-hover); margin-top: 6px;"><strong>Value Destroyed vs. Option A:</strong> Navana loses between <strong>$481.7M and $1.34B pesos in market value</strong> due to hospitality multiple discounts compared to the Option A sum-of-the-parts strategy.</li>
-                </ul>
+                <p style="margin-top: 10px; margin-bottom: 0; font-size: 13.5px; color: var(--nv-ink-hi);"><strong>Conclusión Estratégica:</strong> El <strong>Escenario A (Estructura Dual)</strong> es el único camino viable para maximizar el valor de la empresa, proteger el capital de trabajo y asegurar que los fundadores conserven el control mayoritario de la propiedad intelectual de NAVANA.</p>
             </div>
-
         </div>
 
-        <!-- Justificación Estratégica -->
-        <div class="callout" style="border-left: 4px solid var(--navana-olive); background-color: #1A1815; margin-top: 15px;">
-            <!-- Español -->
-            <p style="font-size: 14px; font-weight: bold; color: var(--navana-olive); margin-top: 0; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;" lang="es">
-                Justificación Estratégica: ¿Por qué el Escenario A es la Ruta Óptima de Negocio?
-            </p>
-            <p style="font-size: 13px; margin-bottom: 10px;" lang="es">
-                Elegir la <strong>Estructura Dual (Escenario A)</strong> no es solo una preferencia de valuación en el papel; es la única arquitectura financiera que habilita la viabilidad a gran escala de NAVANA bajo cuatro pilares estratégicos de alto valor:
-            </p>
-            <ul style="font-size: 12.5px; margin-left: 15px; margin-bottom: 0;" lang="es">
-                <li style="margin-bottom: 6px;">
-                    <strong>Eficiencia Absoluta en Alocación de Fondos:</strong> El capital tiene naturalezas y perfiles de riesgo distintos. Mezclar capital de riesgo (destinado a desarrollo de software e integraciones de la OTA) con capital patrimonial/ladrillo (fijos físicos de bajo riesgo y flujos predecibles) confunde a las fuentes de financiamiento. Separar los vehículos permite atraer capital de riesgo de tecnología (Venture Capital/Semilla) al Riel 1 a tasas de rendimiento exponenciales, y fondear el CAPEX del Riel 2 (Pool de Rentas) con inversionistas patrimoniales estables que buscan respaldo físico y rentas continuas.
-                </li>
-                <li style="margin-bottom: 6px;">
-                    <strong>Protección Total contra la Dilución de Fundadores:</strong> Si levantaran el CAPEX de las cabañas sobre un balance unificado desde el Día 1 (Escenario B), requerirían un fondeo inicial masivo de casi $20,000,000 MXN. Levantar esa cantidad de capital sin un historial operativo o software consolidado provocaría que los fundadores se diluyeran drásticamente, perdiendo el control político de la operadora. Con el Riel Dual, solo se diluyen de forma mínima en OpCo por un ticket semilla de $3.5M MXN, manteniendo el control mayoritario del negocio.
-                </li>
-                <li style="margin-bottom: 6px;">
-                    <strong>Capacidad de Escalamiento Infinito (Asset-Light):</strong> Al mantener el balance de OpCo limpio de deuda e infraestructura pesada, la operadora puede escalar a miles de cabañas nacionales e internacionales de manera ágil. El crecimiento físico es soportado por los fondos y Pools de PropCo por destino, sin asfixiar la caja operativa del corporativo tecnológico.
-                </li>
-                <li>
-                    <strong>Arbitraje de Múltiplos en el Exit (Desbloqueo de Valor):</strong> Al momento de la salida (Año 5), los mercados castigan severamente a las empresas unificadas (Asset-Heavy) tasándolas con múltiplos hoteleros tradicionales (6x - 8x EBITDA). Al separar los vehículos, NAVANA desbloquea un valor masivo vendiendo de forma independiente su operadora tecnológica (OpCo) a múltiplos de SaaS / Tech (12x EBITDA) y su portafolio de activos estables (PropCo) a múltiplos patrimoniales (8x EBITDA), capturando hasta <strong>$1,294.7M MXN de valor adicional</strong> para los socios.
-                </li>
-            </ul>
-
-            <!-- Inglés -->
-            <p style="font-size: 14px; font-weight: bold; color: var(--navana-olive); margin-top: 0; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;" lang="en">
-                Strategic Rationale: Why Scenario A is the Only Path Forward
-            </p>
-            <p style="font-size: 13px; margin-bottom: 10px;" lang="en">
-                The <strong>Dual OpCo/PropCo structure (Scenario A)</strong> is not just a bookkeeping preference; it is the core financial engine that guarantees NAVANA's long-term scale and risk mitigation across four pillars:
-            </p>
-            <ul style="font-size: 12.5px; margin-left: 15px; margin-bottom: 0;" lang="en">
-                <li style="margin-bottom: 6px;">
-                    <strong>Optimized Capital Allocation:</strong> Venture capital (designed for software and direct booking platform engineering) and real estate equity (stable, physical yield-seeking cash) carry completely different risk profiles. Bundling them confuses capital markets. Keeping OpCo light attracts pure tech VCs at exponential valuation growth rates, while funding PropCo's rollout using stable, yield-seeking physical asset investors.
-                </li>
-                <li style="margin-bottom: 6px;">
-                    <strong>Complete Dilution Insulation:</strong> Trying to fund Day 1 cabin CAPEX on a consolidated balance sheet (Scenario B) requires a heavy upfront dilution pool of nearly $20,000,000 MXN without a finished software product. This forces founders to yield control early. Under the Dual model, founders take a tiny, manageable dilution in OpCo for a $3.5M MXN seed ticket, retaining absolute operating control.
-                </li>
-                <li style="margin-bottom: 6px;">
-                    <strong>Unlimited Global Scalability:</strong> Free of heavy infrastructure debt, OpCo can deploy rapidly across domestic and foreign travel hotspots. Expanding the physical fleet is financed independently by PropCo regional trusts, preserving OpCo's corporate balance sheet and operational cash.
-                </li>
-                <li>
-                    <strong>EBITDA Multiplier Arbitrage:</strong> Upon a Year 5 exit, public markets heavily discount consolidated heavy operators with brick-and-mortar multiples (6x - 8x EBITDA). By cleanly bifurcating the exits, NAVANA unlocks maximum shareholder value by selling the technology platform (OpCo) at pure tech multiples (12x EBITDA) and the stabilized real estate fleet (PropCo) at high-yield property multipliers (8x EBITDA), creating an additional <strong>$1.29B MXN in pure founder equity</strong>.
-                </li>
-            </ul>
-        </div>
-
-
-        <!-- ========================================== -->
-        <!-- SECCIÓN 8: ESCENARIOS DE CO-INVERSIÓN      -->
-        <!-- ========================================== -->
-        <h2 lang="es">8. El Camino Hacia el Patrimonio: Estrategias y Opciones de Co-Inversión (Skin in the Game)</h2>
-        <h2 lang="en">8. The Road to Wealth Creation: Optional Co-Investment Frameworks</h2>
-
-        <p lang="es">Para que los propietarios de la OpCo se vuelvan dueños de un portafolio de cabañas físicas que les entregue rentas de por vida, sin tener que poner capital líquido inicial de su propio bolsillo, la estructura dual ofrece una flexibilidad única. A continuación se presentan tres <strong>esquemas y escenarios opcionales</strong> (no obligatorios) que pueden activarse de manera parcial o total según las prioridades del grupo en cada etapa:</p>
-        <p lang="en">To allow OpCo founders to build an extensive, cash-flowing physical cabin portfolio without deploying personal upfront liquidity, the dual model provides unparalleled structuring flexibility. The following three <strong>optional models</strong> can be deployed independently or combined as the brand scales:</p>
+        <h2>8. Estrategias De Retención De Equity Del Corporativo (OpCo)</h2>
+        <p>Para evitar diluir la empresa matriz (OpCo) al levantar capital para las cabañas de PropCo, se estructuran tres opciones de alineación y retención de valor:</p>
 
         <div class="grid-2">
-            <!-- Opción A -->
-            <div class="card" style="border-top-color: var(--navana-olive); background-color: #1A1815;">
-                <div class="card-title" style="color: var(--navana-olive);" lang="es">Opción A: Reinversión de Flujos (Escenario de Crecimiento Patrimonial)</div>
-                <p lang="es">Conforme <strong>NAVANA OpCo</strong> acumule flujos operativos excedentes (EBITDA de la plataforma) por cobrar comisiones, marcas y markups, los socios pueden decidir voluntariamente destinar un porcentaje de esa caja para comprar cabañas físicas directamente en PropCo.</p>
-                <p lang="es"><strong>La Flexibilidad:</strong> No es un compromiso rígido ni obligatorio del 100%. El modelo financiero simula el potencial máximo de esta estrategia (adquiriendo un 24.95% de la red al Año 5), pero ustedes pueden pausar, reducir o desviar este flujo hacia dividendos, marketing o expansión internacional de software según convenga.</p>
-                <p lang="es"><strong>Resultado:</strong> Funciona como un acelerador patrimonial opcional que dota de activos tangibles a la operadora tecnológica.</p>
-
-                <div class="card-title" style="color: var(--navana-olive);" lang="en">Option A: Royalty Cashflow Reinvestment (Strategic Asset Accumulation)</div>
-                <p lang="en">As <strong>NAVANA OpCo</strong> accumulates cash reserves (driven by software fees, markups, and brand royalties), the board can strategically deploy corporate dry powder to purchase physical cabins inside PropCo.</p>
-                <p lang="en"><strong>Ultimate Flexibility:</strong> This is a completely optional framework. The financial model projects the maximum potential of this strategy (acquiring 24.95% of the fleet by Year 5), but founders can easily dial back or suspend reinvestment to prioritize dividends, localized ad spend, or software expansion.</p>
-                <p lang="en"><strong>Value Output:</strong> Builds solid, hard-asset backing behind the tech operating company's valuation.</p>
+            <div class="card" style="border-top-color: var(--navana-sand); background-color: #1E1C15;">
+                <div class="card-title" style="color: var(--navana-sand);">Opción A: Reinversión de Utilidades en PropCo (GP Co-Investment)</div>
+                <p>NAVANA OpCo utiliza una parte de los flujos de efectivo excedentes y del markup cobrado por cabaña instalada para adquirir certificados de participación en los Fideicomisos físicos de PropCo.</p>
+                <p><strong>La Jugada:</strong> Conforme se expande la red, OpCo se convierte en dueña de una parte del portafolio inmobiliario. Al Año 5, OpCo puede llegar a poseer un porcentaje significativo de la PropCo sin haber diluido un solo punto porcentual de sus acciones corporativas frente a inversionistas de capital pesado.</p>
+                <p><strong>La Flexibilidad:</strong> No es un compromiso rígido ni obligatorio del 100%. El modelo financiero simula el potencial máximo de esta estrategia (adquiriendo un 24.95% de la red al Año 5), pero ustedes pueden pausar, reducir o desviar este flujo hacia dividendos, marketing o expansión internacional de software según convenga.</p>
+                <p><strong>Resultado:</strong> Funciona como un acelerador patrimonial opcional que dota de activos tangibles a la operadora tecnológica.</p>
             </div>
 
-            <!-- Opción B -->
             <div class="card" style="border-top-color: var(--navana-slate); background-color: #1A1815;">
-                <div class="card-title" style="color: var(--navana-slate);" lang="es">Opción B: Carried Interest (Sweat Equity por Operación)</div>
-                <p lang="es">En desarrollos financiados al 100% por inversionistas institucionales pesados, el trabajo y el "know-how" operativo de NAVANA se recompensa mediante cláusulas contractuales de desempeño.</p>
-                <p lang="es"><strong>La Jugada:</strong> Se pacta que una vez que el inversionista recupera su capital y obtiene su tasa de rendimiento preferente (<em>Hurdle Rate</em>, ej. 12% anual), un porcentaje del flujo excedente (ej. 20%) se convierte de manera automática en títulos de copropiedad física de las cabañas para los fundadores.</p>
-                <p lang="es"><strong>Resultado:</strong> Propiedad inmobiliaria directa ganada por su excelencia operativa en sitio, sin comprometer recursos ni flujo de caja de la OpCo.</p>
-
-                <div class="card-title" style="color: var(--navana-slate);" lang="en">Option B: Carried Interest (Performance Sweat Equity)</div>
-                <p lang="en">In clusters fully funded by heavy real estate institutional capital, NAVANA's operational excellence and brand performance are incentivized through carried interest clauses.</p>
-                <p lang="en"><strong>The Setup:</strong> The contract dictates that once institutional investors recoup their raw capital and meet their preferred hurdle rate (e.g., 12% annualized return), an agreed share of leftover cashflow (e.g., 20%) automatically converts into direct, deeded property ownership for Navana's founders.</p>
-                <p lang="en"><strong>Value Output:</strong> Yields high-value, direct property deeds for founders in exchange for premium site operations, protecting OpCo's balance sheet liquidity.</p>
+                <div class="card-title" style="color: var(--navana-slate);">Opción B: Carried Interest (Sweat Equity por Operación)</div>
+                <p>En desarrollos financiados al 100% por inversionistas institucionales pesados, el trabajo y el "know-how" operativo de NAVANA se recompensa mediante cláusulas contractuales de desempeño.</p>
+                <p><strong>La Jugada:</strong> Se pacta que una vez que el inversionista recupera su capital y obtiene su tasa de rendimiento preferente (<em>Hurdle Rate</em>, ej. 12% anual), un porcentaje del flujo excedente (ej. 20%) se convierte de manera automática en títulos de copropiedad física de las cabañas para los fundadores.</p>
+                <p><strong>Resultado:</strong> Propiedad inmobiliaria directa ganada por su excelencia operativa en sitio, sin comprometer recursos ni flujo de caja de la OpCo.</p>
             </div>
         </div>
 
-        <!-- Opción C -->
         <div class="callout" style="border-left-color: var(--navana-terracotta); background-color: rgba(182, 107, 75, 0.05); margin-top: 15px; margin-bottom: 20px;">
-            <!-- Español -->
-            <p style="font-size: 14px; font-weight: bold; color: var(--navana-terracotta); margin-top: 0; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;" lang="es">
+            <p style="font-size: 14px; font-weight: bold; color: var(--navana-terracotta); margin-top: 0; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
                 Opción C: Co-Inversión Selectiva (GP / LP - General Partner / Limited Partner):
             </p>
-            <p style="font-size: 13.5px; margin-bottom: 0; line-height: 1.6; text-align: justify; color: var(--nv-ink);" lang="es">
+            <p style="font-size: 13.5px; margin-bottom: 0; line-height: 1.6; text-align: justify; color: var(--nv-ink);">
                 Al estructurar fondos institucionales, los fundadores actúan como el socio administrador (GP) y los inversionistas externos como aportadores de capital pasivo (LP). En lugar de reinvertir de forma automática, los socios deciden de forma discrecional co-invertir un porcentaje menor (ej. del 1% al 5%) en proyectos de altísima rentabilidad para demostrar "Skin in the game". Esto alinea perfectamente los incentivos con los fondos grandes sin asfixiar la liquidez corporativa de la OpCo.
-            </p>
-
-            <!-- Inglés -->
-            <p style="font-size: 14px; font-weight: bold; color: var(--navana-terracotta); margin-top: 0; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;" lang="en">
-                Option C: Discretionary Co-Investment (GP / LP Alignment):
-            </p>
-            <p style="font-size: 13.5px; margin-bottom: 0; line-height: 1.6; text-align: justify; color: var(--nv-ink);" lang="en">
-                When structuring larger institutional development funds, founders serve as the General Partner (GP), and capital investors as the Limited Partners (LP). Instead of automatic allocations, founders can choose to deploy a tiny, highly targeted co-investment tranche (e.g., 1% to 5%) in premier clusters. This satisfies institutional mandates for "skin in the game" and aligns partner incentives, without constraining OpCo's working capital.
             </p>
         </div>
 
+        <h2>9. Plan de Manufactura Avanzada: Micro-Fábricas "Pop-Up" (Hub & Spoke)</h2>
+        <p>Para escalar con calidad de forma internacional y evitar los destructivos costos de flete por carretera de cabañas armadas de gran tamaño, se deconstruye la logística de fabricación en un esquema híbrido y descentralizado:</p>
 
-        <!-- ========================================== -->
-        <!-- SECCIÓN 9: PLAN DE MANUFACTURA             -->
-        <!-- ========================================== -->
-        <h2 lang="es">9. Plan de Manufactura Avanzada: Micro-Fábricas "Pop-Up" (Hub & Spoke)</h2>
-        <h2 lang="en">9. Advanced Manufacturing Plan: Pop-Up Assembly Yards (Hub & Spoke)</h2>
-
-        <p lang="es">Para escalar con calidad de forma internacional y evitar los destructivos costos de flete por carretera de cabañas armadas de gran tamaño, se deconstruye la logística de fabricación en un esquema híbrido y descentralizado:</p>
-        <p lang="en">To scale quality control internationally while dodging the prohibitive highway freight costs of moving massive fully-assembled cabins, logistics are deconstructed into a hybrid Hub & Spoke framework:</p>
-
-        <ul lang="es">
+        <ul>
             <li><strong>El Hub Central de Tecnología (Consolidación):</strong> Una sola bodega fija ubicada en un punto de conexión logística premium. Compra y consolida a escala masiva industrial todo lo que requiere precisión tecnológica, altos acabados o equipamiento clave: paneles solares de alta eficiencia, inversores híbridos, cancelerías de aluminio a medida, cocinas modulares, pisos de alta resistencia, mobiliario de diseño, refrigeradores y electrodomésticos eficientes. Todo se empaqueta milimétricamente en contenedores planos (<strong>Tech-Kits</strong>) y se envía por centavos a las unidades de ensamblaje regional.</li>
             <li><strong>Las Micro-Fábricas "Pop-Up" (Unidades de Ensamblaje Regional):</strong> Nuestros socios estratégicos de construcción buscan y seleccionan ubicaciones o naves industriales de manera estratégica y cercana a donde se instalará el clúster final de cabañas. En esta zona se renta un espacio temporalmente o se realiza una alianza local. Hacia allí se envía directamente el acero estructural para construir las cabañas directamente sobre los remolques. Se contrata a una cuadrilla local de operarios y carpinteros, liderados y guiados por un supervisor experto certificado de NAVANA para garantizar el correcto montaje y la correcta integración de todos los componentes.</li>
             <li><strong>El Hack Logístico de Control de Calidad y Estandarización:</strong> Para asegurar que cada cabaña cumpla con un estándar idéntico al milímetro y optimizar los tiempos de entrega, nuestro socio industrial de manufactura desarrolla y provee <strong>Jigs o Moldes Maestros de Ensamblaje Físico</strong>. Estos marcos no solo estandarizan la estructura de acero, sino también los cortes de maderas, la carpintería fina y el montaje de muebles fijos. Esto eficienta la mano de obra, garantiza que el "Tech-Kit" encaje a la perfección y reduce los desperdicios en sitio a cero.</li>
         </ul>
-        <ul lang="en">
-            <li><strong>The Central Tech Sourcing Hub (Consolidation):</strong> A single fixed logistics plant handles bulk procurement of high-precision components, smart automation, and luxury finishes: smart solar panels, hybrid grid inverters, custom millwork, modular kitchens, pre-measured insulated panels, and designer furniture. These are systematically bundled into ultra-compact, flat flat-pack crates (<strong>Tech-Kits</strong>) and shipped regionally for a fraction of traditional freight costs.</li>
-            <li><strong>The "Pop-Up" Regional Assembly Yards:</strong> Our manufacturing partners strategically lease or joint-venture localized warehouse bays close to final cabin sites. Steel framing sections are delivered raw, mounted onto heavy-duty highway trailer frames, and assembled locally. Regional carpentry and installation crews build out the interiors under the direct, physical supervision of a certified NAVANA Quality Inspector to lock in build integrity.</li>
-            <li><strong>The Standardization Quality Hack (Master Assembly Jigs):</strong> To ensure absolute millimetric precision and rapid turnaround times across separate pop-up sites, our industrial partner deploys <strong>Master Steel Assembly Jigs</strong>. These heavy, calibrated structural guides guarantee that every steel joint, window trim, structural wall, and plumbing line fits the Tech-Kit components perfectly. This leverages local labor efficiently, speeds up production cycles, and cuts on-site material waste to virtually zero.</li>
-        </ul>
 
-
-        <!-- ========================================== -->
-        <!-- SECCIÓN 10: EXPANSIÓN INTERNACIONAL        -->
-        <!-- ========================================== -->
-        <h2 lang="es">10. Estrategia de Expansión Internacional (Escalamiento sin Fronteras)</h2>
-        <h2 lang="en">10. International Expansion Strategy (Scalability Without Borders)</h2>
-
-        <p lang="es">Una de las mayores virtudes de la <strong>Estructura Dual (OpCo/PropCo)</strong> y el modelo descentralizado de <strong>Unidades de Ensamble (Pop-Up)</strong> es su replicabilidad inmediata y sin fronteras. Cuando la capacidad instalada o la absorción de mercado en México encuentre límites naturales, el "playbook" de NAVANA se puede exportar de manera ágil a cualquier país del mundo:</p>
-        <p lang="en">One of the primary benefits of the <strong>Dual OpCo/PropCo structure</strong> and localized <strong>Pop-Up Yards</strong> is their immediate, frictionless replicability. When physical footprint or market absorption in Mexico reaches natural thresholds, the global playbook can be seamlessly deployed in new international markets:</p>
-
+        <h2>10. Estrategia de Expansión Internacional (Escalamiento sin Fronteras)</h2>
+        <p>Una de las mayores virtudes de la <strong>Estructura Dual (OpCo/PropCo)</strong> y el modelo descentralizado de <strong>Unidades de Ensamble (Pop-Up)</strong> es su replicabilidad inmediata y sin fronteras. Cuando la capacidad instalada o la absorción de mercado en México encuentre límites naturales (por ejemplo, al consolidar nuestros primeros clústeres), el "playbook" de NAVANA se puede exportar de manera ágil a cualquier país del mundo:</p>
+        
         <div class="callout" style="border-left-color: var(--navana-olive); background-color: #1A1815; margin-top: 10px;">
-            <!-- Español -->
-            <p lang="es"><strong>El Modelo de Expansión Global "Plug & Play":</strong></p>
-            <ul style="font-size: 13px; margin-left: 15px; margin-bottom: 0;" lang="es">
+            <p><strong>El Modelo de Expansión Global "Plug & Play":</strong></p>
+            <ul style="font-size: 13px; margin-left: 15px; margin-bottom: 0;">
                 <li style="margin-bottom: 6px;">
                     <strong>Socio de Manufactura Local (Aliados de Construcción):</strong> En lugar de exportar las cabañas físicas desde México cruzando aduanas complejas, NAVANA OpCo simplemente exporta la tecnología y la propiedad intelectual. Buscamos y cerramos alianzas estratégicas con plantas de acero y constructoras locales en el país destino (ej. EE.UU., Colombia o Costa Rica), capacitándolos para usar nuestros <strong>Jigs Maestros</strong> y ensamblar los Tech-Kits localmente.
                 </li>
@@ -1337,31 +762,10 @@
                     <strong>Escalamiento Infinito Asset-Light:</strong> Este esquema nos blinda ante riesgos cambiarios y de infraestructura local. NAVANA se consolida como un software y una marca global de eco-hospitalidad de rápido despliegue, capaz de abrir mercados internacionales en cuestión de meses y con cero endeudamiento corporativo.
                 </li>
             </ul>
-
-            <!-- Inglés -->
-            <p lang="en"><strong>The Global "Plug & Play" Scaling Framework:</strong></p>
-            <ul style="font-size: 13px; margin-left: 15px; margin-bottom: 0;" lang="en">
-                <li style="margin-bottom: 6px;">
-                    <strong>Localized Sourcing Alliances:</strong> Instead of shipping physical cabins across complex international borders, NAVANA OpCo simply exports technology, designs, and assembly IP. We establish strategic alliances with certified light-steel plants and modular fabricators in the destination country (e.g., USA, Colombia, or Costa Rica), training them to utilize our proprietary <strong>Master Jigs</strong> and build out the tech kits locally.
-                </li>
-                <li style="margin-bottom: 6px;">
-                    <strong>Localized Capital Pools (Country-Specific PropCos):</strong> To fund physical rollout CAPEX in new markets, we structure regional Rental Pools and trusts with local Family Offices and real estate investment networks. The central operating company (NAVANA OpCo) manages the global booking technology and captures its un-diluted 15% booking royalties and brand management fees directly.
-                </li>
-                <li>
-                    <strong>Pure Asset-Light Scalability:</strong> This methodology completely insulates corporate operations from local real estate market fluctuations or currency risks. NAVANA positions itself as a premier, fast-deployment global eco-hospitality brand capable of entering new territories in a matter of months with zero centralized balance sheet debt.
-                </li>
-            </ul>
         </div>
 
-
-        <!-- ========================================== -->
-        <!-- SECCIÓN 11: CONCLUSIÓN                     -->
-        <!-- ========================================== -->
-        <h2 lang="es">11. Conclusión y Siguiente Paso para los Socios</h2>
-        <h2 lang="en">11. Conclusion and Next Steps for Board Partners</h2>
-
-        <p lang="es">La combinación del <strong>Esquema Dual (OpCo/PropCo)</strong> y el modelo logístico de <strong>Unidades de Ensamble Pop-Up</strong> representa la estructura corporativa más ágil, valiosa y escalable de la hotelería moderna. No solo los blinda frente a deudas de infraestructura pesada, sino que abre el camino para lograr el doble exit de salida a 5 años y construir un patrimonio inmobiliario de por vida.</p>
-        <p lang="en">The synthesis of the <strong>Dual Corporate Model (OpCo/PropCo)</strong> and the decentralized <strong>Pop-Up Assembly Yards</strong> represents the most agile, valuation-maximizing, and scalable architecture in modern hospitality. It completely shields founders from capital-heavy physical debt, unlocks premium multipliers, and paves the way to securing long-term real estate wealth.</p>
+        <h2>11. Conclusión y Siguiente Paso para los Socios</h2>
+        <p>La combinación del <strong>Esquema Dual (OpCo/PropCo)</strong> y el modelo logístico de <strong>Unidades de Ensamble Pop-Up</strong> representa la estructura corporativa más ágil, valiosa y escalable de la hotelería moderna. No solo los blinda frente a deudas de infraestructura pesada, sino que abre el camino para lograr el doble exit de salida a 5 años y construir un patrimonio inmobiliario de por vida.</p>
 
     </div>
 
@@ -1371,31 +775,8 @@
 
     <!-- INTERACTIVIDAD CON JAVASCRIPT -->
     <script>
-        function setLanguage(lang) {
-            if (lang === 'es') {
-                document.body.classList.remove('lang-en');
-                document.getElementById('btn-es').classList.add('active');
-                document.getElementById('btn-en').classList.remove('active');
-                document.documentElement.setAttribute('lang', 'es');
-            } else {
-                document.body.classList.add('lang-en');
-                document.getElementById('btn-en').classList.add('active');
-                document.getElementById('btn-es').classList.remove('active');
-                document.documentElement.setAttribute('lang', 'en');
-            }
-            localStorage.setItem('navana-preferred-lang', lang);
-        }
-
-        // Forzar ESPAÑOL como idioma por defecto absoluto
+        // Pre-flight de carga de fuentes para asegurar impresión perfecta (Regla #2 del checklist)
         window.addEventListener('DOMContentLoaded', () => {
-            const savedLang = localStorage.getItem('navana-preferred-lang');
-            if (savedLang === 'en') {
-                setLanguage('en');
-            } else {
-                setLanguage('es');
-            }
-            
-            // Pre-flight de carga de fuentes para asegurar impresión perfecta (Regla #2 del checklist)
             if (document.fonts) {
                 const families = [
                     '300 16px "Ranade"',
