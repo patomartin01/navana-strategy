@@ -126,8 +126,21 @@
         }
 
         /* Soporte Multilenguaje Seguro */
-        .lang-hidden {
+        /* Ocultar inglés por defecto */
+        [lang="en"] {
             display: none !important;
+        }
+
+        /* Si el body tiene la clase lang-en, ocultar español y mostrar inglés respetando su layout */
+        body.lang-en [lang="es"] {
+            display: none !important;
+        }
+        body.lang-en [lang="en"] {
+            display: unset !important;
+        }
+        /* Garantizar comportamiento de celdas de tabla */
+        body.lang-en th[lang="en"], body.lang-en td[lang="en"] {
+            display: table-cell !important;
         }
 
         /* Contenedor Editorial en Carbón Base */
@@ -1245,21 +1258,15 @@
     </footer>
 
     <!-- INTERACTIVIDAD CON JAVASCRIPT -->
+    <script>
         function setLanguage(lang) {
-            const esElements = document.querySelectorAll('[lang="es"]');
-            const enElements = document.querySelectorAll('[lang="en"]');
-            
             if (lang === 'es') {
-                esElements.forEach(el => el.classList.remove('lang-hidden'));
-                enElements.forEach(el => el.classList.add('lang-hidden'));
-                
+                document.body.classList.remove('lang-en');
                 document.getElementById('btn-es').classList.add('active');
                 document.getElementById('btn-en').classList.remove('active');
                 document.documentElement.setAttribute('lang', 'es');
             } else {
-                enElements.forEach(el => el.classList.remove('lang-hidden'));
-                esElements.forEach(el => el.classList.add('lang-hidden'));
-                
+                document.body.classList.add('lang-en');
                 document.getElementById('btn-en').classList.add('active');
                 document.getElementById('btn-es').classList.remove('active');
                 document.documentElement.setAttribute('lang', 'en');
@@ -1267,7 +1274,7 @@
             localStorage.setItem('navana-preferred-lang', lang);
         }
 
-        // Forzar ESPAÑOL como idioma por defecto absoluto para evitar auto-detectar inglés
+        // Forzar ESPAÑOL como idioma por defecto absoluto
         window.addEventListener('DOMContentLoaded', () => {
             const savedLang = localStorage.getItem('navana-preferred-lang');
             if (savedLang === 'en') {
