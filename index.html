@@ -84,6 +84,7 @@
             padding: 16px 24px;
             display: flex;
             justify-content: flex-end;
+            align-items: center;
             gap: 12px;
             position: sticky;
             top: 0;
@@ -92,9 +93,73 @@
             -webkit-backdrop-filter: blur(12px);
         }
 
+        /* Botón de Descarga PDF Premium */
+        .pdf-btn {
+            background: linear-gradient(135deg, var(--navana-terracotta), #a93c27);
+            border: none;
+            color: var(--nv-ink-hi) !important;
+            padding: 8px 20px;
+            font-family: var(--nv-font-body);
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 700;
+            border-radius: var(--nv-radius-full);
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(139, 46, 27, 0.4);
+            transition: all var(--nv-dur) var(--nv-ease);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-right: auto; /* Alinear a la izquierda de la barra */
+        }
+
+        .pdf-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 46, 27, 0.6);
+            filter: brightness(1.1);
+        }
+
+        .pdf-btn:active {
+            transform: translateY(0);
+        }
+
         @media print {
-            .language-bar {
+            .language-bar, .pdf-btn {
                 display: none !important;
+            }
+            body {
+                background-color: var(--nv-bg-deep) !important;
+                color: var(--nv-ink) !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .container {
+                border: none !important;
+                box-shadow: none !important;
+                background-color: var(--nv-bg) !important;
+                padding: 40px 24px !important;
+                margin: 0 auto !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+            /* Evitar cortes feos en tarjetas, listas y tablas */
+            .card, .callout, tr, blockquote {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+            h2, h3, h4 {
+                page-break-after: avoid !important;
+                break-after: avoid !important;
+            }
+            /* Forzar tabla responsive a ancho completo en impresión */
+            .table-responsive {
+                overflow: visible !important;
+                width: 100% !important;
+            }
+            table {
+                width: 100% !important;
+                table-layout: auto !important;
             }
         }
 
@@ -403,6 +468,11 @@
 
     <!-- Selector de Idioma Flotante (Oculto en PDF) -->
     <div class="language-bar">
+        <button class="pdf-btn" onclick="window.print()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span lang="es">Descargar PDF</span>
+            <span lang="en">Download PDF</span>
+        </button>
         <button class="lang-btn active" id="btn-es" onclick="setLanguage('es')">Español</button>
         <button class="lang-btn" id="btn-en" onclick="setLanguage('en')">English</button>
     </div>
