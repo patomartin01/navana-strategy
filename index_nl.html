@@ -2164,10 +2164,19 @@
                                 <div class="session-duration">⏱️ ${mins}m ${secs}s</div>
                                 <div class="session-date">${dateStr}</div>
                             </div>
-                            <button onclick="deleteSession('${s.id}', event)" style="background: none; border: none; cursor: pointer; font-size: 16px; opacity: 0.6; padding: 8px; transition: opacity 0.2s, transform 0.2s;" onmouseover="this.style.opacity='1'; this.style.transform='scale(1.15)'" onmouseout="this.style.opacity='0.6'; this.style.transform='scale(1)'" title="Verwijder dit record">🗑️</button>
+                            <button class="delete-session-btn" style="background: none; border: none; cursor: pointer; font-size: 16px; opacity: 0.6; padding: 8px; transition: opacity 0.2s, transform 0.2s;" onmouseover="this.style.opacity='1'; this.style.transform='scale(1.15)'" onmouseout="this.style.opacity='0.6'; this.style.transform='scale(1)'" title="Verwijder dit record">🗑️</button>
                         </div>
                     </div>
                 `;
+
+                const deleteBtn = row.querySelector(".delete-session-btn");
+                if (deleteBtn) {
+                    deleteBtn.onclick = (e) => {
+                        if (e) e.stopPropagation();
+                        deleteSession(s.id);
+                    };
+                }
+
                 container.appendChild(row);
             });
 
@@ -2178,8 +2187,7 @@
         }
 
         // Delete Session from both Firestore and LocalStorage
-        window.deleteSession = async function(sessionId, event) {
-            if (event) event.stopPropagation();
+        window.deleteSession = async function(sessionId) {
 
             // 1. Delete from remote Firestore if connected
             if (db) {
