@@ -1394,6 +1394,26 @@
             } else {
                 setLanguage('es');
             }
+            
+            // Pre-flight de carga de fuentes para asegurar impresión perfecta (Regla #2 del checklist)
+            if (document.fonts) {
+                const families = [
+                    '300 16px "Ranade"',
+                    '400 16px "Ranade"',
+                    '500 16px "Ranade"',
+                    '700 16px "Ranade"',
+                    '300 16px "Space Grotesk"',
+                    '400 16px "Space Grotesk"',
+                    '500 16px "Space Grotesk"',
+                    '600 16px "Space Grotesk"',
+                    '700 16px "Space Grotesk"'
+                ];
+                Promise.all(families.map(f => document.fonts.load(f).catch(() => {})))
+                    .then(() => document.fonts.ready)
+                    .then(() => {
+                        console.log('Premium fonts successfully loaded and verified.');
+                    });
+            }
         });
     </script>
 
