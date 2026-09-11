@@ -2089,6 +2089,7 @@
             loadedSessionsCache = sessions;
             renderDashboardData(sessions);
         }
+        window.fetchActiveSessions = fetchActiveSessions;
 
         // Render entire analytics calculations, KPIs and list views
         function renderDashboardData(sessions) {
@@ -2183,7 +2184,7 @@
                     await deleteDoc(doc(db, "viewer_sessions", sessionId));
                     console.log("Deleted remote session: " + sessionId);
                 } catch (err) {
-                    console.warn("Could not delete from firestore: ", err.message);
+                    console.error("Firestore deletion failed or permission denied, continuing local cleanup:", err.message);
                 }
             }
 
