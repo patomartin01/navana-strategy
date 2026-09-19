@@ -744,6 +744,215 @@
             color: white;
         }
 
+        /* --- NAVANA DASHBOARD TABS AND SAFEZONE MAP SYSTEM --- */
+        .dash-tabs {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--nv-line-soft);
+            padding-bottom: 12px;
+        }
+
+        .dash-tab-btn {
+            background: none;
+            border: none;
+            color: var(--nv-ink-muted);
+            font-family: var(--nv-font-display);
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .dash-tab-btn:hover {
+            color: var(--nv-accent-hover);
+        }
+
+        .dash-tab-btn.active {
+            color: var(--nv-ink-hi);
+        }
+
+        .dash-tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -13px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--navana-terracotta);
+        }
+
+        .dash-tab-content {
+            display: none;
+        }
+
+        .dash-tab-content.active {
+            display: block;
+        }
+
+        /* SafeZone Grid */
+        .safezone-layout {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+
+        @media (max-width: 1024px) {
+            .safezone-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* SafeZone State Map SVG Container */
+        .mexico-map-container {
+            position: relative;
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--nv-line-soft);
+            border-radius: var(--nv-radius-lg);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 480px;
+        }
+
+        .mexico-map-svg {
+            width: 100%;
+            max-height: 440px;
+            fill: #1a1512;
+            stroke: #2a221d;
+            stroke-width: 1.5;
+            transition: all 0.3s ease;
+        }
+
+        .mexico-state-path {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mexico-state-path:hover {
+            fill: var(--nv-accent);
+            opacity: 0.8;
+        }
+
+        .mexico-state-path.selected {
+            fill: var(--navana-terracotta);
+            stroke: #fff;
+            stroke-width: 2;
+        }
+
+        /* SafeZone Details Panel */
+        .safezone-details {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .safezone-state-header {
+            border-bottom: 1px solid var(--nv-line-soft);
+            padding-bottom: 16px;
+            text-align: left;
+        }
+
+        .safezone-state-title {
+            font-family: var(--nv-font-display);
+            font-size: 24px;
+            color: var(--nv-ink-hi);
+            margin: 0 0 4px 0;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .safezone-state-subtitle {
+            font-family: var(--nv-font-body);
+            font-size: 12px;
+            color: var(--nv-accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0;
+        }
+
+        .safezone-legend {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 16px;
+            font-family: var(--nv-font-body);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        /* SafeZone Table styles */
+        .safezone-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: var(--nv-font-body);
+            font-size: 13px;
+            text-align: left;
+        }
+
+        .safezone-table th, .safezone-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--nv-line-soft);
+        }
+
+        .safezone-table th {
+            font-family: var(--nv-font-display);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--nv-ink-muted);
+            background-color: rgba(255,255,255,0.01);
+            border-bottom: 1px solid var(--nv-line-strong);
+        }
+
+        .safezone-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: var(--nv-radius-full);
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .safezone-badge.verde {
+            background-color: rgba(40, 167, 69, 0.15);
+            color: #28a745;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+
+        .safezone-badge.amarillo {
+            background-color: rgba(255, 193, 7, 0.15);
+            color: #ffc107;
+            border: 1px solid rgba(255, 193, 7, 0.3);
+        }
+
+        .safezone-badge.rojo {
+            background-color: rgba(220, 53, 69, 0.15);
+            color: #dc3545;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+
         /* Analytics Grid */
         .dash-grid-metrics {
             display: grid;
@@ -1662,31 +1871,153 @@
                 </div>
             </div>
 
-            <!-- Two Column Live Analytics -->
-            <div class="dash-layout-split">
-                <!-- Left: List of Reader Sessions -->
-                <div class="dash-panel">
-                    <h3 class="panel-heading">
-                        <span>Recent Audiences (Active Streams)</span>
-                        <span style="font-size: 11px; font-weight: normal; color: var(--nv-accent); text-transform: uppercase;">Select a reader to view their attention heatmap</span>
-                    </h3>
-                    <div class="session-list" id="dash-sessions-container">
-                        <div style="text-align: center; color: var(--nv-ink-muted); padding: 40px;">Fetching streams...</div>
+            <!-- TAB SELECTION BAR -->
+            <div class="dash-tabs">
+                <button class="dash-tab-btn active" id="tab-btn-telemetry" onclick="switchDashboardTab('telemetry')">Audience Metrics</button>
+                <button class="dash-tab-btn" id="tab-btn-safezone" onclick="switchDashboardTab('safezone')">NAVANA SafeZone (Risk Mapping)</button>
+            </div>
+
+            <!-- TAB 1: TELEMETRY VIEW -->
+            <div id="tab-content-telemetry" class="dash-tab-content active">
+                <!-- Two Column Live Analytics -->
+                <div class="dash-layout-split">
+                    <!-- Left: List of Reader Sessions -->
+                    <div class="dash-panel">
+                        <h3 class="panel-heading">
+                            <span>Recent Audiences (Active Streams)</span>
+                            <span style="font-size: 11px; font-weight: normal; color: var(--nv-accent); text-transform: uppercase;">Select a reader to view their attention heatmap</span>
+                        </h3>
+                        <div class="session-list" id="dash-sessions-container">
+                            <!-- Dynamic content loaded via JS -->
+                            <div style="text-align: center; color: var(--nv-ink-muted); padding: 40px;">Fetching streams...</div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Active Map & Time Per Section Heatmap -->
+                    <div class="dash-panel">
+                        <h3 class="panel-heading">Attention Map & Heat-Zones</h3>
+                        <div style="margin-bottom: 24px; padding: 12px 16px; background: rgba(255,255,255,0.02); border: 1px solid var(--nv-line-soft); border-radius: var(--nv-radius-md); text-align: left;">
+                            <p style="margin: 0 0 4px 0; font-size: 11px; text-transform: uppercase; color: var(--nv-accent); letter-spacing: 1px;">Selected Reader:</p>
+                            <p style="margin: 0; font-family: var(--nv-font-display); font-size: 16px; font-weight: bold; color: var(--nv-ink-hi);" id="active-viewer-name">-</p>
+                            <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--nv-ink-muted);" id="active-viewer-email">-</p>
+                        </div>
+
+                        <!-- Progress tracking bars for section times -->
+                        <div class="heatmap-container" id="dash-heatmap-bars">
+                            <!-- Dynamic elements -->
+                            <div style="text-align: center; color: var(--nv-ink-muted); padding: 40px;">Select a reader session from the left column.</div>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Right: Active Map & Time Per Section Heatmap -->
-                <div class="dash-panel">
-                    <h3 class="panel-heading">Attention Map & Heat-Zones</h3>
-                    <div style="margin-bottom: 24px; padding: 12px 16px; background: rgba(255,255,255,0.02); border: 1px solid var(--nv-line-soft); border-radius: var(--nv-radius-md); text-align: left;">
-                        <p style="margin: 0 0 4px 0; font-size: 11px; text-transform: uppercase; color: var(--nv-accent); letter-spacing: 1px;">Selected Reader:</p>
-                        <p style="margin: 0; font-family: var(--nv-font-display); font-size: 16px; font-weight: bold; color: var(--nv-ink-hi);" id="active-viewer-name">-</p>
-                        <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--nv-ink-muted);" id="active-viewer-email">-</p>
+            <!-- TAB 2: SAFEZONE RISK MAP VIEW -->
+            <div id="tab-content-safezone" class="dash-tab-content">
+                <div class="safezone-layout">
+                    <!-- Left Column: Interactive Map -->
+                    <div class="mexico-map-container">
+                        <h4 style="margin: 0 0 16px 0; font-family: var(--nv-font-display); font-size: 16px; font-weight: bold; color: var(--nv-ink-hi); text-transform: uppercase; letter-spacing: 2px;">Mexico Territorial Risk Analysis Map</h4>
+                        <p style="margin: 0 0 24px 0; font-size: 12px; color: var(--nv-ink-muted); text-align: center;">Click on any of the highlighted states to audit regional municipalities and investment feasibility levels.</p>
+                        
+                        <!-- Premium Embedded SVG Map of Mexico -->
+                        <svg class="mexico-map-svg" viewBox="0 0 1000 650" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Baja California -->
+                            <path class="mexico-state-path" id="map-state-bc" d="M110,60 L140,80 L180,180 L140,240 L100,160 Z" onclick="selectSafeZoneState('BC', 'Baja California')" />
+                            <!-- Sonora -->
+                            <path class="mexico-state-path" id="map-state-son" d="M190,80 L290,100 L320,190 L260,280 L160,220 Z" onclick="selectSafeZoneState('SON', 'Sonora')" />
+                            <!-- Chihuahua -->
+                            <path class="mexico-state-path" id="map-state-chih" d="M300,100 L440,140 L430,300 L320,310 L310,200 Z" onclick="selectSafeZoneState('CHIH', 'Chihuahua')" />
+                            <!-- Coahuila -->
+                            <path class="mexico-state-path" id="map-state-coah" d="M450,150 L560,180 L540,310 L440,310 Z" onclick="selectSafeZoneState('COAH', 'Coahuila')" />
+                            <!-- Durango -->
+                            <path class="mexico-state-path" id="map-state-dgo" d="M330,320 L430,310 L460,420 L370,430 L310,360 Z" onclick="selectSafeZoneState('DGO', 'Durango')" />
+                            <!-- Sinaloa -->
+                            <path class="mexico-state-path" id="map-state-sin" d="M250,290 L310,320 L360,430 L300,450 Z" onclick="selectSafeZoneState('SIN', 'Sinaloa')" />
+                            
+                            <!-- Nayarit (🟢 GREEN/🟡 YELLOW) -->
+                            <path class="mexico-state-path" id="map-state-nay" style="fill: rgba(40, 167, 69, 0.4); stroke: rgba(40, 167, 69, 0.7);" d="M340,440 L380,440 L390,470 L340,480 Z" onclick="selectSafeZoneState('NAY', 'Nayarit')" />
+                            <!-- Jalisco (🔴 RED/🟡 YELLOW/🟢 GREEN) -->
+                            <path class="mexico-state-path" id="map-state-jal" style="fill: rgba(220, 53, 69, 0.4); stroke: rgba(220, 53, 69, 0.7);" d="M340,490 L400,480 L440,510 L410,540 L370,540 L330,520 Z" onclick="selectSafeZoneState('JAL', 'Jalisco')" />
+                            <!-- Colima (🟡 YELLOW) -->
+                            <path class="mexico-state-path" id="map-state-col" style="fill: rgba(255, 193, 7, 0.3); stroke: rgba(255, 193, 7, 0.6);" d="M380,550 L400,545 L410,560 L390,565 Z" onclick="selectSafeZoneState('COL', 'Colima')" />
+                            <!-- Michoacán (🔴 RED / 🟡 YELLOW) -->
+                            <path class="mexico-state-path" id="map-state-mich" style="fill: rgba(220, 53, 69, 0.5); stroke: rgba(220, 53, 69, 0.8);" d="M410,545 L460,515 L490,535 L480,570 L420,570 Z" onclick="selectSafeZoneState('MICH', 'Michoacán')" />
+                            <!-- Guanajuato (🟢 GREEN / 🔴 RED) -->
+                            <path class="mexico-state-path" id="map-state-gto" style="fill: rgba(40, 167, 69, 0.4); stroke: rgba(40, 167, 69, 0.7);" d="M445,495 L480,485 L490,510 L455,515 Z" onclick="selectSafeZoneState('GTO', 'Guanajuato')" />
+                            <!-- Querétaro (🟢 GREEN) -->
+                            <path class="mexico-state-path" id="map-state-qro" style="fill: rgba(40, 167, 69, 0.6); stroke: rgba(40, 167, 69, 0.9);" d="M485,480 L505,475 L510,495 L490,500 Z" onclick="selectSafeZoneState('QRO', 'Querétaro')" />
+                            
+                            <!-- Zacatecas -->
+                            <path class="mexico-state-path" id="map-state-zac" d="M410,320 L480,320 L510,430 L450,460 L410,410 Z" onclick="selectSafeZoneState('ZAC', 'Zacatecas')" />
+                            <!-- San Luis Potosí -->
+                            <path class="mexico-state-path" id="map-state-slp" d="M490,320 L570,360 L560,460 L490,465 Z" onclick="selectSafeZoneState('SLP', 'San Luis Potosí')" />
+                            <!-- Nuevo León -->
+                            <path class="mexico-state-path" id="map-state-nl" d="M550,220 L600,240 L580,330 L530,300 Z" onclick="selectSafeZoneState('NL', 'Nuevo León')" />
+                            <!-- Tamaulipas -->
+                            <path class="mexico-state-path" id="map-state-tamps" d="M590,260 L650,300 L610,410 L560,340 Z" onclick="selectSafeZoneState('TAMPS', 'Tamaulipas')" />
+                            <!-- Veracruz -->
+                            <path class="mexico-state-path" id="map-state-ver" d="M580,420 L660,460 L730,520 L680,560 L540,510 Z" onclick="selectSafeZoneState('VER', 'Veracruz')" />
+                            <!-- Guerrero -->
+                            <path class="mexico-state-path" id="map-state-gro" d="M465,550 L535,530 L570,580 L480,600 Z" onclick="selectSafeZoneState('GRO', 'Guerrero')" />
+                            <!-- Oaxaca -->
+                            <path class="mexico-state-path" id="map-state-oax" d="M580,560 L680,550 L680,610 L580,610 Z" onclick="selectSafeZoneState('OAX', 'Oaxaca')" />
+                            <!-- Chiapas -->
+                            <path class="mexico-state-path" id="map-state-chis" d="M690,560 L780,560 L750,620 L685,610 Z" onclick="selectSafeZoneState('CHIS', 'Chiapas')" />
+                            <!-- Tabasco -->
+                            <path class="mexico-state-path" id="map-state-tab" d="M690,530 L760,530 L750,560 L685,555 Z" onclick="selectSafeZoneState('TAB', 'Tabasco')" />
+                            <!-- Campeche -->
+                            <path class="mexico-state-path" id="map-state-camp" d="M770,500 L840,490 L810,560 L760,540 Z" onclick="selectSafeZoneState('CAMP', 'Campeche')" />
+                            <!-- Yucatán -->
+                            <path class="mexico-state-path" id="map-state-yuc" d="M800,430 L890,440 L850,490 L770,490 Z" onclick="selectSafeZoneState('YUC', 'Yucatán')" />
+                            <!-- Quintana Roo -->
+                            <path class="mexico-state-path" id="map-state-qroo" d="M860,450 L910,460 L870,550 L825,500 Z" onclick="selectSafeZoneState('QROO', 'Quintana Roo')" />
+                        </svg>
+
+                        <!-- Legend Indicator -->
+                        <div class="safezone-legend">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: #28a745;"></div>
+                                <span>🟢 Approved (Green)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: #ffc107;"></div>
+                                <span>🟡 Conditional (Yellow)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: #dc3545;"></div>
+                                <span>🔴 No-Go (Red)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: #1a1512; border: 1px solid #2a221d;"></div>
+                                <span>Unevaluated</span>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Progress tracking bars for section times -->
-                    <div class="heatmap-container" id="dash-heatmap-bars">
-                        <div style="text-align: center; color: var(--nv-ink-muted); padding: 40px;">Select a reader session from the left column.</div>
+                    <!-- Right Column: State Details & Municipality Level Analysis -->
+                    <div class="dash-panel safezone-details">
+                        <div class="safezone-state-header">
+                            <span id="safezone-back-btn" style="display: none; cursor: pointer; color: var(--nv-accent-hover); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;" onclick="resetSafeZoneStateSelection()">⬅️ View All States</span>
+                            <h3 class="safezone-state-title" id="selected-state-title">Territory Audit</h3>
+                            <p class="safezone-state-subtitle" id="selected-state-subtitle">Region 1: Occidente y Bajío</p>
+                        </div>
+
+                        <!-- Info Box / Table container -->
+                        <div id="safezone-content-panel" style="text-align: left;">
+                            <p style="margin: 0 0 16px 0; color: var(--nv-ink-muted); font-size: 13.5px; line-height: 1.6;">Select any highlighted state on the map to audit local municipal risk assessments. All ratings are meticulously based on official security databases and NAVANA's 3 Security Pillars.</p>
+                            
+                            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--nv-line-soft); border-radius: var(--nv-radius-md); padding: 16px; margin-bottom: 16px;">
+                                <h4 style="margin: 0 0 8px 0; font-family: var(--nv-font-display); font-size: 13px; color: var(--nv-accent); text-transform: uppercase; letter-spacing: 1px;">📊 Region 1 Summary:</h4>
+                                <ul style="margin: 0; padding-left: 20px; font-size: 12.5px; line-height: 1.6; color: var(--nv-ink);">
+                                    <li><strong>Querétaro & North Guanajuato:</strong> Highly recommended for mountain & wine clusters.</li>
+                                    <li><strong>Nayarit & Jalisco Coast:</strong> Ideal for luxury coastal clusters (Punta Mita / Sayulita).</li>
+                                    <li><strong>Critical Risks (Red):</strong> Jalisco-Michoacán internal borders and southern Guanajuato (Celaya corridor).</li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Export Button -->
+                            <button class="dash-close-btn" style="width: 100%; font-weight: bold; background-color: var(--nv-accent); color: #000; border-color: var(--nv-accent);" onclick="downloadSafeZoneExcel()">📊 Download Excel Sheet (.csv) for Google Sheets</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2300,8 +2631,231 @@
             scrollMeta.innerHTML = checklistHTML;
             heatmapContainer.appendChild(scrollMeta);
         };
-    </script>
 
+        // --- INTERACTIVE NAVANA SAFEZONE TABS & ANALYSIS REGISTRY ---
+        
+        // Tab switching controller
+        window.switchDashboardTab = function(tabId) {
+            document.querySelectorAll('.dash-tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.dash-tab-content').forEach(content => content.classList.remove('active'));
+            
+            if (tabId === 'telemetry') {
+                document.getElementById('tab-btn-telemetry').classList.add('active');
+                document.getElementById('tab-content-telemetry').classList.add('active');
+            } else if (tabId === 'safezone') {
+                document.getElementById('tab-btn-safezone').classList.add('active');
+                document.getElementById('tab-content-safezone').classList.add('active');
+            }
+        };
+
+        // Structured database matching navana_security_registry.md (Region 1: Occidente y Bajío)
+        const safeZoneDatabase = {
+            "QRO": {
+                stateName: "Querétaro",
+                subtitle: "Region 1: Occidente y Bajío • Security and Stability Hub",
+                generalStatus: "Highly viable for premium cluster expansion. Optimal highway security and strong institutional certainty.",
+                municipalities: [
+                    { name: "Querétaro (Capital)", p1: "9/10", p2: "9/10", p3: "10/10", status: "verde", dictamen: "Approved for OpCo offices and suburban clusters." },
+                    { name: "Corregidora", p1: "9/10", p2: "9/10", p3: "9/10", status: "verde", dictamen: "Excellent. High quality of life and great infrastructure." },
+                    { name: "El Marqués", p1: "8/10", p2: "9/10", p3: "9/10", status: "verde", dictamen: "Approved. Excellent for residential and industrial corridors." },
+                    { name: "Tequisquiapan", p1: "8/10", p2: "8/10", p3: "9/10", status: "verde", dictamen: "Highly recommended for wine-themed eco-luxury clusters." },
+                    { name: "San Juan del Río", p1: "6/10", p2: "7/10", p3: "8/10", status: "amarillo", dictamen: "Conditional on perimetral highway security (Federal Hwy 57)." }
+                ]
+            },
+            "NAY": {
+                stateName: "Nayarit",
+                subtitle: "Region 1: Occidente y Bajío • Pacific North Tourism Corridor",
+                generalStatus: "Very safe coastal frontier with high international eco-tourism demand. Stable inland areas.",
+                municipalities: [
+                    { name: "Bahía de Banderas", p1: "9/10", p2: "9/10", p3: "10/10", status: "verde", dictamen: "Priority 1 for beach clusters (Punta de Mita / Sayulita)." },
+                    { name: "Compostela", p1: "8/10", p2: "8/10", p3: "9/10", status: "verde", dictamen: "Highly recommended for beachfront forest projects." },
+                    { name: "San Blas", p1: "7/10", p2: "7/10", p3: "8/10", status: "verde", dictamen: "Approved. Great potential for rustic eco-luxury." },
+                    { name: "Tepic", p1: "7/10", p2: "7/10", p3: "8/10", status: "verde", dictamen: "Safe. Highly viable for logistics OpCo." }
+                ]
+            },
+            "JAL": {
+                stateName: "Jalisco",
+                subtitle: "Region 1: Occidente y Bajío • Multimodal Strategic Axis",
+                generalStatus: "Sharp contrast. North coast is extremely safe and attractive; borders with Michoacán and Zacatecas carry high active risks.",
+                municipalities: [
+                    { name: "Puerto Vallarta", p1: "9/10", p2: "8/10", p3: "9/10", status: "verde", dictamen: "Approved fully for luxury beach eco-resorts." },
+                    { name: "Zapopan", p1: "8/10", p2: "8/10", p3: "9/10", status: "verde", dictamen: "Approved for suburban high-net-worth clusters." },
+                    { name: "Tlaquepaque / Tonalá", p1: "6/10", p2: "7/10", p3: "7/10", status: "amarillo", dictamen: "Conditional. Require close monitoring of local extortion rates." },
+                    { name: "Tepatitlán (Los Altos)", p1: "5/10", p2: "6/10", p3: "6/10", status: "amarillo", dictamen: "Conditional. Intermittent presence of groups on roads." },
+                    { name: "Lagos de Moreno", p1: "3/10", p2: "3/10", p3: "4/10", status: "rojo", dictamen: "Absolute NO-GO. High conflict rates and fractured road security." },
+                    { name: "Michoacán Border (Jilotlán)", p1: "2/10", p2: "3/10", p3: "2/10", status: "rojo", dictamen: "Absolute NO-GO. Active local social conflict and zero certainty." }
+                ]
+            },
+            "GTO": {
+                stateName: "Guanajuato",
+                subtitle: "Region 1: Occidente y Bajío • Industrial & Wine Corridor",
+                generalStatus: "Strong North/South division. Northern zone (San Miguel de Allende corridor) is very safe; southern industrial belt experiences high violence.",
+                municipalities: [
+                    { name: "San Miguel de Allende", p1: "9/10", p2: "8/10", p3: "9/10", status: "verde", dictamen: "High priority zone for luxury design clusters." },
+                    { name: "Guanajuato (Capital)", p1: "8/10", p2: "8/10", p3: "8/10", status: "verde", dictamen: "Approved. Excellent cultural destination." },
+                    { name: "León", p1: "6/10", p2: "8/10", p3: "7/10", status: "amarillo", dictamen: "Conditional. Viable with strict local background checks." },
+                    { name: "Celaya", p1: "2/10", p2: "4/10", p3: "3/10", status: "rojo", dictamen: "Absolute NO-GO. Critical land extortion and gun violence indices." },
+                    { name: "Salamanca / Irapuato", p1: "3/10", p2: "5/10", p3: "4/10", status: "rojo", dictamen: "Absolute NO-GO. Operational block due to social conflict." }
+                ]
+            },
+            "MICH": {
+                stateName: "Michoacán",
+                subtitle: "Region 1: Occidente y Bajío • Forest & Agricultural Borders",
+                generalStatus: "High risk due to soil control disputes in agricultural areas. Capital and enclosed resort areas only carry conditional viability.",
+                municipalities: [
+                    { name: "Morelia (Capital)", p1: "6/10", p2: "7/10", p3: "7/10", status: "amarillo", dictamen: "Conditional. Monitor peripheral local extortions." },
+                    { name: "Pátzcuaro", p1: "5/10", p2: "6/10", p3: "6/10", status: "amarillo", dictamen: "Conditional. High tourist appeal but requires perimeter road security." },
+                    { name: "Uruapan", p1: "2/10", p2: "3/10", p3: "2/10", status: "rojo", dictamen: "Absolute NO-GO. Critical avocado crop soil control disputes." },
+                    { name: "Apatzingán (Tierra Caliente)", p1: "1/10", p2: "2/10", p3: "1/10", status: "rojo", dictamen: "Absolute NO-GO. Extreme life risk and zero secure connectivity." }
+                ]
+            },
+            "COL": {
+                stateName: "Colima",
+                subtitle: "Region 1: Occidente y Bajío • Port Logistics Corridor",
+                generalStatus: "Localized instability due to cargo port control. High conditional risk rating.",
+                municipalities: [
+                    { name: "Manzanillo (Tourist Area)", p1: "6/10", p2: "7/10", p3: "6/10", status: "amarillo", dictamen: "Conditional strictly to consolidated hotel zones." },
+                    { name: "Colima (Capital)", p1: "4/10", p2: "6/10", p3: "4/10", status: "rojo", dictamen: "Provisional NO-GO due to historic peaks in homicide rates." }
+                ]
+            }
+        };
+
+        // Interactive state click handler
+        window.selectSafeZoneState = function(stateId, stateName) {
+            // Remove selection class from all paths
+            document.querySelectorAll(".mexico-state-path").forEach(p => p.classList.remove("selected"));
+            
+            // Highlight selected path
+            const path = document.getElementById("map-state-" + stateId.toLowerCase());
+            if (path) path.classList.add("selected");
+
+            const stateData = safeZoneDatabase[stateId];
+            const contentPanel = document.getElementById("safezone-content-panel");
+            const backBtn = document.getElementById("safezone-back-btn");
+            const titleEl = document.getElementById("selected-state-title");
+            const subtitleEl = document.getElementById("selected-state-subtitle");
+
+            if (!stateData) {
+                // If not mapped yet, display placeholder warning
+                backBtn.style.display = "inline-block";
+                titleEl.innerText = stateName;
+                subtitleEl.innerText = "State Unevaluated in Phase 1";
+                
+                contentPanel.innerHTML = `
+                    <div class="callout" style="border-left-color: var(--navana-terracotta); background-color: rgba(220, 53, 69, 0.05); margin-top: 10px;">
+                        <p><strong>Territorial Audit Phase 1:</strong></p>
+                        <p style="font-size: 13px; margin-top: 5px; line-height: 1.6;">
+                            The state of <strong>${stateName}</strong> belongs to a region that is currently queued for strategic safety analysis (Phase 2 or Phase 3). 
+                            Investment authorization in this area is pending until the meticulous 3-pillar safety review is finalized.
+                        </p>
+                    </div>
+                    <button class="dash-close-btn" style="width: 100%; margin-top: 16px;" onclick="resetSafeZoneStateSelection()">View General Summary</button>
+                `;
+                return;
+            }
+
+            // If mapped, build interactive table
+            backBtn.style.display = "inline-block";
+            titleEl.innerText = stateData.stateName;
+            subtitleEl.innerText = stateData.subtitle;
+
+            let html = `
+                <p style="margin: 0 0 16px 0; font-size: 13px; line-height: 1.6; color: var(--nv-ink);">${stateData.generalStatus}</p>
+                <div class="table-container" style="margin-bottom: 24px;">
+                    <table class="safezone-table">
+                        <thead>
+                            <tr>
+                                <th>Municipality</th>
+                                <th title="Pillar 1: Soil Extortion">P1</th>
+                                <th title="Pillar 2: Road Security">P2</th>
+                                <th title="Pillar 3: Social Conflict">P3</th>
+                                <th>Status</th>
+                                <th>Strategic Dictamen</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            stateData.municipalities.forEach(m => {
+                const badgeClass = m.status; // verde, amarillo, rojo
+                const badgeLabel = m.status === 'verde' ? 'Approved' : (m.status === 'amarillo' ? 'Conditional' : 'No-Go');
+                
+                html += `
+                    <tr>
+                        <td style="font-weight: bold; color: var(--nv-ink-hi);">${m.name}</td>
+                        <td>${m.p1}</td>
+                        <td>${m.p2}</td>
+                        <td>${m.p3}</td>
+                        <td><span class="safezone-badge ${badgeClass}">${badgeLabel}</span></td>
+                        <td style="font-size: 12px; color: var(--nv-ink);">${m.dictamen}</td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <button class="dash-close-btn" style="flex: 1;" onclick="resetSafeZoneStateSelection()">Back</button>
+                    <button class="dash-close-btn" style="flex: 2; font-weight: bold; background-color: var(--nv-accent); color: #000; border-color: var(--nv-accent);" onclick="downloadSafeZoneExcel()">Export Data (.csv)</button>
+                </div>
+            `;
+
+            contentPanel.innerHTML = html;
+        };
+
+        // Reset state selection on map
+        window.resetSafeZoneStateSelection = function() {
+            document.querySelectorAll(".mexico-state-path").forEach(p => p.classList.remove("selected"));
+            document.getElementById("safezone-back-btn").style.display = "none";
+            document.getElementById("selected-state-title").innerText = "Territory Audit";
+            document.getElementById("selected-state-subtitle").innerText = "Region 1: Occidente y Bajío";
+
+            const contentPanel = document.getElementById("safezone-content-panel");
+            contentPanel.innerHTML = `
+                <p style="margin: 0 0 16px 0; color: var(--nv-ink-muted); font-size: 13.5px; line-height: 1.6;">Select any highlighted state on the map to audit local municipal risk assessments. All ratings are meticulously based on official security databases and NAVANA's 3 Security Pillars.</p>
+                
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--nv-line-soft); border-radius: var(--nv-radius-md); padding: 16px; margin-bottom: 16px;">
+                    <h4 style="margin: 0 0 8px 0; font-family: var(--nv-font-display); font-size: 13px; color: var(--nv-accent); text-transform: uppercase; letter-spacing: 1px;">📊 Region 1 Summary:</h4>
+                    <ul style="margin: 0; padding-left: 20px; font-size: 12.5px; line-height: 1.6; color: var(--nv-ink);">
+                        <li><strong>Querétaro & North Guanajuato:</strong> Highly recommended for mountain & wine clusters.</li>
+                        <li><strong>Nayarit & Jalisco Coast:</strong> Ideal for luxury coastal clusters (Punta Mita / Sayulita).</li>
+                        <li><strong>Critical Risks (Red):</strong> Jalisco-Michoacán internal borders and southern Guanajuato (Celaya corridor).</li>
+                    </ul>
+                </div>
+                
+                <button class="dash-close-btn" style="width: 100%; font-weight: bold; background-color: var(--nv-accent); color: #000; border-color: var(--nv-accent);" onclick="downloadSafeZoneExcel()">📊 Download Excel Sheet (.csv) for Google Sheets</button>
+            `;
+        };
+
+        // Download entire mapped safety catalog as structured Excel-friendly CSV
+        window.downloadSafeZoneExcel = function() {
+            // Build CSV rows
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; // Include BOM for proper Excel Spanish accents support
+            csvContent += "State,Municipality,Pillar 1: Soil Extortion,Pillar 2: Road Security,Pillar 3: Social Conflict,Status,Strategic Dictamen\n";
+
+            Object.keys(safeZoneDatabase).forEach(stateKey => {
+                const state = safeZoneDatabase[stateKey];
+                state.municipalities.forEach(m => {
+                    const statusLabel = m.status === 'verde' ? 'Approved' : (m.status === 'amarillo' ? 'Conditional' : 'No-Go');
+                    const cleanDictamen = m.dictamen.replace(/"/g, '""'); // Escape quotes
+                    const cleanName = m.name.replace(/"/g, '""');
+                    const cleanState = state.stateName.replace(/"/g, '""');
+                    
+                    csvContent += `"${cleanState}","${cleanName}","${m.p1}","${m.p2}","${m.p3}","${statusLabel}","${cleanDictamen}"\n`;
+                });
+            });
+
+            // Create download anchor and trigger browser download flow
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "navana_safezone_registry_region1.csv");
+            document.body.appendChild(link);
+            link.click();
+        };
+    </script>
 </body>
 </html>
 
