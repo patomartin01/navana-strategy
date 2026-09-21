@@ -9,6 +9,9 @@
     <!-- Leaflet Real-time OpenStreetMap Engine CDN -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- PapaParse Library to stream Google Sheets CSV in real-time -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js" integrity="sha512-dfX5uYVXzyU8+KHAVK3bIp70HSzW8ODp7VNykbeIPGf7wgN23gYKgvUMcAtK6fL2gK97pD60G1q20fwgUFYig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <style>
         /* Import official Navana Fonts from CDN */
@@ -2717,9 +2720,6 @@
         };
 
         // Interactive state click handler
-        let safezoneMap = null;
-        let safezoneMarkersGroup = null;
-
         // Initialize Leaflet Map inside the dashboard
         window.initSafeZoneLeafletMap = function() {
             if (safezoneMap) {
@@ -2745,12 +2745,92 @@
 
             safezoneMarkersGroup = L.layerGroup().addTo(safezoneMap);
 
-            // Re-render and plot all points automatically
-            plotAllSafeZoneMarkers();
+            // Fetch live Google Sheet data in real-time, then render
+            fetchLiveGoogleSheetData();
         };
 
+        // Fetch live CSV records directly from Google Sheets
+        function fetchLiveGoogleSheetData() {
+            const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRMiFyBn86Jv2fQ9_kA01aJbZ5Pgj2qeG1fKwQx76oqYARL3J01_Mm3pbBzFvdRg6CEybrYYzxhtJ8r/pub?gid=0&single=true&output=csv";
+            
+            console.log("☁️ Fetching live territorial dataset from Google Sheets...");
+            
+            Papa.parse(sheetUrl, {
+                download: true,
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    console.log("✨ Successfully received live records from Google Sheets:", results.data);
+                    if (results.data && results.data.length > 0) {
+                        rebuildDatabaseFromGoogleSheet(results.data);
+                    } else {
+                        plotAllSafeZoneMarkers();
+                    }
+                },
+                error: function(err) {
+                    console.warn("⚠️ Failed to parse Google Sheet, using local static database fallback:", err);
+                    plotAllSafeZoneMarkers();
+                }
+            });
+        }
+
+        // Dynamically rebuild the safeZoneDatabase matching Google Sheets rows
+        function rebuildDatabaseFromGoogleSheet(rows) {
+            // Clean out current local database structure
+            const newDb = {};
+            
+            rows.forEach(row => {
+                const state = row["Estado"] || row["State"];
+                const municipality = row["Municipio"] || row["Municipality"];
+                const p1 = row["Pilar 1 (Suelo/Extorsión)"] || row["Pilar 1"] || "Low (9/10)";
+                const p2 = row["Pilar 2 (Vial/Carretera)"] || row["Pilar 2"] || "Low (9/10)";
+                const p3 = row["Pilar 3 (Social/Certeza)"] || row["Pilar 3"] || "Low (10/10)";
+                
+                let rawStatus = row["Semáforo (Status)"] || row["Status"] || "Green";
+                const status = rawStatus.toLowerCase().includes("verde") || rawStatus.toLowerCase().includes("green") ? "verde" : 
+                               (rawStatus.toLowerCase().includes("amarillo") || rawStatus.toLowerCase().includes("yellow") ? "amarillo" : "rojo");
+                
+                const dictamen = row["Dictamen & Justificación Estratégica"] || row["Advice"] || "";
+                const lat = parseFloat(row["Latitud"] || row["Latitude"]);
+                const lng = parseFloat(row["Longitud"] || row["Longitude"]);
+
+                // Map standard states key
+                let stateKey = "QRO";
+                if (state.toLowerCase().includes("querétaro") || state.toLowerCase().includes("queretaro")) stateKey = "QRO";
+                else if (state.toLowerCase().includes("nayarit")) stateKey = "NAY";
+                else if (state.toLowerCase().includes("jalisco")) stateKey = "JAL";
+                else if (state.toLowerCase().includes("guanajuato")) stateKey = "GTO";
+                else if (state.toLowerCase().includes("michoacán") || state.toLowerCase().includes("michoacan")) stateKey = "MICH";
+                else if (state.toLowerCase().includes("colima")) stateKey = "COL";
+                else stateKey = state.substring(0, 3).toUpperCase(); // Dynamic backup
+
+                if (!newDb[stateKey]) {
+                    newDb[stateKey] = {
+                        stateName: state,
+                        subtitle: `Region 1: Occidente y Bajío • Risk Mitigation control`,
+                        generalStatus: `Live active cloud territorial safety audit.`,
+                        municipalities: []
+                    };
+                }
+
+                newDb[stateKey].municipalities.push({
+                    name: municipality,
+                    p1: p1,
+                    p2: p2,
+                    p3: p3,
+                    status: status,
+                    dictamen: dictamen,
+                    latlng: (!isNaN(lat) && !isNaN(lng)) ? [lat, lng] : null
+                });
+            });
+
+            // Overwrite database reference and render
+            Object.assign(safeZoneDatabase, newDb);
+            plotAllSafeZoneMarkers(true);
+        }
+
         // Custom marker rendering based on security semaphores
-        function plotAllSafeZoneMarkers() {
+        function plotAllSafeZoneMarkers(useDynamicCoords = false) {
             if (!safezoneMap || !safezoneMarkersGroup) return;
             safezoneMarkersGroup.clearLayers();
 
@@ -2787,7 +2867,7 @@
             Object.keys(safeZoneDatabase).forEach(stateKey => {
                 const stateData = safeZoneDatabase[stateKey];
                 stateData.municipalities.forEach(m => {
-                    const latlng = coordsDB[m.name];
+                    let latlng = (useDynamicCoords && m.latlng) ? m.latlng : coordsDB[m.name];
                     if (!latlng) return;
 
                     // Set marker color based on status
