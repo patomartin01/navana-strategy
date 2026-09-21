@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estructuración Corporativa y Financiera - NAVANA GROUP</title>
     <link rel="icon" type="image/png" href="logo_gold.png">
+    
+    <!-- Leaflet Real-time OpenStreetMap Engine CDN -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
     <style>
         /* Import official Navana Fonts from CDN */
         @import url('https://api.fontshare.com/v2/css?f[]=ranade@300,400,500,700&display=swap');
@@ -817,12 +822,49 @@
             padding: 24px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
             min-height: 480px;
         }
 
+        #safezone-leaflet-map {
+            width: 100%;
+            height: 480px;
+            border-radius: var(--nv-radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: #110d0a !important;
+            margin-bottom: 12px;
+            z-index: 1;
+        }
+
+        /* Premium Dark Theme Tile Filter for Leaflet Map */
+        .leaflet-tile-container {
+            filter: invert(100%) hue-rotate(180deg) brightness(85%) contrast(90%);
+        }
+
+        .leaflet-container {
+            font-family: var(--nv-font-body) !important;
+        }
+
+        .leaflet-popup-content-wrapper {
+            background: #181412 !important;
+            color: var(--nv-ink-hi) !important;
+            border: 1px solid var(--nv-line-soft) !important;
+            border-radius: var(--nv-radius-md) !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6) !important;
+        }
+
+        .leaflet-popup-tip {
+            background: #181412 !important;
+            border: 1px solid var(--nv-line-soft) !important;
+        }
+
+        .leaflet-control-zoom-in, .leaflet-control-zoom-out {
+            background-color: #181412 !important;
+            color: #fff !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        }
+
         .mexico-map-svg {
+            display: none !important; /* Hide old SVG vector map */
             width: 100%;
             max-height: 480px;
             fill: #2c221a;
@@ -1913,59 +1955,8 @@
                         <h4 style="margin: 0 0 16px 0; font-family: var(--nv-font-display); font-size: 16px; font-weight: bold; color: var(--nv-ink-hi); text-transform: uppercase; letter-spacing: 2px;">Mexico Territoriale Risicoanalyse Kaart</h4>
                         <p style="margin: 0 0 24px 0; font-size: 12px; color: var(--nv-ink-muted); text-align: center;">Klik op een van de gemarkeerde staten om de risico's op gemeentelijk niveau en de haalbaarheid van investeringen te bekijken.</p>
                         
-                        <!-- Premium Embedded SVG Map of Mexico -->
-                        <svg class="mexico-map-svg" viewBox="0 0 1000 650" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Baja California -->
-                            <path class="mexico-state-path" id="map-state-bc" d="M110,60 L140,80 L180,180 L140,240 L100,160 Z" onclick="selectSafeZoneState('BC', 'Baja California')" />
-                            <!-- Sonora -->
-                            <path class="mexico-state-path" id="map-state-son" d="M190,80 L290,100 L320,190 L260,280 L160,220 Z" onclick="selectSafeZoneState('SON', 'Sonora')" />
-                            <!-- Chihuahua -->
-                            <path class="mexico-state-path" id="map-state-chih" d="M300,100 L440,140 L430,300 L320,310 L310,200 Z" onclick="selectSafeZoneState('CHIH', 'Chihuahua')" />
-                            <!-- Coahuila -->
-                            <path class="mexico-state-path" id="map-state-coah" d="M450,150 L560,180 L540,310 L440,310 Z" onclick="selectSafeZoneState('COAH', 'Coahuila')" />
-                            <!-- Durango -->
-                            <path class="mexico-state-path" id="map-state-dgo" d="M330,320 L430,310 L460,420 L370,430 L310,360 Z" onclick="selectSafeZoneState('DGO', 'Durango')" />
-                            <!-- Sinaloa -->
-                            <path class="mexico-state-path" id="map-state-sin" d="M250,290 L310,320 L360,430 L300,450 Z" onclick="selectSafeZoneState('SIN', 'Sinaloa')" />
-                            
-                            <!-- Nayarit (🟢 GREEN/🟡 YELLOW) -->
-                            <path class="mexico-state-path" id="map-state-nay" style="fill: rgba(40, 167, 69, 0.4); stroke: rgba(40, 167, 69, 0.7);" d="M340,440 L380,440 L390,470 L340,480 Z" onclick="selectSafeZoneState('NAY', 'Nayarit')" />
-                            <!-- Jalisco (🔴 RED/🟡 YELLOW/🟢 GREEN) -->
-                            <path class="mexico-state-path" id="map-state-jal" style="fill: rgba(220, 53, 69, 0.4); stroke: rgba(220, 53, 69, 0.7);" d="M340,490 L400,480 L440,510 L410,540 L370,540 L330,520 Z" onclick="selectSafeZoneState('JAL', 'Jalisco')" />
-                            <!-- Colima (🟡 YELLOW) -->
-                            <path class="mexico-state-path" id="map-state-col" style="fill: rgba(255, 193, 7, 0.3); stroke: rgba(255, 193, 7, 0.6);" d="M380,550 L400,545 L410,560 L390,565 Z" onclick="selectSafeZoneState('COL', 'Colima')" />
-                            <!-- Michoacán (🔴 RED / 🟡 YELLOW) -->
-                            <path class="mexico-state-path" id="map-state-mich" style="fill: rgba(220, 53, 69, 0.5); stroke: rgba(220, 53, 69, 0.8);" d="M410,545 L460,515 L490,535 L480,570 L420,570 Z" onclick="selectSafeZoneState('MICH', 'Michoacán')" />
-                            <!-- Guanajuato (🟢 GREEN / 🔴 RED) -->
-                            <path class="mexico-state-path" id="map-state-gto" style="fill: rgba(40, 167, 69, 0.4); stroke: rgba(40, 167, 69, 0.7);" d="M445,495 L480,485 L490,510 L455,515 Z" onclick="selectSafeZoneState('GTO', 'Guanajuato')" />
-                            <!-- Querétaro (🟢 GREEN) -->
-                            <path class="mexico-state-path" id="map-state-qro" style="fill: rgba(40, 167, 69, 0.6); stroke: rgba(40, 167, 69, 0.9);" d="M485,480 L505,475 L510,495 L490,500 Z" onclick="selectSafeZoneState('QRO', 'Querétaro')" />
-                            
-                            <!-- Zacatecas -->
-                            <path class="mexico-state-path" id="map-state-zac" d="M410,320 L480,320 L510,430 L450,460 L410,410 Z" onclick="selectSafeZoneState('ZAC', 'Zacatecas')" />
-                            <!-- San Luis Potosí -->
-                            <path class="mexico-state-path" id="map-state-slp" d="M490,320 L570,360 L560,460 L490,465 Z" onclick="selectSafeZoneState('SLP', 'San Luis Potosí')" />
-                            <!-- Nuevo León -->
-                            <path class="mexico-state-path" id="map-state-nl" d="M550,220 L600,240 L580,330 L530,300 Z" onclick="selectSafeZoneState('NL', 'Nuevo León')" />
-                            <!-- Tamaulipas -->
-                            <path class="mexico-state-path" id="map-state-tamps" d="M590,260 L650,300 L610,410 L560,340 Z" onclick="selectSafeZoneState('TAMPS', 'Tamaulipas')" />
-                            <!-- Veracruz -->
-                            <path class="mexico-state-path" id="map-state-ver" d="M580,420 L660,460 L730,520 L680,560 L540,510 Z" onclick="selectSafeZoneState('VER', 'Veracruz')" />
-                            <!-- Guerrero -->
-                            <path class="mexico-state-path" id="map-state-gro" d="M465,550 L535,530 L570,580 L480,600 Z" onclick="selectSafeZoneState('GRO', 'Guerrero')" />
-                            <!-- Oaxaca -->
-                            <path class="mexico-state-path" id="map-state-oax" d="M580,560 L680,550 L680,610 L580,610 Z" onclick="selectSafeZoneState('OAX', 'Oaxaca')" />
-                            <!-- Chiapas -->
-                            <path class="mexico-state-path" id="map-state-chis" d="M690,560 L780,560 L750,620 L685,610 Z" onclick="selectSafeZoneState('CHIS', 'Chiapas')" />
-                            <!-- Tabasco -->
-                            <path class="mexico-state-path" id="map-state-tab" d="M690,530 L760,530 L750,560 L685,555 Z" onclick="selectSafeZoneState('TAB', 'Tabasco')" />
-                            <!-- Campeche -->
-                            <path class="mexico-state-path" id="map-state-camp" d="M770,500 L840,490 L810,560 L760,540 Z" onclick="selectSafeZoneState('CAMP', 'Campeche')" />
-                            <!-- Yucatán -->
-                            <path class="mexico-state-path" id="map-state-yuc" d="M800,430 L890,440 L850,490 L770,490 Z" onclick="selectSafeZoneState('YUC', 'Yucatán')" />
-                            <!-- Quintana Roo -->
-                            <path class="mexico-state-path" id="map-state-qroo" d="M860,450 L910,460 L870,550 L825,500 Z" onclick="selectSafeZoneState('QROO', 'Quintana Roo')" />
-                        </svg>
+                        <!-- Leaflet Interactive Map Canvas -->
+                        <div id="safezone-leaflet-map"></div>
 
                         <!-- Legend Indicator -->
                         <div class="safezone-legend">
@@ -2638,6 +2629,11 @@
             } else if (tabId === 'safezone') {
                 document.getElementById('tab-btn-safezone').classList.add('active');
                 document.getElementById('tab-content-safezone').classList.add('active');
+                
+                // Initialize map beautifully
+                if (window.initSafeZoneLeafletMap) {
+                    window.initSafeZoneLeafletMap();
+                }
             }
         };
 
@@ -2714,14 +2710,118 @@
         };
 
         // Interactive state click handler
-        window.selectSafeZoneState = function(stateId, stateName) {
-            // Remove selection class from all paths
-            document.querySelectorAll(".mexico-state-path").forEach(p => p.classList.remove("selected"));
-            
-            // Highlight selected path
-            const path = document.getElementById("map-state-" + stateId.toLowerCase());
-            if (path) path.classList.add("selected");
+        let safezoneMap = null;
+        let safezoneMarkersGroup = null;
 
+        // Initialize Leaflet Map inside the dashboard
+        window.initSafeZoneLeafletMap = function() {
+            if (safezoneMap) {
+                // Already initialized, force resize recalculation
+                setTimeout(() => { safezoneMap.invalidateSize(); }, 200);
+                return;
+            }
+
+            console.log("Initializing Leaflet Real GIS Map integration...");
+            
+            // Standard centered coordinates for Mexico Republic
+            safezoneMap = L.map('safezone-leaflet-map', {
+                center: [21.8, -101.5],
+                zoom: 6,
+                minZoom: 5,
+                maxZoom: 12
+            });
+
+            // Standard openstreetmap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(safezoneMap);
+
+            safezoneMarkersGroup = L.layerGroup().addTo(safezoneMap);
+
+            // Re-render and plot all points automatically
+            plotAllSafeZoneMarkers();
+        };
+
+        // Custom marker rendering based on security semaphores
+        function plotAllSafeZoneMarkers() {
+            if (!safezoneMap || !safezoneMarkersGroup) return;
+            safezoneMarkersGroup.clearLayers();
+
+            // Coordinates lookup for Region 1 municipalities
+            const coordsDB = {
+                "Querétaro (Capital)": [20.5881, -100.3889],
+                "Corregidora": [20.5317, -100.4433],
+                "El Marqués": [20.6139, -100.2789],
+                "Tequisquiapan": [20.5217, -99.8903],
+                "San Juan del Río": [20.3889, -100.0050],
+                "Bahía de Banderas": [20.7511, -105.2858],
+                "Compostela": [21.1556, -105.2153],
+                "San Blas": [21.5381, -105.2853],
+                "Tepic": [21.5039, -104.8947],
+                "Puerto Vallarta": [20.6534, -105.2253],
+                "Zapopan": [20.7204, -103.3919],
+                "Tlaquepaque / Tonalá": [20.6228, -103.3139],
+                "Tepatitlán (Los Altos)": [20.8169, -102.7606],
+                "Lagos de Moreno": [21.3533, -101.9300],
+                "Grens Michoacán (Jilotlán)": [19.3492, -102.9733],
+                "San Miguel de Allende": [20.9139, -100.7439],
+                "Guanajuato (Capital)": [21.0181, -101.2575],
+                "León": [21.1219, -101.6825],
+                "Celaya": [20.5217, -100.8139],
+                "Salamanca / Irapuato": [20.5719, -101.2008],
+                "Morelia (Capital)": [19.7006, -101.1853],
+                "Pátzcuaro": [19.5147, -101.6094],
+                "Uruapan": [19.4125, -102.0525],
+                "Apatzingán (Tierra Caliente)": [19.0856, -102.3556],
+                "Manzanillo (Toeristisch)": [19.0522, -104.3158],
+                "Colima (Capital)": [19.2433, -103.7250]
+            };
+
+            Object.keys(safeZoneDatabase).forEach(stateKey => {
+                const stateData = safeZoneDatabase[stateKey];
+                stateData.municipalities.forEach(m => {
+                    const latlng = coordsDB[m.name];
+                    if (!latlng) return;
+
+                    // Set marker color based on status
+                    let markerColor = "#dc3545"; // rojo default
+                    if (m.status === 'verde') markerColor = "#28a745";
+                    if (m.status === 'amarillo') markerColor = "#ffc107";
+
+                    const customCircle = L.circleMarker(latlng, {
+                        radius: 8,
+                        fillColor: markerColor,
+                        color: "#fff",
+                        weight: 1.5,
+                        opacity: 1,
+                        fillOpacity: 0.85
+                    });
+
+                    // Add rich detailed popup on click
+                    const popupContent = `
+                        <div style="text-align: left; font-family: var(--nv-font-body); font-size:12px;">
+                            <strong style="font-size:14px; text-transform:uppercase; color: var(--nv-accent);">${m.name}</strong><br/>
+                            <span style="font-size:10px; color:#aaa; text-transform:uppercase;">${stateData.stateName}</span>
+                            <hr style="border-top:1px solid #333; margin: 8px 0;"/>
+                            <strong>Status:</strong> <span style="color:${markerColor}; font-weight:bold; text-transform:uppercase;">${m.status === 'verde' ? 'Goedgekeurd' : (m.status === 'amarillo' ? 'Gevrijwaard' : 'No-Go')}</span><br/>
+                            <strong>P1 (Grond):</strong> ${m.p1} | <strong>P2 (Wegen):</strong> ${m.p2} | <strong>P3 (Sociaal):</strong> ${m.p3}<br/>
+                            <p style="margin: 6px 0 0 0; color:#eee; font-style:italic; font-size:11px;">"${m.dictamen}"</p>
+                        </div>
+                    `;
+
+                    customCircle.bindPopup(popupContent);
+
+                    // Hook up event to select state on sidebar when clicking markers
+                    customCircle.on('click', function() {
+                        selectSafeZoneState(stateKey, stateData.stateName);
+                    });
+
+                    customCircle.addTo(safezoneMarkersGroup);
+                });
+            });
+        }
+
+        window.selectSafeZoneState = function(stateId, stateName) {
             const stateData = safeZoneDatabase[stateId];
             const contentPanel = document.getElementById("safezone-content-panel");
             const backBtn = document.getElementById("safezone-back-btn");
@@ -2745,6 +2845,19 @@
                     <button class="dash-close-btn" style="width: 100%; margin-top: 16px;" onclick="resetSafeZoneStateSelection()">Bekijk overzicht</button>
                 `;
                 return;
+            }
+
+            // Zoom map to state region coordinates if map exists
+            const stateCenters = {
+                "QRO": [20.8, -99.9],
+                "NAY": [21.5, -105.0],
+                "JAL": [20.5, -103.5],
+                "GTO": [21.0, -101.0],
+                "MICH": [19.5, -101.8],
+                "COL": [19.1, -104.0]
+            };
+            if (safezoneMap && stateCenters[stateId]) {
+                safezoneMap.setView(stateCenters[stateId], 8);
             }
 
             // If mapped, build interactive table
@@ -2800,7 +2913,9 @@
 
         // Reset state selection on map
         window.resetSafeZoneStateSelection = function() {
-            document.querySelectorAll(".mexico-state-path").forEach(p => p.classList.remove("selected"));
+            if (safezoneMap) {
+                safezoneMap.setView([21.8, -101.5], 6);
+            }
             document.getElementById("safezone-back-btn").style.display = "none";
             document.getElementById("selected-state-title").innerText = "Gebiedscontrole";
             document.getElementById("selected-state-subtitle").innerText = "Regio 1: Occidente y Bajío";
