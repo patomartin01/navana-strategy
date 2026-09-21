@@ -170,9 +170,72 @@ async function runSafetyAuditPipeline() {
 
     // Save back to CSV
     saveRegistryCSV(registry);
+
+    // Sync to Google Sheets if credentials are provided in .env
+    if (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL && process.env.GOOGLE_PRIVATE_KEY && process.env.GOOGLE_SPREADSHEET_ID) {
+        await syncToGoogleSheets(registry);
+    } else {
+        console.log("\n💡 TIP: To enable real-time cloud sync, add your GOOGLE_SERVICE_ACCOUNT_EMAIL, GOOGLE_PRIVATE_KEY, and GOOGLE_SPREADSHEET_ID to your local .env file.");
+    }
+
     console.log("==========================================================");
-    console.log("🎉 SECURITY PIPELINE PIPELINE PROCESS COMPLETED SUCCESSFULLY!");
+    console.log("🎉 SECURITY PIPELINE PROCESS COMPLETED SUCCESSFULLY!");
     console.log("==========================================================");
+}
+
+// Function to synchronize the local parsed registry data with Google Sheets
+async function syncToGoogleSheets(registry) {
+    const { google } = require('googleapis');
+    console.log("\n☁️ Connecting with Google Sheets Cloud API...");
+
+    try {
+        // Format private key correctly to support single/double quote and newline escaping in dotenv
+        const formattedPrivateKey = process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n');
+
+        const auth = new google.auth.JWT(
+            process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+            null,
+            formattedPrivateKey,
+            ['https://www.googleapis.com/auth/spreadsheets']
+        );
+
+        const sheets = google.sheets({ version: 'v4', auth });
+        const spreadsheetId = process.env.GOOGLE_SPREADSHEET_ID;
+        const range = 'Hoja 1!A1'; // Target default first sheet name
+
+        // Structure rows
+        const values = [
+            ["Estado", "Municipio", "Pilar 1 (Suelo/Extorsión)", "Pilar 2 (Vial/Carretera)", "Pilar 3 (Social/Certeza)", "Semáforo (Status)", "Dictamen & Justificación Estratégica", "Latitud", "Longitud"]
+        ];
+
+        registry.forEach(r => {
+            values.push([
+                r["Estado"],
+                r["Municipio"],
+                r["Pilar 1 (Suelo/Extorsión)"],
+                r["Pilar 2 (Vial/Carretera)"],
+                r["Pilar 3 (Social/Certeza)"],
+                r["Semáforo (Status)"],
+                r["Dictamen & Justificación Estratégica"],
+                r["Latitud"],
+                r["Longitud"]
+            ]);
+        });
+
+        console.log(`📤 Writing ${values.length - 1} municipalities to Google Sheet: https://docs.google.com/spreadsheets/d/${spreadsheetId}`);
+
+        // Update the sheet values
+        await sheets.spreadsheets.values.update({
+            spreadsheetId,
+            range,
+            valueInputOption: 'USER_ENTERED',
+            resource: { values }
+        });
+
+        console.log("✨ Google Sheets synchronized and updated successfully in the cloud!");
+    } catch (error) {
+        console.error("❌ Google Sheets synchronization failed:", error.message);
+    }
 }
 
 // Expose the runner or execute directly if called via command line
@@ -183,5 +246,6 @@ if (require.main === module) {
 module.exports = {
     runSafetyAuditPipeline,
     loadRegistryCSV,
-    saveRegistryCSV
+    saveRegistryCSV,
+    syncToGoogleSheets
 };
