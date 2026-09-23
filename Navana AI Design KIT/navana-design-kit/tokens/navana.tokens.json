@@ -1,0 +1,145 @@
+{
+  "$schema": "https://tr.designtokens.org/format/",
+  "$description": "Navana design tokens (DTCG). Fuente compartida con tokens/navana.css y tokens/navana.ts.",
+  "brand": {
+    "$type": "color",
+    "terracotta": { "$value": "#8B2E1B", "$description": "Acento primario en superficies claras. No usar como texto sobre carbon (3.4:1)." },
+    "terracotta-light": { "$value": "#B5563F" },
+    "terracotta-dark": { "$value": "#5E1E11" },
+    "terracotta-text": { "$value": "#D67A62", "$description": "Unica variante legible sobre carbon (5.6:1)." },
+    "olive": { "$value": "#6B6826" },
+    "olive-light": { "$value": "#8E8C45" },
+    "olive-dark": { "$value": "#474518" },
+    "sand": { "$value": "#A8956A" },
+    "sand-light": { "$value": "#C4B892" },
+    "sand-dark": { "$value": "#7A6C4C" },
+    "slate": { "$value": "#607384" },
+    "slate-light": { "$value": "#8A9DAD" },
+    "slate-dark": { "$value": "#3E4D5A" },
+    "earth": { "$value": "#5C4C32" },
+    "earth-light": { "$value": "#8A7555" },
+    "earth-dark": { "$value": "#3A3020" },
+    "cream": { "$value": "#DED9CB" },
+    "cream-light": { "$value": "#EDEAE2" },
+    "cream-dark": { "$value": "#B8B3A5" },
+    "bronze": { "$value": "#84724D" },
+    "stone": { "$value": "#B8AE9C" }
+  },
+  "theme": {
+    "dark": {
+      "$type": "color",
+      "bg": { "$value": "#1A1410" },
+      "bg-deep": { "$value": "#16130F" },
+      "bg-elevated": { "$value": "#1E1C18" },
+      "bg-raised": { "$value": "#232119" },
+      "ink": { "$value": "#DCD7C9", "$description": "12.1:1 sobre bg" },
+      "ink-hi": { "$value": "#E8E2D6", "$description": "14.0:1 sobre bg" },
+      "ink-muted": { "$value": "#8A7B65", "$description": "4.9:1 sobre bg — minimo para texto" },
+      "ink-faint": { "$value": "rgba(220,215,201,0.58)" },
+      "ink-ghost": { "$value": "rgba(220,215,201,0.22)", "$description": "Solo decorativo, nunca texto" },
+      "accent": { "$value": "#84724D" },
+      "accent-hover": { "$value": "#B8AE9C" },
+      "accent-contrast": { "$value": "#1A1410" },
+      "line": { "$value": "rgba(255,255,255,0.08)" },
+      "line-soft": { "$value": "rgba(255,255,255,0.05)" },
+      "line-strong": { "$value": "rgba(255,255,255,0.14)" },
+      "veil": { "$value": "rgba(255,255,255,0.03)" },
+      "veil-hover": { "$value": "rgba(255,255,255,0.06)" }
+    },
+    "light": {
+      "$type": "color",
+      "bg": { "$value": "#FAFAF7" },
+      "bg-deep": { "$value": "#F2EFE8" },
+      "bg-elevated": { "$value": "#FFFFFF" },
+      "bg-raised": { "$value": "#F6F4EE" },
+      "ink": { "$value": "#2A2722" },
+      "ink-hi": { "$value": "#1F1D1A" },
+      "ink-muted": { "$value": "#6B6660" },
+      "ink-faint": { "$value": "rgba(42,39,34,0.62)" },
+      "ink-ghost": { "$value": "rgba(42,39,34,0.18)" },
+      "accent": { "$value": "#8B2E1B" },
+      "accent-hover": { "$value": "#B5563F" },
+      "accent-contrast": { "$value": "#FFFFFF" },
+      "line": { "$value": "#D1CCC3" },
+      "line-soft": { "$value": "#E6E2DA" },
+      "line-strong": { "$value": "#A8A39A" },
+      "veil": { "$value": "rgba(42,39,34,0.03)" },
+      "veil-hover": { "$value": "rgba(42,39,34,0.06)" }
+    }
+  },
+  "state": {
+    "$type": "color",
+    "success": { "$value": "#6B6826" },
+    "warning": { "$value": "#A8956A" },
+    "danger": { "$value": "#D67A62" },
+    "info": { "$value": "#607384" }
+  },
+  "gradient": {
+    "$type": "gradient",
+    "action": { "$value": "linear-gradient(to right, #DCD7C9, #B8AE9C)", "$description": "Fondo de boton primario, texto #1A1410" },
+    "text": { "$value": "linear-gradient(to right, #DCD7C9, #84724D)", "$description": "Solo 1-2 palabras de un titulo, una vez por seccion" },
+    "scrim": { "$value": "linear-gradient(to top, #1A1410 0%, rgba(26,20,16,0.4) 45%, transparent 100%)" }
+  },
+  "font": {
+    "$type": "fontFamily",
+    "display": { "$value": ["Ranade", "Gill Sans", "Optima", "sans-serif"], "$description": "Titulos. Pesos 400-500, tracking -0.025em. Nunca 300." },
+    "body": { "$value": ["Space Grotesk", "Helvetica Neue", "Arial", "sans-serif"] }
+  },
+  "fontSize": {
+    "$type": "dimension",
+    "xs": { "$value": "12px" }, "sm": { "$value": "13px" }, "base": { "$value": "15px" },
+    "md": { "$value": "17px" }, "lg": { "$value": "20px" }, "xl": { "$value": "28px" },
+    "2xl": { "$value": "38px" }, "3xl": { "$value": "50px" }, "4xl": { "$value": "67px" },
+    "display-fluid": { "$value": "clamp(2.3rem, 5.8vw, 5.2rem)" },
+    "h2-fluid": { "$value": "clamp(2rem, 4vw, 3.2rem)" }
+  },
+  "lineHeight": {
+    "$type": "number",
+    "tight": { "$value": 1.05 }, "snug": { "$value": 1.3 },
+    "normal": { "$value": 1.6 }, "relaxed": { "$value": 1.7 }
+  },
+  "letterSpacing": {
+    "$type": "dimension",
+    "display": { "$value": "-0.025em" }, "tight": { "$value": "-0.01em" },
+    "normal": { "$value": "0" }, "wide": { "$value": "0.05em" },
+    "overline": { "$value": "0.15em" }, "widest": { "$value": "0.2em" }
+  },
+  "space": {
+    "$type": "dimension",
+    "1": { "$value": "4px" }, "2": { "$value": "8px" }, "3": { "$value": "12px" },
+    "4": { "$value": "16px" }, "5": { "$value": "24px" }, "6": { "$value": "32px" },
+    "7": { "$value": "48px" }, "8": { "$value": "64px" }, "9": { "$value": "96px" },
+    "10": { "$value": "128px" },
+    "gutter": { "$value": "clamp(20px, 5vw, 88px)" },
+    "section-y": { "$value": "clamp(88px, 14vh, 168px)" },
+    "container": { "$value": "1280px" },
+    "measure": { "$value": "68ch" }
+  },
+  "radius": {
+    "$type": "dimension",
+    "sm": { "$value": "8px" }, "md": { "$value": "12px" }, "lg": { "$value": "16px" },
+    "xl": { "$value": "24px" }, "2xl": { "$value": "32px" }, "full": { "$value": "9999px" }
+  },
+  "shadow": {
+    "$type": "shadow",
+    "sm": { "$value": "0 1px 3px rgba(12,9,6,0.24)" },
+    "md": { "$value": "0 4px 14px rgba(12,9,6,0.32)" },
+    "lg": { "$value": "0 12px 40px rgba(12,9,6,0.44)" },
+    "xl": { "$value": "0 24px 70px rgba(12,9,6,0.55)" },
+    "glow": { "$value": "0 0 20px rgba(132,114,77,0.18)" }
+  },
+  "motion": {
+    "ease": { "$type": "cubicBezier", "$value": [0.22, 0.61, 0.36, 1] },
+    "ease-out": { "$type": "cubicBezier", "$value": [0.22, 1, 0.36, 1] },
+    "duration": {
+      "$type": "duration",
+      "fast": { "$value": "220ms" }, "base": { "$value": "420ms" },
+      "slow": { "$value": "620ms" }, "cinematic": { "$value": "800ms" }
+    }
+  },
+  "z": {
+    "$type": "number",
+    "base": { "$value": 0 }, "sticky": { "$value": 40 }, "nav": { "$value": 90 },
+    "overlay": { "$value": 120 }, "modal": { "$value": 150 }, "toast": { "$value": 200 }
+  }
+}

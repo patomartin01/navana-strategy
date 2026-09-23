@@ -1,0 +1,196 @@
+/* ============================================================
+   NAVANA — Design tokens (CSS custom properties)
+   Tema oscuro por defecto. Tema claro con .nv-light o [data-nv-theme="light"].
+   ============================================================ */
+
+/* Archivos locales incluidos en fonts/. Para usar CDN en su lugar, borra este
+   bloque y usa los @import del README. Ranade 400 se sirve desde Medium. */
+@font-face{font-family:'Ranade';src:url('../fonts/Ranade-Light.otf') format('opentype');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:'Ranade';src:url('../fonts/Ranade-Medium.otf') format('opentype');font-weight:400 500;font-style:normal;font-display:swap}
+@font-face{font-family:'Ranade';src:url('../fonts/Ranade-Bold.otf') format('opentype');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Space Grotesk';src:url('../fonts/SpaceGrotesk-VariableFont_wght.ttf') format('truetype');font-weight:300 700;font-style:normal;font-display:swap}
+
+:root{
+  /* ── Marca (constantes, no cambian entre temas) ───────────── */
+  --nv-terracotta:#8B2E1B;
+  --nv-terracotta-light:#B5563F;
+  --nv-terracotta-dark:#5E1E11;
+  --nv-terracotta-text:#D67A62;   /* única variante legible sobre carbón */
+  --nv-olive:#6B6826;
+  --nv-olive-light:#8E8C45;
+  --nv-olive-dark:#474518;
+  --nv-sand:#A8956A;
+  --nv-sand-light:#C4B892;
+  --nv-sand-dark:#7A6C4C;
+  --nv-slate:#607384;
+  --nv-slate-light:#8A9DAD;
+  --nv-slate-dark:#3E4D5A;
+  --nv-earth:#5C4C32;
+  --nv-earth-light:#8A7555;
+  --nv-earth-dark:#3A3020;
+  --nv-cream:#DED9CB;
+  --nv-cream-light:#EDEAE2;
+  --nv-cream-dark:#B8B3A5;
+  --nv-bronze:#84724D;
+  --nv-stone:#B8AE9C;
+
+  /* ── Superficies (tema oscuro) ────────────────────────────── */
+  --nv-bg:#1A1410;          /* superficie base */
+  --nv-bg-deep:#16130F;     /* secciones a plena sangre */
+  --nv-bg-elevated:#1E1C18; /* cards, panels, popovers */
+  --nv-bg-raised:#232119;   /* estados hover sobre elevated */
+
+  /* ── Tinta ────────────────────────────────────────────────── */
+  --nv-ink:#DCD7C9;         /* texto principal      12.1:1 */
+  --nv-ink-hi:#E8E2D6;      /* títulos              14.0:1 */
+  --nv-ink-muted:#8A7B65;   /* secundario            4.9:1 */
+  --nv-ink-faint:rgba(220,215,201,.58);
+  --nv-ink-ghost:rgba(220,215,201,.22);
+
+  /* ── Acción ───────────────────────────────────────────────── */
+  --nv-accent:#84724D;
+  --nv-accent-hover:#B8AE9C;
+  --nv-accent-contrast:#1A1410;
+  --nv-accent-gradient:linear-gradient(to right,#DCD7C9,#B8AE9C);
+  --nv-text-gradient:linear-gradient(to right,#DCD7C9,#84724D);
+
+  /* ── Líneas y veladuras ───────────────────────────────────── */
+  --nv-line:rgba(255,255,255,.08);
+  --nv-line-soft:rgba(255,255,255,.05);
+  --nv-line-strong:rgba(255,255,255,.14);
+  --nv-veil:rgba(255,255,255,.03);
+  --nv-veil-hover:rgba(255,255,255,.06);
+
+  /* ── Estado ───────────────────────────────────────────────── */
+  --nv-success:#6B6826;
+  --nv-warning:#A8956A;
+  --nv-danger:#D67A62;
+  --nv-info:#607384;
+
+  /* ── Tipografía ───────────────────────────────────────────── */
+  --nv-font-display:'Ranade','Gill Sans',Optima,sans-serif;
+  --nv-font-body:'Space Grotesk','Helvetica Neue',Arial,sans-serif;
+
+  --nv-text-xs:.75rem;      /* 12 — overline */
+  --nv-text-sm:.8125rem;    /* 13 — caption */
+  --nv-text-base:.9375rem;  /* 15 — cuerpo */
+  --nv-text-md:1.0625rem;   /* 17 — cuerpo grande, h3 card */
+  --nv-text-lg:1.25rem;     /* 20 */
+  --nv-text-xl:1.75rem;     /* 28 */
+  --nv-text-2xl:2.375rem;   /* 38 */
+  --nv-text-3xl:3.15rem;    /* 50 */
+  --nv-text-4xl:4.2rem;     /* 67 */
+
+  --nv-display-fluid:clamp(2.3rem,5.8vw,5.2rem);
+  --nv-h2-fluid:clamp(2rem,4vw,3.2rem);
+
+  --nv-leading-tight:1.05;
+  --nv-leading-snug:1.3;
+  --nv-leading-normal:1.6;
+  --nv-leading-relaxed:1.7;
+
+  --nv-tracking-display:-.025em;
+  --nv-tracking-tight:-.01em;
+  --nv-tracking-normal:0;
+  --nv-tracking-wide:.05em;
+  --nv-tracking-overline:.15em;
+  --nv-tracking-widest:.2em;
+
+  /* ── Espacio (escala 4px) ─────────────────────────────────── */
+  --nv-space-1:.25rem;  --nv-space-2:.5rem;   --nv-space-3:.75rem;
+  --nv-space-4:1rem;    --nv-space-5:1.5rem;  --nv-space-6:2rem;
+  --nv-space-7:3rem;    --nv-space-8:4rem;    --nv-space-9:6rem;
+  --nv-space-10:8rem;
+
+  --nv-gutter:clamp(20px,5vw,88px);      /* margen lateral de página */
+  --nv-section-y:clamp(88px,14vh,168px); /* aire vertical entre secciones */
+  --nv-container:1280px;
+  --nv-measure:68ch;                     /* ancho máximo de párrafo */
+
+  /* ── Radios ───────────────────────────────────────────────── */
+  --nv-radius-sm:8px;
+  --nv-radius-md:12px;
+  --nv-radius-lg:16px;
+  --nv-radius-xl:24px;
+  --nv-radius-2xl:32px;
+  --nv-radius-full:9999px;
+
+  /* ── Sombras (cálidas, nunca negro puro) ──────────────────── */
+  --nv-shadow-sm:0 1px 3px rgba(12,9,6,.24);
+  --nv-shadow-md:0 4px 14px rgba(12,9,6,.32);
+  --nv-shadow-lg:0 12px 40px rgba(12,9,6,.44);
+  --nv-shadow-xl:0 24px 70px rgba(12,9,6,.55);
+  --nv-glow:0 0 20px rgba(132,114,77,.18);
+
+  /* ── Movimiento ───────────────────────────────────────────── */
+  --nv-ease:cubic-bezier(.22,.61,.36,1);
+  --nv-ease-out:cubic-bezier(.22,1,.36,1);
+  --nv-dur-fast:220ms;
+  --nv-dur:420ms;
+  --nv-dur-slow:620ms;
+  --nv-dur-cinematic:800ms;
+
+  /* ── Capas ────────────────────────────────────────────────── */
+  --nv-z-base:0; --nv-z-sticky:40; --nv-z-nav:90;
+  --nv-z-overlay:120; --nv-z-modal:150; --nv-z-toast:200;
+}
+
+/* ── Tema claro / papel (documentos, impresos, correo) ─────── */
+.nv-light,[data-nv-theme="light"]{
+  --nv-bg:#FAFAF7;
+  --nv-bg-deep:#F2EFE8;
+  --nv-bg-elevated:#FFFFFF;
+  --nv-bg-raised:#F6F4EE;
+  --nv-ink:#2A2722;
+  --nv-ink-hi:#1F1D1A;
+  --nv-ink-muted:#6B6660;
+  --nv-ink-faint:rgba(42,39,34,.62);
+  --nv-ink-ghost:rgba(42,39,34,.18);
+  --nv-accent:#8B2E1B;
+  --nv-accent-hover:#B5563F;
+  --nv-accent-contrast:#FFFFFF;
+  --nv-accent-gradient:linear-gradient(to right,#8B2E1B,#B5563F);
+  --nv-text-gradient:linear-gradient(to right,#5C4C32,#8B2E1B);
+  --nv-line:#D1CCC3;
+  --nv-line-soft:#E6E2DA;
+  --nv-line-strong:#A8A39A;
+  --nv-veil:rgba(42,39,34,.03);
+  --nv-veil-hover:rgba(42,39,34,.06);
+  --nv-shadow-sm:0 1px 3px rgba(42,39,34,.06);
+  --nv-shadow-md:0 4px 12px rgba(42,39,34,.08);
+  --nv-shadow-lg:0 8px 30px rgba(42,39,34,.12);
+  --nv-shadow-xl:0 16px 48px rgba(42,39,34,.16);
+}
+
+/* ── Base ─────────────────────────────────────────────────── */
+.nv-root,body.nv-root{
+  background:var(--nv-bg);
+  color:var(--nv-ink);
+  font-family:var(--nv-font-body);
+  font-size:var(--nv-text-base);
+  line-height:var(--nv-leading-relaxed);
+  -webkit-font-smoothing:antialiased;
+}
+.nv-root a{color:var(--nv-ink);text-decoration-color:var(--nv-line-strong);transition:color var(--nv-dur-fast) var(--nv-ease)}
+.nv-root a:hover{color:var(--nv-accent-hover)}
+
+/* ── Clases utilitarias del sistema ───────────────────────── */
+.nv-display{font-family:var(--nv-font-display);font-weight:400;font-size:var(--nv-display-fluid);line-height:var(--nv-leading-tight);letter-spacing:var(--nv-tracking-display);color:var(--nv-ink-hi);text-wrap:balance}
+.nv-h2{font-family:var(--nv-font-display);font-weight:500;font-size:var(--nv-h2-fluid);line-height:1.1;letter-spacing:-.02em;color:var(--nv-ink-hi);text-wrap:balance}
+.nv-h3{font-family:var(--nv-font-body);font-weight:700;font-size:var(--nv-text-md);line-height:var(--nv-leading-snug);color:var(--nv-ink-hi)}
+.nv-body{font-family:var(--nv-font-body);font-size:var(--nv-text-base);line-height:var(--nv-leading-relaxed);color:var(--nv-ink);max-width:var(--nv-measure);text-wrap:pretty}
+.nv-caption{font-size:var(--nv-text-sm);line-height:var(--nv-leading-normal);color:var(--nv-ink-muted)}
+.nv-overline{font-size:var(--nv-text-xs);font-weight:600;letter-spacing:var(--nv-tracking-overline);text-transform:uppercase;color:var(--nv-ink-muted)}
+.nv-gradient-text{background:var(--nv-text-gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.nv-section{padding-block:var(--nv-section-y);padding-inline:var(--nv-gutter)}
+.nv-container{max-width:var(--nv-container);margin-inline:auto}
+.nv-card{background:var(--nv-veil);border:1px solid var(--nv-line-soft);border-radius:var(--nv-radius-lg);transition:border-color var(--nv-dur) var(--nv-ease),background-color var(--nv-dur) var(--nv-ease)}
+.nv-card:hover{background:var(--nv-veil-hover);border-color:var(--nv-line-strong)}
+.nv-glow{position:absolute;border-radius:var(--nv-radius-full);filter:blur(120px);opacity:.06;background:var(--nv-accent);pointer-events:none}
+.nv-film-grain{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:160px 160px;opacity:.05;mix-blend-mode:soft-light;pointer-events:none}
+
+@keyframes nv-kenburns{0%{transform:scale(1.04) translate(0,0)}100%{transform:scale(1.17) translate(-1.5%,-1.5%)}}
+.nv-kenburns{animation:nv-kenburns 22s ease-out forwards;will-change:transform}
+
+@media (pointer:coarse){.nv-root a,.nv-root button{min-height:44px;min-width:44px}}
+@media (prefers-reduced-motion:reduce){.nv-kenburns{animation:none}.nv-root *{animation-duration:.01ms !important;transition-duration:.01ms !important}}

@@ -1387,6 +1387,14 @@
             </svg>
             Descargar PDF
         </button>
+        <a href="mapa.html" target="_blank" class="map-btn" style="text-decoration: none; display: flex; align-items: center; gap: 8px; background: rgba(197, 160, 89, 0.12); border: 1px solid rgba(197, 160, 89, 0.35); color: var(--nv-accent-hover); padding: 8px 18px; border-radius: var(--nv-radius-full); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; transition: all var(--nv-dur) var(--nv-ease); margin-right: 8px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                <line x1="8" y1="2" x2="8" y2="18"></line>
+                <line x1="16" y1="6" x2="16" y2="22"></line>
+            </svg>
+            🗺️ Mapa Territorial (301 Zonas)
+        </a>
         <button class="lang-btn" onclick="location.href='index_nl.html'">NL</button>
         <button class="lang-btn" onclick="location.href='index_en.html'">EN</button>
         <button class="lang-btn active" onclick="location.href='index.html'">Español</button>
@@ -2009,6 +2017,9 @@
                                 </ul>
                             </div>
                             
+                            <!-- Launch Fullscreen Interactive Visualizer -->
+                            <a href="mapa.html" target="_blank" class="dash-close-btn" style="text-decoration: none; display: block; text-align: center; width: 100%; font-weight: bold; background: linear-gradient(135deg, var(--navana-terracotta), #a93c27); color: #fff; border: none; margin-bottom: 12px; padding: 12px; font-size: 12px; letter-spacing: 1px; text-transform: uppercase;">🗺️ Abrir Visualizador Completo en Pantalla Completa (263 Zonas) ↗</a>
+
                             <!-- Export Button -->
                             <button class="dash-close-btn" style="width: 100%; font-weight: bold; background-color: var(--nv-accent); color: #000; border-color: var(--nv-accent);" onclick="downloadSafeZoneExcel()">📊 Descargar Hoja de Excel (.csv) para Google Sheets</button>
                         </div>
@@ -2730,15 +2741,17 @@
             
             // Standard centered coordinates for Mexico Republic
             safezoneMap = L.map('safezone-leaflet-map', {
-                center: [21.8, -101.5],
-                zoom: 6,
-                minZoom: 5,
-                maxZoom: 12
+                center: [24.5, -102.5],
+                zoom: 5.5,
+                minZoom: 4,
+                maxZoom: 16
             });
 
-            // Standard openstreetmap tiles
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap contributors'
+            // CartoDB Dark Matter tiles (Sleek dark theme)
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+                subdomains: 'abcd',
+                maxZoom: 19
             }).addTo(safezoneMap);
 
             safezoneMarkersGroup = L.layerGroup().addTo(safezoneMap);
@@ -2758,7 +2771,7 @@
                 header: true,
                 skipEmptyLines: true,
                 complete: function(results) {
-                    console.log("✨ Successfully received live records from Google Sheets:", results.data);
+                    console.log("✨ Successfully received live records from Google Sheets:", results.data ? results.data.length : 0);
                     if (results.data && results.data.length > 0) {
                         rebuildDatabaseFromGoogleSheet(results.data);
                     } else {
@@ -2766,7 +2779,7 @@
                     }
                 },
                 error: function(err) {
-                    console.warn("⚠️ Failed to parse Google Sheet, using local static database fallback:", err);
+                    console.warn("⚠️ Failed to parse Google Sheet, using local fallback:", err);
                     plotAllSafeZoneMarkers();
                 }
             });
@@ -2774,36 +2787,33 @@
 
         // Dynamically rebuild the safeZoneDatabase matching Google Sheets rows
         function rebuildDatabaseFromGoogleSheet(rows) {
-            // Clean out current local database structure
             const newDb = {};
             
             rows.forEach(row => {
-                const state = row["Estado"];
-                const municipality = row["Municipio"];
+                const state = (row["Estado"] || "").trim();
+                const municipality = (row["Municipio"] || "").trim();
+                if (!state || !municipality) return;
+
                 const p1 = row["Pilar 1 (Suelo/Extorsión)"] || "Bajo (9/10)";
                 const p2 = row["Pilar 2 (Vial/Carretera)"] || "Bajo (9/10)";
                 const p3 = row["Pilar 3 (Social/Certeza)"] || "Bajo (10/10)";
                 const status = (row["Semáforo (Status)"] || "🟢 VERDE").toLowerCase().includes("verde") ? "verde" : 
                                ((row["Semáforo (Status)"] || "🟡 AMARILLO").toLowerCase().includes("amarillo") ? "amarillo" : "rojo");
                 const dictamen = row["Dictamen & Justificación Estratégica"] || "";
-                const lat = parseFloat(row["Latitud"]);
-                const lng = parseFloat(row["Longitud"]);
+                const fuentes = row["Fuentes / Evidencias Encontradas"] || "";
+                const rawLat = String(row["Latitud"] || "").replace(/['"]/g, '').trim();
+                const rawLng = String(row["Longitud"] || "").replace(/['"]/g, '').trim();
+                const lat = parseFloat(rawLat);
+                const lng = parseFloat(rawLng);
 
-                // Map standard states key
-                let stateKey = "QRO";
-                if (state.toLowerCase().includes("querétaro") || state.toLowerCase().includes("queretaro")) stateKey = "QRO";
-                else if (state.toLowerCase().includes("nayarit")) stateKey = "NAY";
-                else if (state.toLowerCase().includes("jalisco")) stateKey = "JAL";
-                else if (state.toLowerCase().includes("guanajuato")) stateKey = "GTO";
-                else if (state.toLowerCase().includes("michoacán") || state.toLowerCase().includes("michoacan")) stateKey = "MICH";
-                else if (state.toLowerCase().includes("colima")) stateKey = "COL";
-                else stateKey = state.substring(0, 3).toUpperCase(); // Dynamic backup
+                // Use normalized state name as unique key
+                const stateKey = state.toUpperCase();
 
                 if (!newDb[stateKey]) {
                     newDb[stateKey] = {
                         stateName: state,
-                        subtitle: `Región 1: Occidente y Bajío • Control de Riesgos`,
-                        generalStatus: `Auditoría territorial de seguridad y viabilidad activa en vivo.`,
+                        subtitle: `Auditoría Territorial de Seguridad • Control de Riesgos NAVANA`,
+                        generalStatus: `Auditoría territorial activa para el estado de ${state}. Datos sincronizados en vivo con Google Sheets.`,
                         municipalities: []
                     };
                 }
@@ -2815,6 +2825,7 @@
                     p3: p3,
                     status: status,
                     dictamen: dictamen,
+                    fuentes: fuentes,
                     latlng: (!isNaN(lat) && !isNaN(lng)) ? [lat, lng] : null
                 });
             });
@@ -2931,15 +2942,31 @@
 
             // Zoom map to state region coordinates if map exists
             const stateCenters = {
-                "QRO": [20.8, -99.9],
-                "NAY": [21.5, -105.0],
-                "JAL": [20.5, -103.5],
-                "GTO": [21.0, -101.0],
-                "MICH": [19.5, -101.8],
-                "COL": [19.1, -104.0]
+                "QUERÉTARO": [20.75, -99.95, 9],
+                "BAJA CALIFORNIA": [30.84, -115.28, 7],
+                "BAJA CALIFORNIA SUR": [25.5, -111.5, 7],
+                "SONORA": [29.8, -110.8, 7],
+                "CHIHUAHUA": [28.6, -106.1, 7],
+                "COAHUILA": [27.0, -101.7, 7],
+                "NUEVO LEÓN": [25.6, -99.8, 7],
+                "TAMAULIPAS": [24.3, -98.8, 7],
+                "QRO": [20.8, -99.9, 9],
+                "NAY": [21.5, -105.0, 8],
+                "JAL": [20.5, -103.5, 8],
+                "GTO": [21.0, -101.0, 8],
+                "MICH": [19.5, -101.8, 8],
+                "COL": [19.1, -104.0, 8]
             };
-            if (safezoneMap && stateCenters[stateId]) {
-                safezoneMap.setView(stateCenters[stateId], 8);
+            if (safezoneMap) {
+                const sc = stateCenters[stateId.toUpperCase()];
+                if (sc) {
+                    safezoneMap.setView([sc[0], sc[1]], sc[2] || 8, { animate: true });
+                } else {
+                    const validCoords = stateData.municipalities.filter(m => m.latlng).map(m => m.latlng);
+                    if (validCoords.length > 0) {
+                        safezoneMap.fitBounds(L.latLngBounds(validCoords), { padding: [40, 40], maxZoom: 9 });
+                    }
+                }
             }
 
             // If mapped, build interactive table

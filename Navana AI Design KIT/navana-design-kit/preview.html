@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Navana Design Kit — Preview</title>
+<link rel="stylesheet" href="tokens/navana.css">
+<style>
+body{margin:0;background:var(--nv-bg);color:var(--nv-ink);font-family:var(--nv-font-body);font-size:var(--nv-text-base);line-height:var(--nv-leading-relaxed);-webkit-font-smoothing:antialiased}
+.wrap{max-width:var(--nv-container);margin-inline:auto;padding-inline:var(--nv-gutter);padding-block:clamp(48px,8vh,96px)}
+header{display:flex;align-items:center;gap:12px;color:var(--nv-ink);margin-bottom:56px}
+header svg{display:block}
+header .iso{height:14px;width:auto}
+header .logo{height:16px;width:auto}
+header .tag{margin-left:auto;font-size:var(--nv-text-xs);font-weight:600;letter-spacing:var(--nv-tracking-overline);text-transform:uppercase;color:var(--nv-ink-muted)}
+section{padding-block:clamp(44px,6vh,72px);border-top:1px solid var(--nv-line-soft)}
+section:first-of-type{border-top:0;padding-top:0}
+.eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:28px}
+.eyebrow span:first-child{width:32px;height:1px;background:var(--nv-ink-ghost)}
+.eyebrow span:last-child{font-size:var(--nv-text-xs);font-weight:600;letter-spacing:var(--nv-tracking-overline);text-transform:uppercase;color:var(--nv-ink-muted)}
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.sw{border:1px solid var(--nv-line-soft);border-radius:var(--nv-radius-md);overflow:hidden}
+.sw i{display:block;height:76px}
+.sw div{padding:10px 12px 12px}
+.sw b{display:block;font-size:var(--nv-text-sm);font-weight:600;color:var(--nv-ink-hi)}
+.sw code{font-size:11px;letter-spacing:.04em;color:var(--nv-ink-muted);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.type-row{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;padding-block:20px;border-bottom:1px solid var(--nv-line-soft)}
+.type-row:last-child{border-bottom:0}
+.type-meta{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--nv-ink-muted);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.demo{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;align-items:start}
+.btn-row{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.btn-1{border:0;cursor:pointer;border-radius:var(--nv-radius-full);padding:14px 26px;background:var(--nv-accent-gradient);color:var(--nv-bg);font-family:var(--nv-font-body);font-size:var(--nv-text-sm);font-weight:600;transition:box-shadow var(--nv-dur) var(--nv-ease)}
+.btn-1:hover{box-shadow:var(--nv-glow)}
+.btn-2{cursor:pointer;border-radius:var(--nv-radius-full);padding:14px 26px;background:transparent;border:1px solid var(--nv-line-strong);color:var(--nv-ink);font-family:var(--nv-font-body);font-size:var(--nv-text-sm);transition:background-color var(--nv-dur-fast) var(--nv-ease)}
+.btn-2:hover{background:var(--nv-veil-hover)}
+.btn-3{cursor:pointer;border:0;background:none;color:var(--nv-ink-muted);font-family:var(--nv-font-body);font-size:var(--nv-text-sm);transition:color var(--nv-dur-fast) var(--nv-ease)}
+.btn-3:hover{color:var(--nv-ink)}
+.card{padding:28px}
+.card b{display:block;font-size:var(--nv-text-md);font-weight:700;color:var(--nv-ink-hi);margin:14px 0 6px}
+.card p{margin:0;font-size:var(--nv-text-sm);color:var(--nv-ink-muted);line-height:var(--nv-leading-relaxed)}
+.card em{font-style:normal;font-size:var(--nv-text-xs);font-weight:600;letter-spacing:var(--nv-tracking-overline);text-transform:uppercase;color:var(--nv-accent)}
+.metric b{display:block;font-size:var(--nv-text-2xl);font-weight:500;letter-spacing:-.02em;color:var(--nv-ink-hi);font-variant-numeric:tabular-nums;line-height:1.05;margin:8px 0 6px}
+.metric span{font-size:var(--nv-text-xs);font-weight:600;letter-spacing:var(--nv-tracking-overline);text-transform:uppercase;color:var(--nv-ink-muted)}
+.metric p{margin:0;font-size:var(--nv-text-sm);color:var(--nv-ink-muted)}
+.paper{background:var(--nv-bg);color:var(--nv-ink);border-radius:var(--nv-radius-lg);padding:36px;border:1px solid var(--nv-line)}
+.paper h4{font-family:var(--nv-font-display);font-weight:500;font-size:var(--nv-text-xl);letter-spacing:-.02em;color:var(--nv-ink-hi);margin:0 0 10px}
+.paper p{margin:0;color:var(--nv-ink-muted);font-size:var(--nv-text-sm);max-width:52ch}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+.scale{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
+.scale div{background:var(--nv-veil);border:1px solid var(--nv-line-soft);border-radius:var(--nv-radius-sm);display:grid;place-items:end center;padding:6px;font-size:10px;color:var(--nv-ink-muted);font-family:ui-monospace,monospace}
+footer{padding-top:44px;border-top:1px solid var(--nv-line-soft);font-size:var(--nv-text-sm);color:var(--nv-ink-muted)}
+a{color:var(--nv-ink)}a:hover{color:var(--nv-accent-hover)}
+</style></head><body>
+<div class="wrap">
+<header>
+<svg class="iso" viewBox="0 38 245 84" fill="currentColor" aria-label="Navana isotipo"><path d="M2.66634 104.329C3.79041 103.137 4.92477 101.955 6.06871 100.783C11.0694 95.6908 50.3429 55.0267 53.2197 55.3865C55.0036 55.6097 57.1898 57.5938 58.5165 58.7587C68.2923 67.3419 77.1703 77.438 86.3831 86.6614C91.7602 92.0442 99.2692 97.6846 103.427 103.963C104.496 105.576 104.362 106.497 104.048 108.287C93.5565 119.268 96.6641 116.544 85.3251 107.779C76.8047 100.974 62.2704 90.2762 51.0772 91.8979C35.1084 94.2115 24.2033 106.404 12.3748 115.72C9.62687 117.885 3.11422 109.3 2.06771 107.199C1.52849 106.116 2.17722 105.397 2.66634 104.329Z"></path><path d="M140.666 104.329C141.79 103.137 142.925 101.955 144.069 100.783C149.069 95.6908 188.343 55.0267 191.22 55.3865C193.004 55.6097 195.19 57.5938 196.517 58.7587C206.292 67.3419 215.17 77.438 224.383 86.6614C229.76 92.0442 237.269 97.6846 241.427 103.963C242.496 105.576 242.362 106.497 242.048 108.287C231.556 119.268 234.664 116.544 223.325 107.779C214.805 100.974 200.27 90.2762 189.077 91.8979C173.108 94.2115 162.203 106.404 150.375 115.72C147.627 117.885 141.114 109.3 140.068 107.199C139.528 106.116 140.177 105.397 140.666 104.329Z"></path><path d="M172.812 55.1488C171.688 56.341 170.553 57.5229 169.409 58.6952C164.409 63.7874 125.135 104.451 122.258 104.092C120.475 103.869 118.288 101.884 116.962 100.719C107.186 92.1363 98.3079 82.0402 89.095 72.8168C83.718 67.434 76.209 61.7936 72.0507 55.5156C70.9826 53.9019 71.1163 52.9807 71.4298 51.1915C81.9217 40.2101 78.8141 42.9346 90.1531 51.6992C98.6734 58.5041 113.208 69.202 124.401 67.5803C140.37 65.2667 151.275 53.0747 163.103 43.7584C165.851 41.5936 172.364 50.1785 173.41 52.2792C173.95 53.3618 173.301 54.0808 172.812 55.1488Z"></path></svg>
+<svg class="logo" viewBox="0 0 323 49" fill="currentColor" aria-label="Navana"><path d="M217.984 49V0H223.724L256.134 40.25H253.124V0H260.124V49H254.384L221.974 8.75H224.984V49H217.984Z"></path><path d="M126.619 49L105.059 0H112.619L132.429 45.22H128.089L148.039 0H155.039L133.549 49H126.619Z"></path><path d="M52.8867 49L75.0767 0H82.0067L104.267 49H96.9167L77.1067 3.92H79.9067L60.0967 49H52.8867Z"></path><path d="M155.43 49L177.62 0H184.55L206.81 49H199.46L179.65 3.92H182.45L162.64 49H155.43Z"></path><path d="M271.43 49L293.62 0H300.55L322.81 49H315.46L295.65 3.92H298.45L278.64 49H271.43Z"></path><path d="M0 49V0H5.74001L38.15 40.25H35.14V0H42.14V49H36.4L3.99 8.75H7V49H0Z"></path></svg>
+<span class="tag">Design Kit · Preview</span>
+</header>
+
+<section>
+<h1 class="nv-display" style="max-width:16ch;margin:0">Tierra, diseño y operación en una <span class="nv-gradient-text">sola red</span>.</h1>
+<p class="nv-body" style="margin-top:26px">Esta página renderiza los tokens reales de <code>tokens/navana.css</code>. Si algo se ve mal aquí, el token está mal.</p>
+</section>
+
+<section>
+<div class="eyebrow"><span></span><span>Superficies y tinta</span></div>
+<div class="swatches">
+<div class="sw"><i style="background:var(--nv-bg)"></i><div><b>bg</b><code>#1A1410</code></div></div>
+<div class="sw"><i style="background:var(--nv-bg-deep)"></i><div><b>bg-deep</b><code>#16130F</code></div></div>
+<div class="sw"><i style="background:var(--nv-bg-elevated)"></i><div><b>bg-elevated</b><code>#1E1C18</code></div></div>
+<div class="sw"><i style="background:var(--nv-bg-raised)"></i><div><b>bg-raised</b><code>#232119</code></div></div>
+<div class="sw"><i style="background:var(--nv-ink-hi)"></i><div><b>ink-hi</b><code>#E8E2D6 · 14.0:1</code></div></div>
+<div class="sw"><i style="background:var(--nv-ink)"></i><div><b>ink</b><code>#DCD7C9 · 12.1:1</code></div></div>
+<div class="sw"><i style="background:var(--nv-ink-muted)"></i><div><b>ink-muted</b><code>#8A7B65 · 4.9:1</code></div></div>
+<div class="sw"><i style="background:var(--nv-accent)"></i><div><b>accent</b><code>#84724D</code></div></div>
+<div class="sw"><i style="background:var(--nv-accent-hover)"></i><div><b>accent-hover</b><code>#B8AE9C</code></div></div>
+</div>
+</section>
+
+<section>
+<div class="eyebrow"><span></span><span>Paleta de marca</span></div>
+<div class="swatches">
+<div class="sw"><i style="background:var(--nv-terracotta)"></i><div><b>terracota</b><code>#8B2E1B</code></div></div>
+<div class="sw"><i style="background:var(--nv-olive)"></i><div><b>olivo</b><code>#6B6826</code></div></div>
+<div class="sw"><i style="background:var(--nv-sand)"></i><div><b>arena</b><code>#A8956A</code></div></div>
+<div class="sw"><i style="background:var(--nv-slate)"></i><div><b>pizarra</b><code>#607384</code></div></div>
+<div class="sw"><i style="background:var(--nv-earth)"></i><div><b>tierra</b><code>#5C4C32</code></div></div>
+<div class="sw"><i style="background:var(--nv-cream)"></i><div><b>crema</b><code>#DED9CB</code></div></div>
+</div>
+<p class="nv-caption" style="margin-top:18px">La terracota da 3.4:1 sobre carbón — sólo puntos, bordes y acentos. Para texto de aviso, <span style="color:var(--nv-terracotta-text)">#D67A62</span>.</p>
+</section>
+
+<section>
+<div class="eyebrow"><span></span><span>Tipografía</span></div>
+<div class="type-row"><div class="type-meta">Display · Ranade 400 · clamp(2.3rem, 5.8vw, 5.2rem) · −0.025em</div><div class="nv-display">Get lost, on purpose</div></div>
+<div class="type-row"><div class="type-meta">H2 · Ranade 500 · clamp(2rem, 4vw, 3.2rem) · −0.02em</div><div class="nv-h2">Tu terreno ya vale más de lo que produce</div></div>
+<div class="type-row"><div class="type-meta">H3 · Space Grotesk 700 · 17px</div><div class="nv-h3">Entorno natural</div></div>
+<div class="type-row"><div class="type-meta">Cuerpo · Space Grotesk 400 · 15px / 1.7 · máx 68ch</div><div class="nv-body">Aportas el terreno. Nosotros diseñamos, fabricamos, instalamos y operamos la cabaña. Tú recibes una participación de los ingresos sin administrar nada.</div></div>
+<div class="type-row"><div class="type-meta">Caption · 13px</div><div class="nv-caption">Proyección estimada, sujeta a ocupación real y estacionalidad.</div></div>
+<div class="type-row"><div class="type-meta">Overline · 12px · 600 · 0.15em</div><div class="nv-overline">El modelo</div></div>
+</section>
+
+<section>
+<div class="eyebrow"><span></span><span>Componentes</span></div>
+<div class="btn-row"><button class="btn-1">Agenda una llamada</button><button class="btn-2">Ver el terreno</button><button class="btn-3">Conocer más →</button></div>
+<div class="grid-2" style="margin-top:36px">
+<div class="nv-card card"><em>01</em><b>Entorno natural</b><p>Rodeado de paisaje, vegetación o vistas privilegiadas.</p></div>
+<div class="nv-card card"><em>02</em><b>Acceso razonable</b><p>Conectado por carretera o caminos transitables todo el año.</p></div>
+<div class="nv-card card metric"><span>Retorno estimado</span><b>26.6%</b><p>TIR a 10 años · recuperación en 3.8 años</p></div>
+</div>
+</section>
+
+<section>
+<div class="eyebrow"><span></span><span>Tema claro / papel</span></div>
+<div class="paper nv-light"><h4>Convenio de confidencialidad</h4><p>El mismo sistema en superficie clara: fondo #FAFAF7, tinta #2A2722, acento terracota. Para contratos, correo e impresos.</p></div>
+</section>
+
+<section>
+<div class="eyebrow"><span></span><span>Radios y espacio</span></div>
+<div class="scale">
+<div style="width:64px;height:64px;border-radius:var(--nv-radius-sm)">8</div>
+<div style="width:76px;height:76px;border-radius:var(--nv-radius-md)">12</div>
+<div style="width:88px;height:88px;border-radius:var(--nv-radius-lg)">16</div>
+<div style="width:100px;height:100px;border-radius:var(--nv-radius-xl)">24</div>
+<div style="width:112px;height:112px;border-radius:var(--nv-radius-2xl)">32</div>
+<div style="width:124px;height:124px;border-radius:var(--nv-radius-full)">full</div>
+</div>
+<div class="scale" style="margin-top:24px">
+<div style="width:4px;height:32px">4</div><div style="width:8px;height:32px">8</div><div style="width:12px;height:32px">12</div><div style="width:16px;height:32px">16</div><div style="width:24px;height:32px">24</div><div style="width:32px;height:32px">32</div><div style="width:48px;height:32px">48</div><div style="width:64px;height:32px">64</div><div style="width:96px;height:32px">96</div><div style="width:128px;height:32px">128</div>
+</div>
+</section>
+
+<footer>Fuente de verdad: <code>tokens/navana.css</code> · Reglas: <a href="AGENTS.md">AGENTS.md</a> · Detalle: <a href="design.md">design.md</a></footer>
+</div>
+</body></html>

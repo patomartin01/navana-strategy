@@ -1,0 +1,131 @@
+/* ============================================================
+   NAVANA — Tailwind v4 theme bridge
+   Uso:
+     @import "tailwindcss";
+     @import "./navana-design-kit/tokens/navana.css";
+     @import "./navana-design-kit/tokens/navana.tailwind.css";
+
+   Genera utilidades: bg-nv-bg, text-nv-ink, border-nv-line,
+   font-display, text-display, rounded-nv-lg, shadow-nv-lg, ease-nv…
+   ============================================================ */
+
+@theme inline{
+  /* Superficies */
+  --color-nv-bg:var(--nv-bg);
+  --color-nv-bg-deep:var(--nv-bg-deep);
+  --color-nv-bg-elevated:var(--nv-bg-elevated);
+  --color-nv-bg-raised:var(--nv-bg-raised);
+
+  /* Tinta */
+  --color-nv-ink:var(--nv-ink);
+  --color-nv-ink-hi:var(--nv-ink-hi);
+  --color-nv-ink-muted:var(--nv-ink-muted);
+  --color-nv-ink-faint:var(--nv-ink-faint);
+  --color-nv-ink-ghost:var(--nv-ink-ghost);
+
+  /* Acción */
+  --color-nv-accent:var(--nv-accent);
+  --color-nv-accent-hover:var(--nv-accent-hover);
+  --color-nv-accent-contrast:var(--nv-accent-contrast);
+
+  /* Marca */
+  --color-nv-terracotta:var(--nv-terracotta);
+  --color-nv-terracotta-light:var(--nv-terracotta-light);
+  --color-nv-terracotta-text:var(--nv-terracotta-text);
+  --color-nv-olive:var(--nv-olive);
+  --color-nv-sand:var(--nv-sand);
+  --color-nv-sand-light:var(--nv-sand-light);
+  --color-nv-slate:var(--nv-slate);
+  --color-nv-earth:var(--nv-earth);
+  --color-nv-cream:var(--nv-cream);
+  --color-nv-cream-light:var(--nv-cream-light);
+  --color-nv-bronze:var(--nv-bronze);
+  --color-nv-stone:var(--nv-stone);
+
+  /* Líneas / estado */
+  --color-nv-line:var(--nv-line);
+  --color-nv-line-soft:var(--nv-line-soft);
+  --color-nv-line-strong:var(--nv-line-strong);
+  --color-nv-success:var(--nv-success);
+  --color-nv-warning:var(--nv-warning);
+  --color-nv-danger:var(--nv-danger);
+  --color-nv-info:var(--nv-info);
+
+  /* Tipografía */
+  --font-display:var(--nv-font-display);
+  --font-body:var(--nv-font-body);
+  --font-sans:var(--nv-font-body);
+
+  --text-nv-xs:var(--nv-text-xs);
+  --text-nv-sm:var(--nv-text-sm);
+  --text-nv-base:var(--nv-text-base);
+  --text-nv-md:var(--nv-text-md);
+  --text-nv-lg:var(--nv-text-lg);
+  --text-nv-xl:var(--nv-text-xl);
+  --text-nv-2xl:var(--nv-text-2xl);
+  --text-nv-3xl:var(--nv-text-3xl);
+  --text-nv-4xl:var(--nv-text-4xl);
+  --text-display:var(--nv-display-fluid);
+  --text-h2:var(--nv-h2-fluid);
+
+  --tracking-display:var(--nv-tracking-display);
+  --tracking-overline:var(--nv-tracking-overline);
+  --tracking-widest:var(--nv-tracking-widest);
+
+  --leading-tight:var(--nv-leading-tight);
+  --leading-snug:var(--nv-leading-snug);
+  --leading-normal:var(--nv-leading-normal);
+  --leading-relaxed:var(--nv-leading-relaxed);
+
+  /* Radios */
+  --radius-nv-sm:var(--nv-radius-sm);
+  --radius-nv-md:var(--nv-radius-md);
+  --radius-nv-lg:var(--nv-radius-lg);
+  --radius-nv-xl:var(--nv-radius-xl);
+  --radius-nv-2xl:var(--nv-radius-2xl);
+
+  /* Sombras */
+  --shadow-nv-sm:var(--nv-shadow-sm);
+  --shadow-nv-md:var(--nv-shadow-md);
+  --shadow-nv-lg:var(--nv-shadow-lg);
+  --shadow-nv-xl:var(--nv-shadow-xl);
+  --shadow-nv-glow:var(--nv-glow);
+
+  /* Espacio y medidas */
+  --spacing-gutter:var(--nv-gutter);
+  --spacing-section:var(--nv-section-y);
+  --container-nv:var(--nv-container);
+
+  /* Movimiento */
+  --ease-nv:var(--nv-ease);
+  --ease-nv-out:var(--nv-ease-out);
+  --animate-duration-nv:var(--nv-dur);
+}
+
+/* Puente opcional: si el proyecto ya usa shadcn/ui, esto reviste
+   sus componentes con la piel Navana sin tocar sus archivos. */
+@layer base{
+  .nv-shadcn{
+    --background:var(--nv-bg);
+    --foreground:var(--nv-ink);
+    --card:var(--nv-bg-elevated);
+    --card-foreground:var(--nv-ink);
+    --popover:var(--nv-bg-elevated);
+    --popover-foreground:var(--nv-ink);
+    --primary:var(--nv-accent);
+    --primary-foreground:var(--nv-accent-contrast);
+    --secondary:var(--nv-bg-raised);
+    --secondary-foreground:var(--nv-ink);
+    --muted:var(--nv-bg-raised);
+    --muted-foreground:var(--nv-ink-muted);
+    --accent:var(--nv-bg-raised);
+    --accent-foreground:var(--nv-ink-hi);
+    --destructive:var(--nv-danger);
+    --destructive-foreground:var(--nv-bg);
+    --border:var(--nv-line);
+    --input:var(--nv-line);
+    --input-background:var(--nv-veil);
+    --ring:var(--nv-accent);
+    --radius:var(--nv-radius-md);
+  }
+}

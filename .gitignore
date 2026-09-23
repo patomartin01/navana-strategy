@@ -8,3 +8,13 @@ Estrategia_Corporativa_Navana_Español.html
 .gemini/
 node_modules/
 .env
+
+# Credentials & secrets
+google-credentials.json
+
+# Scratch & temporary test scripts
+scratch/
+scratch_*.js
+*.png.tmp
+map_test.png
+
