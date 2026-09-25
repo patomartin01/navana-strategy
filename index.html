@@ -314,33 +314,194 @@
             color: var(--nv-ink-muted);
         }
 
-        .state-select {
+        /* CUSTOM MULTISELECT WIDGET */
+        .custom-multiselect {
+            position: relative;
+            display: inline-block;
+        }
+        .custom-multiselect-trigger {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--nv-line);
             color: var(--nv-ink);
-            padding: 6px 26px 6px 12px;
+            padding: 6px 14px;
             border-radius: 9999px;
             font-family: var(--nv-font-body);
             font-size: 11.5px;
             font-weight: 500;
             cursor: pointer;
             outline: none;
-            appearance: none;
-            -webkit-appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5' fill='none'%3E%3Cpath d='M1 1L4 4L7 1' stroke='%238E8270' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 10px center;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--nv-shadow-card);
             transition: all 0.2s ease;
-            max-width: 150px;
+            user-select: none;
+            white-space: nowrap;
         }
-        .state-select:focus {
+        .custom-multiselect-trigger:hover {
+            color: var(--nv-ink-hi);
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .custom-multiselect.open .custom-multiselect-trigger {
             border-color: var(--nv-sand);
             color: var(--nv-ink-hi);
+            background: rgba(255, 255, 255, 0.1);
         }
-        .state-select option {
-            background-color: var(--nv-bg-elevated);
+        .multiselect-chevron {
+            color: var(--nv-ink-muted);
+            transition: transform 0.2s ease;
+        }
+        .custom-multiselect.open .multiselect-chevron {
+            transform: rotate(180deg);
+            color: var(--nv-sand);
+        }
+
+        /* DROPDOWN POPUP */
+        .custom-multiselect-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            width: 290px;
+            max-height: 380px;
+            background: rgba(22, 17, 14, 0.96);
+            backdrop-filter: blur(32px);
+            -webkit-backdrop-filter: blur(32px);
+            border: 1px solid var(--nv-line);
+            border-radius: 18px;
+            box-shadow: 0 24px 50px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(132, 114, 77, 0.2);
+            z-index: 2500;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            animation: fadeInDropdown 0.2s ease;
+        }
+        @keyframes fadeInDropdown {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .custom-multiselect.open .custom-multiselect-dropdown {
+            display: flex;
+        }
+
+        /* HEADER & SEARCH */
+        .multiselect-search-header {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--nv-line);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .search-box.micro {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--nv-line);
+            border-radius: 8px;
+            padding: 4px 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .search-box.micro input {
+            background: transparent;
+            border: none;
+            outline: none;
             color: var(--nv-ink);
-            padding: 8px;
+            font-family: var(--nv-font-body);
+            font-size: 11px;
+            width: 100%;
+        }
+        .multiselect-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .multiselect-action-btn {
+            background: transparent;
+            border: none;
+            color: var(--nv-sand);
+            font-size: 10.5px;
+            font-family: var(--nv-font-body);
+            font-weight: 600;
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        .multiselect-action-btn:hover {
+            background: rgba(132, 114, 77, 0.2);
+            color: var(--nv-ink-hi);
+        }
+
+        /* OPTIONS LIST */
+        .multiselect-options-list {
+            flex: 1;
+            overflow-y: auto;
+            max-height: 260px;
+            padding: 6px;
+        }
+        .multiselect-options-list::-webkit-scrollbar {
+            width: 5px;
+        }
+        .multiselect-options-list::-webkit-scrollbar-thumb {
+            background: var(--nv-line);
+            border-radius: 4px;
+        }
+        .multiselect-options-list::-webkit-scrollbar-thumb:hover {
+            background: var(--nv-sand);
+        }
+
+        .multiselect-option-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 7px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.15s ease;
+            user-select: none;
+        }
+        .multiselect-option-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .multiselect-checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 11px;
+            color: var(--nv-ink);
+            font-family: var(--nv-font-body);
+        }
+        .multiselect-custom-check {
+            width: 15px;
+            height: 15px;
+            border: 1.5px solid var(--nv-ink-muted);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease;
+        }
+        .multiselect-option-item.selected .multiselect-custom-check {
+            background: var(--nv-sand);
+            border-color: var(--nv-sand);
+            color: #14100D;
+        }
+        .multiselect-custom-check svg {
+            opacity: 0;
+            transition: opacity 0.15s ease;
+        }
+        .multiselect-option-item.selected .multiselect-custom-check svg {
+            opacity: 1;
+        }
+        .multiselect-count-tag {
+            font-family: var(--nv-font-display);
+            font-size: 10px;
+            color: var(--nv-ink-muted);
+            font-weight: 500;
+        }
+        .multiselect-option-item.selected .multiselect-count-tag {
+            color: var(--nv-sand);
         }
 
         /* STATUS FILTER SEGMENTS (NO EMOJIS) */
@@ -1056,10 +1217,26 @@
                 <input type="text" id="map-search" class="search-field" placeholder="Buscar municipio..." oninput="syncAndFilterMap()">
             </div>
 
-            <!-- State Selector Dropdown -->
-            <select id="map-state-select" class="state-select" onchange="syncAndFilterMap()">
-                <option value="ALL">Todos los Estados (32)</option>
-            </select>
+            <!-- Custom Multi-Select State Selector -->
+            <div class="custom-multiselect" id="map-multiselect-container">
+                <button type="button" class="custom-multiselect-trigger" id="map-multiselect-trigger" onclick="toggleMultiSelectDropdown('map')">
+                    <span class="multiselect-label" id="map-multiselect-label">Todos los Estados (32)</span>
+                    <svg class="multiselect-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="custom-multiselect-dropdown" id="map-multiselect-dropdown">
+                    <div class="multiselect-search-header">
+                        <div class="search-box micro">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            <input type="text" id="map-state-search" placeholder="Buscar estado..." oninput="filterMultiSelectSearch('map')" />
+                        </div>
+                        <div class="multiselect-actions">
+                            <button type="button" class="multiselect-action-btn" onclick="selectAllStates('map')">Seleccionar Todos</button>
+                            <button type="button" class="multiselect-action-btn" onclick="clearAllStates('map')">Limpiar</button>
+                        </div>
+                    </div>
+                    <div class="multiselect-options-list" id="map-multiselect-list"></div>
+                </div>
+            </div>
 
             <!-- Status Filter Segments (No Emojis) -->
             <div class="filter-segments">
@@ -1241,10 +1418,26 @@
                         <input type="text" id="tbl-filter-search" class="search-field" placeholder="Filtrar tabla..." oninput="updateTableFilterState()">
                     </div>
 
-                    <!-- State Selector inside table -->
-                    <select id="tbl-filter-state" class="state-select" style="max-width: 170px;" onchange="updateTableFilterState()">
-                        <option value="ALL">Todos los Estados (32)</option>
-                    </select>
+                    <!-- Custom Multi-Select State Selector inside Table -->
+                    <div class="custom-multiselect" id="tbl-multiselect-container">
+                        <button type="button" class="custom-multiselect-trigger" id="tbl-multiselect-trigger" onclick="toggleMultiSelectDropdown('tbl')">
+                            <span class="multiselect-label" id="tbl-multiselect-label">Todos los Estados (32)</span>
+                            <svg class="multiselect-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div class="custom-multiselect-dropdown" id="tbl-multiselect-dropdown">
+                            <div class="multiselect-search-header">
+                                <div class="search-box micro">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                                    <input type="text" id="tbl-state-search" placeholder="Buscar estado..." oninput="filterMultiSelectSearch('tbl')" />
+                                </div>
+                                <div class="multiselect-actions">
+                                    <button type="button" class="multiselect-action-btn" onclick="selectAllStates('tbl')">Seleccionar Todos</button>
+                                    <button type="button" class="multiselect-action-btn" onclick="clearAllStates('tbl')">Limpiar</button>
+                                </div>
+                            </div>
+                            <div class="multiselect-options-list" id="tbl-multiselect-list"></div>
+                        </div>
+                    </div>
 
                     <!-- Status Filter buttons inside table -->
                     <div class="filter-segments">
@@ -1709,26 +1902,134 @@
             updateTableFilterState();
         }
 
-        function populateDropdowns(states) {
-            const mapSelect = document.getElementById("map-state-select");
-            const tblSelect = document.getElementById("tbl-filter-state");
+        // ============================================================
+        // CUSTOM MULTI-SELECT STATE SELECTOR ENGINE
+        // ============================================================
+        let availableStatesList = [];
+        let selectedMapStates = new Set(); // Empty means ALL states selected
+        let selectedTblStates = new Set(); // Empty means ALL states selected
 
-            [mapSelect, tblSelect].forEach(select => {
-                if (!select) return;
-                const currentVal = select.value;
-                select.innerHTML = '<option value="ALL">Todos los Estados (32)</option>';
-                states.forEach(st => {
-                    const count = rawDataset.filter(d => d.estado.toUpperCase() === st.toUpperCase()).length;
-                    const opt = document.createElement("option");
-                    opt.value = st;
-                    opt.innerText = `${st} (${count})`;
-                    select.appendChild(opt);
-                });
-                if (currentVal && states.includes(currentVal)) {
-                    select.value = currentVal;
-                }
-            });
+        function populateDropdowns(states) {
+            availableStatesList = states;
+            renderMultiSelectOptions('map');
+            renderMultiSelectOptions('tbl');
         }
+
+        function renderMultiSelectOptions(type) {
+            const listEl = document.getElementById(`${type}-multiselect-list`);
+            const searchInput = document.getElementById(`${type}-state-search`);
+            const searchVal = (searchInput ? searchInput.value : '').toLowerCase().trim();
+            const selectedSet = type === 'map' ? selectedMapStates : selectedTblStates;
+            if (!listEl) return;
+
+            listEl.innerHTML = '';
+
+            const filteredStates = availableStatesList.filter(st => st.toLowerCase().includes(searchVal));
+
+            if (filteredStates.length === 0) {
+                listEl.innerHTML = '<div style="padding: 12px; font-size: 11px; color: var(--nv-ink-muted); text-align: center;">No se encontraron estados</div>';
+            } else {
+                filteredStates.forEach(st => {
+                    const count = rawDataset.filter(d => d.estado.toUpperCase() === st.toUpperCase()).length;
+                    const isSelected = selectedSet.has(st.toUpperCase());
+
+                    const item = document.createElement('div');
+                    item.className = `multiselect-option-item ${isSelected ? 'selected' : ''}`;
+                    item.onclick = (e) => {
+                        e.stopPropagation();
+                        toggleStateSelection(type, st);
+                    };
+
+                    item.innerHTML = `
+                        <div class="multiselect-checkbox-label">
+                            <div class="multiselect-custom-check">
+                                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                            <span>${st}</span>
+                        </div>
+                        <span class="multiselect-count-tag">(${count})</span>
+                    `;
+                    listEl.appendChild(item);
+                });
+            }
+
+            updateMultiSelectTriggerLabel(type);
+        }
+
+        function toggleStateSelection(type, stateName) {
+            const selectedSet = type === 'map' ? selectedMapStates : selectedTblStates;
+            const key = stateName.toUpperCase();
+            if (selectedSet.has('__NONE__')) selectedSet.delete('__NONE__');
+
+            if (selectedSet.has(key)) {
+                selectedSet.delete(key);
+            } else {
+                selectedSet.add(key);
+            }
+            renderMultiSelectOptions(type);
+            if (type === 'map') {
+                syncAndFilterMap();
+            } else {
+                updateTableFilterState();
+            }
+        }
+
+        function selectAllStates(type) {
+            const selectedSet = type === 'map' ? selectedMapStates : selectedTblStates;
+            selectedSet.clear();
+            renderMultiSelectOptions(type);
+            if (type === 'map') syncAndFilterMap();
+            else updateTableFilterState();
+        }
+
+        function clearAllStates(type) {
+            const selectedSet = type === 'map' ? selectedMapStates : selectedTblStates;
+            selectedSet.clear();
+            selectedSet.add('__NONE__');
+            renderMultiSelectOptions(type);
+            if (type === 'map') syncAndFilterMap();
+            else updateTableFilterState();
+        }
+
+        function filterMultiSelectSearch(type) {
+            renderMultiSelectOptions(type);
+        }
+
+        function updateMultiSelectTriggerLabel(type) {
+            const labelEl = document.getElementById(`${type}-multiselect-label`);
+            const selectedSet = type === 'map' ? selectedMapStates : selectedTblStates;
+            if (!labelEl) return;
+
+            if (selectedSet.has('__NONE__')) {
+                labelEl.innerText = 'Ningún Estado (0)';
+            } else if (selectedSet.size === 0 || selectedSet.size === availableStatesList.length) {
+                labelEl.innerText = `Todos los Estados (${availableStatesList.length})`;
+            } else if (selectedSet.size === 1) {
+                const singleKey = Array.from(selectedSet)[0];
+                const match = availableStatesList.find(s => s.toUpperCase() === singleKey) || singleKey;
+                labelEl.innerText = match;
+            } else {
+                labelEl.innerText = `${selectedSet.size} Estados Seleccionados`;
+            }
+        }
+
+        function toggleMultiSelectDropdown(type) {
+            const container = document.getElementById(`${type}-multiselect-container`);
+            if (!container) return;
+            const wasOpen = container.classList.contains('open');
+            document.querySelectorAll('.custom-multiselect').forEach(el => el.classList.remove('open'));
+            if (!wasOpen) {
+                container.classList.add('open');
+                const searchInput = document.getElementById(`${type}-state-search`);
+                if (searchInput) searchInput.focus();
+            }
+        }
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.custom-multiselect')) {
+                document.querySelectorAll('.custom-multiselect').forEach(el => el.classList.remove('open'));
+            }
+        });
 
         function updateKPIMetrics() {
             const total = rawDataset.length;
@@ -1752,11 +2053,13 @@
 
         function syncAndFilterMap() {
             const searchQuery = document.getElementById("map-search").value.toLowerCase().trim();
-            const selectedState = document.getElementById("map-state-select").value;
 
             filteredDataset = rawDataset.filter(item => {
                 if (currentMapStatus !== 'ALL' && item.status !== currentMapStatus) return false;
-                if (selectedState !== 'ALL' && item.estado.toUpperCase() !== selectedState.toUpperCase()) return false;
+                if (selectedMapStates.size > 0) {
+                    if (selectedMapStates.has('__NONE__')) return false;
+                    if (!selectedMapStates.has(item.estado.toUpperCase())) return false;
+                }
                 if (searchQuery) {
                     const matchText = `${item.municipio} ${item.estado} ${item.dictamen}`.toLowerCase();
                     if (!matchText.includes(searchQuery)) return false;
@@ -1766,14 +2069,17 @@
 
             plotMarkers();
 
-            if (selectedState !== 'ALL') {
-                const centerData = STATE_CENTERS[selectedState.toUpperCase()];
+            if (selectedMapStates.size === 1 && !selectedMapStates.has('__NONE__')) {
+                const singleState = Array.from(selectedMapStates)[0];
+                const centerData = STATE_CENTERS[singleState];
                 if (centerData) {
                     leafletMap.setView([centerData[0], centerData[1]], centerData[2], { animate: true });
                 } else if (markersGroup.getLayers().length > 0) {
                     leafletMap.fitBounds(markersGroup.getBounds(), { padding: [50, 50], maxZoom: 10 });
                 }
-            } else if (markersGroup.getLayers().length > 0 && !searchQuery) {
+            } else if (selectedMapStates.size > 1 && !selectedMapStates.has('__NONE__') && markersGroup.getLayers().length > 0) {
+                leafletMap.fitBounds(markersGroup.getBounds(), { padding: [50, 50], maxZoom: 10 });
+            } else if ((selectedMapStates.size === 0 || selectedMapStates.size === availableStatesList.length) && markersGroup.getLayers().length > 0 && !searchQuery) {
                 leafletMap.fitBounds([[14.5, -118.5], [32.8, -86.5]], { padding: [30, 30] });
             }
         }
@@ -1899,7 +2205,7 @@
 
         function resetViewToNational() {
             document.getElementById("map-search").value = "";
-            document.getElementById("map-state-select").value = "ALL";
+            selectAllStates('map');
             setStatusFilter('ALL');
             if (markersGroup.getLayers().length > 0) {
                 leafletMap.fitBounds([[14.5, -118.5], [32.8, -86.5]], { padding: [30, 30] });
@@ -1921,18 +2227,19 @@
         function resetTableFilters() {
             const s = document.getElementById("tbl-filter-search");
             if (s) s.value = "";
-            const st = document.getElementById("tbl-filter-state");
-            if (st) st.value = "ALL";
+            selectAllStates('tbl');
             setTableStatusFilter('ALL');
         }
 
         function updateTableFilterState() {
             const query = (document.getElementById("tbl-filter-search")?.value || "").toLowerCase().trim();
-            const state = document.getElementById("tbl-filter-state")?.value || "ALL";
 
             tableFilteredDataset = rawDataset.filter(item => {
                 if (currentTableStatus !== 'ALL' && item.status !== currentTableStatus) return false;
-                if (state !== 'ALL' && item.estado.toUpperCase() !== state.toUpperCase()) return false;
+                if (selectedTblStates.size > 0) {
+                    if (selectedTblStates.has('__NONE__')) return false;
+                    if (!selectedTblStates.has(item.estado.toUpperCase())) return false;
+                }
                 if (query) {
                     const haystack = `${item.municipio} ${item.estado} ${item.dictamen} ${item.p1} ${item.p2}`.toLowerCase();
                     if (!haystack.includes(query)) return false;
