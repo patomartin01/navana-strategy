@@ -288,18 +288,37 @@
             flex: 1;
             max-width: 170px;
         }
-        .search-box svg {
+        .search-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            max-width: 220px;
+        }
+        .search-clear {
             position: absolute;
-            left: 10px;
+            right: 8px;
+            background: transparent;
+            border: none;
             color: var(--nv-ink-muted);
-            pointer-events: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+        .search-clear:hover {
+            color: var(--nv-ink-hi);
+            background: rgba(255, 255, 255, 0.15);
         }
         .search-field {
             width: 100%;
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--nv-line);
             border-radius: 9999px;
-            padding: 6px 12px 6px 28px;
+            padding: 6px 26px 6px 28px;
             color: var(--nv-ink-hi);
             font-family: var(--nv-font-body);
             font-size: 11.5px;
@@ -1214,7 +1233,10 @@
             <!-- Search Input -->
             <div class="search-box">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="map-search" class="search-field" placeholder="Buscar municipio..." oninput="syncAndFilterMap()">
+                <input type="text" id="map-search" class="search-field" placeholder="Buscar municipio..." oninput="onMapSearchInput()">
+                <button type="button" id="map-search-clear" class="search-clear" style="display: none;" onclick="clearMapSearch()" title="Limpiar búsqueda">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
             </div>
 
             <!-- Custom Multi-Select State Selector -->
@@ -1415,7 +1437,10 @@
                     <!-- Text Search inside table -->
                     <div class="search-box" style="max-width: 220px;">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                        <input type="text" id="tbl-filter-search" class="search-field" placeholder="Filtrar tabla..." oninput="updateTableFilterState()">
+                        <input type="text" id="tbl-filter-search" class="search-field" placeholder="Filtrar tabla..." oninput="onTableSearchInput()">
+                        <button type="button" id="tbl-search-clear" class="search-clear" style="display: none;" onclick="clearTableSearch()" title="Limpiar búsqueda">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        </button>
                     </div>
 
                     <!-- Custom Multi-Select State Selector inside Table -->
@@ -2051,8 +2076,53 @@
             syncAndFilterMap();
         }
 
+        function onMapSearchInput() {
+            const query = document.getElementById("map-search")?.value || "";
+            const tblSearch = document.getElementById("tbl-filter-search");
+            if (tblSearch && tblSearch.value !== query) tblSearch.value = query;
+            updateSearchClearButtons();
+            syncAndFilterMap();
+        }
+
+        function onTableSearchInput() {
+            const query = document.getElementById("tbl-filter-search")?.value || "";
+            const mapSearch = document.getElementById("map-search");
+            if (mapSearch && mapSearch.value !== query) mapSearch.value = query;
+            updateSearchClearButtons();
+            syncAndFilterMap();
+            updateTableFilterState(false);
+        }
+
+        function clearMapSearch() {
+            const m = document.getElementById("map-search");
+            if (m) m.value = "";
+            const t = document.getElementById("tbl-filter-search");
+            if (t) t.value = "";
+            updateSearchClearButtons();
+            syncAndFilterMap();
+        }
+
+        function clearTableSearch() {
+            const t = document.getElementById("tbl-filter-search");
+            if (t) t.value = "";
+            const m = document.getElementById("map-search");
+            if (m) m.value = "";
+            updateSearchClearButtons();
+            syncAndFilterMap();
+            updateTableFilterState(false);
+        }
+
+        function updateSearchClearButtons() {
+            const mapVal = document.getElementById("map-search")?.value || "";
+            const tblVal = document.getElementById("tbl-filter-search")?.value || "";
+            const mapClear = document.getElementById("map-search-clear");
+            const tblClear = document.getElementById("tbl-search-clear");
+            if (mapClear) mapClear.style.display = mapVal.trim().length > 0 ? "flex" : "none";
+            if (tblClear) tblClear.style.display = tblVal.trim().length > 0 ? "flex" : "none";
+        }
+
         function syncAndFilterMap() {
-            const searchQuery = document.getElementById("map-search").value.toLowerCase().trim();
+            const searchQuery = (document.getElementById("map-search")?.value || "").toLowerCase().trim();
 
             filteredDataset = rawDataset.filter(item => {
                 if (currentMapStatus !== 'ALL' && item.status !== currentMapStatus) return false;
@@ -2069,7 +2139,9 @@
 
             plotMarkers();
 
-            if (selectedMapStates.size === 1 && !selectedMapStates.has('__NONE__')) {
+            if (filteredDataset.length === 1 && filteredDataset[0].lat && filteredDataset[0].lng) {
+                leafletMap.setView([filteredDataset[0].lat, filteredDataset[0].lng], 11, { animate: true });
+            } else if (selectedMapStates.size === 1 && !selectedMapStates.has('__NONE__')) {
                 const singleState = Array.from(selectedMapStates)[0];
                 const centerData = STATE_CENTERS[singleState];
                 if (centerData) {
@@ -2094,18 +2166,36 @@
                 rojo: { fill: '#B84328', stroke: '#F28C77', label: 'No-Go' }
             };
 
+            const isSingleIsolated = (filteredDataset.length === 1);
+
             filteredDataset.forEach(item => {
                 if (!item.lat || !item.lng) return;
 
                 const style = styling[item.status] || styling.verde;
+                const isSelected = activeSelectedMuni && (activeSelectedMuni.id === item.id);
+
+                let fillOpacity = 0.88;
+                let opacity = 0.95;
+                let radius = getMarkerRadius();
+                let weight = getMarkerWeight();
+
+                if (activeSelectedMuni && !isSelected && !isSingleIsolated) {
+                    fillOpacity = 0.12;
+                    opacity = 0.2;
+                } else if (isSelected || isSingleIsolated) {
+                    radius = Math.max(radius * 1.5, 12);
+                    weight = weight * 1.8;
+                    fillOpacity = 1.0;
+                    opacity = 1.0;
+                }
 
                 const marker = L.circleMarker([item.lat, item.lng], {
-                    radius: getMarkerRadius(),
+                    radius: radius,
                     fillColor: style.fill,
-                    color: style.stroke,
-                    weight: getMarkerWeight(),
-                    opacity: 0.95,
-                    fillOpacity: 0.88
+                    color: (isSelected || isSingleIsolated) ? '#FFFFFF' : style.stroke,
+                    weight: weight,
+                    opacity: opacity,
+                    fillOpacity: fillOpacity
                 });
 
                 marker.bindTooltip(`
@@ -2120,6 +2210,7 @@
 
                 marker.on('click', () => {
                     openInspector(item);
+                    plotMarkers();
                     leafletMap.setView([item.lat, item.lng], Math.max(leafletMap.getZoom(), 9), { animate: true });
                 });
 
@@ -2193,6 +2284,7 @@
             document.getElementById("inspector-drawer").classList.remove("open");
             document.body.classList.remove("drawer-open");
             activeSelectedMuni = null;
+            plotMarkers();
         }
 
         function copyCoordinates() {
@@ -2204,7 +2296,7 @@
         }
 
         function resetViewToNational() {
-            document.getElementById("map-search").value = "";
+            clearMapSearch();
             selectAllStates('map');
             setStatusFilter('ALL');
             if (markersGroup.getLayers().length > 0) {
@@ -2334,9 +2426,17 @@
             closeTableModal();
             const item = rawDataset.find(d => d.id === id);
             if (item) {
+                const m = document.getElementById("map-search");
+                const t = document.getElementById("tbl-filter-search");
+                if (m) m.value = item.municipio;
+                if (t) t.value = item.municipio;
+
+                updateSearchClearButtons();
+                syncAndFilterMap();
                 openInspector(item);
+
                 if (item.lat && item.lng) {
-                    leafletMap.setView([item.lat, item.lng], 10, { animate: true });
+                    leafletMap.setView([item.lat, item.lng], 11, { animate: true });
                 }
             }
         }
