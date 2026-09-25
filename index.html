@@ -1418,10 +1418,16 @@
             });
 
             baseLayers = {
-                "dark": L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                    maxZoom: 19,
-                    attribution: '&copy; CartoDB Dark Matter'
-                }),
+                "dark": L.layerGroup([
+                    L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+                        maxZoom: 16,
+                        attribution: '&copy; Esri &mdash; Esri, DeLorme, NAVTEQ'
+                    }),
+                    L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
+                        maxZoom: 16,
+                        attribution: ''
+                    })
+                ]),
                 "google": L.tileLayer('https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
                     subdomains: '0123',
                     maxZoom: 20,
@@ -1539,7 +1545,11 @@
                 activeBaseLayer = baseLayers[type];
                 if (leafletMap) {
                     activeBaseLayer.addTo(leafletMap);
-                    if (activeBaseLayer.bringToBack) activeBaseLayer.bringToBack();
+                    if (activeBaseLayer.bringToBack) {
+                        activeBaseLayer.bringToBack();
+                    } else if (activeBaseLayer.eachLayer) {
+                        activeBaseLayer.eachLayer(l => { if (l.bringToBack) l.bringToBack(); });
+                    }
                 }
             }
             ['google', 'dark', 'roadmap'].forEach(k => {
