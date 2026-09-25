@@ -147,22 +147,9 @@
             overflow: hidden;
             box-shadow: var(--nv-shadow-card) !important;
         }
-        .leaflet-bar a {
-            background-color: var(--nv-bg-elevated) !important;
-            color: var(--nv-ink) !important;
-            border-bottom: 1px solid var(--nv-line-subtle) !important;
-            transition: all 0.2s ease;
-        }
-        .leaflet-bar a:hover {
-            background-color: var(--nv-bg-raised) !important;
-            color: var(--nv-ink-hi) !important;
-        }
-        .leaflet-control-zoom {
-            bottom: 30px !important;
-            left: 24px !important;
-            top: auto !important;
-            right: auto !important;
-            border-radius: 12px !important;
+        .leaflet-bar {
+            border: none !important;
+            box-shadow: none !important;
         }
         .leaflet-control-attribution {
             background: rgba(20, 16, 13, 0.8) !important;
@@ -498,6 +485,73 @@
         }
         .layer-switch-btn.active svg {
             color: var(--nv-sand);
+        }
+
+        /* ============================================================
+           MAP NAVIGATION CONTROLS (LUXURY FLOATING CAPSULE)
+           ============================================================ */
+        .nav-controls-dock {
+            position: absolute;
+            right: 24px;
+            bottom: 38px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--nv-bg-glass);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--nv-line);
+            border-radius: 14px;
+            box-shadow: var(--nv-shadow-card);
+            overflow: hidden;
+            transition: right 0.4s var(--ease), transform 0.2s ease;
+        }
+        @media (min-width: 1200px) {
+            body.drawer-open .nav-controls-dock {
+                right: 468px;
+            }
+        }
+        .nav-control-btn {
+            width: 38px;
+            height: 38px;
+            background: transparent;
+            border: none;
+            color: var(--nv-ink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s var(--ease);
+            position: relative;
+        }
+        .nav-control-btn svg {
+            transition: transform 0.2s var(--ease), color 0.2s var(--ease);
+        }
+        .nav-control-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--nv-sand);
+        }
+        .nav-control-btn:hover svg {
+            transform: scale(1.12);
+        }
+        .nav-control-btn:active {
+            transform: scale(0.92);
+        }
+        .nav-control-sep {
+            width: 22px;
+            height: 1px;
+            background: var(--nv-line);
+        }
+        .nav-zoom-badge {
+            font-family: var(--nv-font-display);
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--nv-sand);
+            letter-spacing: 0.04em;
+            line-height: 1;
+            padding: 4px 0;
+            user-select: none;
         }
 
         /* ============================================================
@@ -1055,6 +1109,24 @@
         </button>
     </div>
 
+    <!-- FLOATING MAP NAVIGATION CAPSULE (ZOOM & ORIENTATION) -->
+    <div class="nav-controls-dock" role="toolbar" aria-label="Controles de navegación del mapa">
+        <button class="nav-control-btn" onclick="zoomInMap()" title="Acercar mapa (+)" aria-label="Acercar">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="nav-zoom-badge" id="nav-zoom-indicator" title="Nivel de zoom actual">Z5</div>
+        <button class="nav-control-btn" onclick="zoomOutMap()" title="Alejar mapa (-)" aria-label="Alejar">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <div class="nav-control-sep"></div>
+        <button class="nav-control-btn" onclick="resetViewToNational()" title="Vista Nacional · Centrar México" aria-label="Centrar México">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M3 12h3M18 12h3M12 3v3M12 18v3"/><circle cx="12" cy="12" r="8" stroke-dasharray="2 3"/></svg>
+        </button>
+        <button class="nav-control-btn" onclick="locateUserPosition()" title="Ubicar mi posición actual" aria-label="Mi Ubicación">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+        </button>
+    </div>
+
     <!-- INSPECTOR DRAWER / DETAIL SLIDE-OVER -->
     <aside class="inspector-panel" id="inspector-drawer">
         <div class="panel-header">
@@ -1319,10 +1391,19 @@
         });
 
         window.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
             if (e.key === 'Escape') {
                 closeInspector();
                 closeTableModal();
                 closeCoverageModal();
+            } else if (e.key === '+' || e.key === '=') {
+                zoomInMap();
+            } else if (e.key === '-' || e.key === '_') {
+                zoomOutMap();
+            } else if (e.key === '0') {
+                resetViewToNational();
             }
         });
 
@@ -1332,7 +1413,7 @@
                 zoom: 5,
                 minZoom: 4,
                 maxZoom: 19,
-                zoomControl: true,
+                zoomControl: false,
                 preferCanvas: true
             });
 
@@ -1366,14 +1447,65 @@
 
             leafletMap.on('zoomend', () => {
                 updateMarkerScales();
+                updateZoomIndicator();
             });
 
             setTimeout(() => {
                 if (leafletMap) {
                     leafletMap.invalidateSize();
                     leafletMap.fitBounds([[14.5, -118.5], [32.8, -86.5]], { padding: [30, 30] });
+                    updateZoomIndicator();
                 }
             }, 300);
+        }
+
+        function zoomInMap() {
+            if (leafletMap) leafletMap.zoomIn(1, { animate: true });
+        }
+
+        function zoomOutMap() {
+            if (leafletMap) leafletMap.zoomOut(1, { animate: true });
+        }
+
+        function updateZoomIndicator() {
+            const badge = document.getElementById("nav-zoom-indicator");
+            if (badge && leafletMap) {
+                const z = leafletMap.getZoom();
+                badge.innerText = `Z${z}`;
+            }
+        }
+
+        let userLocationMarker = null;
+        function locateUserPosition() {
+            if (!navigator.geolocation) {
+                showToast("Geolocalización no disponible en tu navegador");
+                return;
+            }
+            showToast("Buscando tu geolocalización...");
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    const lat = pos.coords.latitude;
+                    const lng = pos.coords.longitude;
+                    if (leafletMap) {
+                        leafletMap.flyTo([lat, lng], 13, { duration: 1.5 });
+                        if (userLocationMarker) leafletMap.removeLayer(userLocationMarker);
+                        userLocationMarker = L.circleMarker([lat, lng], {
+                            radius: 8,
+                            fillColor: '#84724D',
+                            color: '#FFFFFF',
+                            weight: 2,
+                            opacity: 1,
+                            fillOpacity: 0.95
+                        }).addTo(leafletMap);
+                        userLocationMarker.bindTooltip("Tu Ubicación Actual", { permanent: true, direction: 'top', className: 'custom-map-tooltip' });
+                    }
+                    showToast("Ubicación centrada con éxito");
+                },
+                (err) => {
+                    showToast("No se pudo obtener la ubicación (permiso denegado)");
+                },
+                { timeout: 8000, enableHighAccuracy: true }
+            );
         }
 
         function getMarkerRadius() {
