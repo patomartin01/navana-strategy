@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NAVANA · Inteligencia Territorial & Viabilidad de Seguridad México</title>
+    <title>NAVANA · Inteligencia Territorial & Viabilidad de Seguridad</title>
     <meta name="description" content="Plataforma de inteligencia territorial, análisis geoespacial y viabilidad de seguridad para prospección y despliegue de cabañas de diseño NAVANA en México.">
     <meta name="theme-color" content="#1A1410">
 
@@ -15,7 +15,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     
     <!-- PapaParse for real-time Google Sheets CSV streaming -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js" integrity="sha512-dfX5uYVXzyU8+KHAVK3bIp70HSzW8ODp7VNykbeIPGf7wgN23gYKgvUMcAtK6fL2gK97pD60G1q20fwgUFYig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
     <!-- Seed Dataset for Instant Local / Offline Rendering (2,491 records) -->
     <script src="navana_seed_data.js"></script>
@@ -28,84 +28,82 @@
 
     <style>
         /* ============================================================
-           NAVANA DESIGN SYSTEM — EXACT DESIGN TOKENS
-           Inspirado en www.navanacabins.com & Navana Design Kit
+           NAVANA LUXURY DESIGN SYSTEM
+           Inspirado en www.navanacabins.com (Ranade + Space Grotesk)
            ============================================================ */
+        @font-face {
+            font-family: 'Ranade';
+            src: url('fonts/Ranade-Light.otf') format('opentype');
+            font-weight: 300;
+            font-display: swap;
+        }
         @font-face {
             font-family: 'Ranade';
             src: url('fonts/Ranade-Medium.otf') format('opentype');
             font-weight: 400 500;
-            font-style: normal;
             font-display: swap;
         }
         @font-face {
             font-family: 'Ranade';
             src: url('fonts/Ranade-Bold.otf') format('opentype');
             font-weight: 700;
-            font-style: normal;
             font-display: swap;
         }
         @font-face {
             font-family: 'Space Grotesk';
             src: url('fonts/SpaceGrotesk-VariableFont_wght.ttf') format('truetype');
             font-weight: 300 700;
-            font-style: normal;
             font-display: swap;
         }
 
         :root {
-            /* Superficies (Tema Oscuro Carbón Navana) */
+            /* Superficies Navana Oficiales */
             --nv-bg: #1A1410;
             --nv-bg-deep: #14100D;
             --nv-bg-elevated: #1E1C18;
             --nv-bg-raised: #25221C;
-            --nv-bg-card: rgba(30, 28, 24, 0.88);
-            --nv-glass: rgba(26, 20, 16, 0.82);
+            --nv-bg-glass: rgba(26, 20, 16, 0.82);
+            --nv-bg-card: rgba(30, 28, 24, 0.94);
 
-            /* Tinta */
-            --nv-ink-hi: #E8E2D6;
+            /* Tipografía & Tinta */
+            --nv-ink-hi: #F2EEE5;
             --nv-ink: #DCD7C9;
-            --nv-ink-muted: #8A7B65;
-            --nv-ink-faint: rgba(220, 215, 201, 0.58);
-            --nv-ink-ghost: rgba(220, 215, 201, 0.18);
+            --nv-ink-muted: #8E8270;
+            --nv-ink-faint: rgba(220, 215, 201, 0.4);
 
-            /* Acentos de Marca */
-            --nv-terracotta: #8B2E1B;
-            --nv-terracotta-text: #D67A62;
-            --nv-olive: #6B6826;
-            --nv-sand: #A8956A;
-            --nv-slate: #607384;
-            --nv-earth: #5C4C32;
-            --nv-cream: #DED9CB;
+            /* Paleta de Acentos de Marca */
             --nv-bronze: #84724D;
+            --nv-bronze-glow: rgba(132, 114, 77, 0.25);
             --nv-stone: #B8AE9C;
+            --nv-sand: #A8956A;
+            --nv-terracotta: #8B2E1B;
 
-            /* Semáforos Rediseñados de Lujo */
-            --sem-green-bg: rgba(61, 120, 86, 0.18);
-            --sem-green-border: rgba(94, 158, 116, 0.4);
-            --sem-green-text: #6DC28C;
-            --sem-green-marker: #458B60;
+            /* Semáforo Territorial de Lujo */
+            --sem-green-bg: rgba(69, 139, 96, 0.14);
+            --sem-green-border: rgba(94, 168, 122, 0.35);
+            --sem-green-text: #7BD69E;
+            --sem-green-dot: #4E9A68;
 
-            --sem-yellow-bg: rgba(196, 151, 70, 0.18);
-            --sem-yellow-border: rgba(212, 175, 55, 0.4);
-            --sem-yellow-text: #E5BE6B;
-            --sem-yellow-marker: #C49746;
+            --sem-yellow-bg: rgba(196, 151, 70, 0.14);
+            --sem-yellow-border: rgba(212, 175, 55, 0.35);
+            --sem-yellow-text: #E8C472;
+            --sem-yellow-dot: #C49746;
 
-            --sem-red-bg: rgba(139, 46, 27, 0.22);
-            --sem-red-border: rgba(214, 122, 98, 0.4);
-            --sem-red-text: #F08E77;
-            --sem-red-marker: #A83B24;
+            --sem-red-bg: rgba(168, 59, 36, 0.16);
+            --sem-red-border: rgba(214, 98, 77, 0.35);
+            --sem-red-text: #F28C77;
+            --sem-red-dot: #B84328;
 
             /* Tipografía */
-            --nv-font-display: 'Ranade', 'Times New Roman', serif;
+            --nv-font-display: 'Ranade', -apple-system, serif;
             --nv-font-body: 'Space Grotesk', -apple-system, sans-serif;
 
-            /* Líneas y Sombras */
+            /* Bordes y Sombras */
             --nv-line: rgba(255, 255, 255, 0.08);
-            --nv-line-soft: rgba(255, 255, 255, 0.05);
-            --nv-line-strong: rgba(255, 255, 255, 0.16);
-            --nv-shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.6);
-            --nv-shadow-card: 0 12px 32px rgba(0, 0, 0, 0.45);
+            --nv-line-subtle: rgba(255, 255, 255, 0.04);
+            --nv-line-focus: rgba(184, 174, 156, 0.4);
+            --nv-shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.65);
+            --nv-shadow-card: 0 16px 40px rgba(0, 0, 0, 0.45);
 
             --ease: cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -125,6 +123,7 @@
             overflow: hidden;
             position: relative;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         /* FULLSCREEN MAP CANVAS */
@@ -137,21 +136,21 @@
             background-color: var(--nv-bg-deep);
         }
 
-        /* CUSTOM LEAFLET STYLING TO BLEND WITH NAVANA AESTHETIC */
+        /* CUSTOM LEAFLET ARCHITECTURE */
         .leaflet-container {
             background-color: var(--nv-bg-deep) !important;
             font-family: var(--nv-font-body) !important;
         }
         .leaflet-bar {
             border: 1px solid var(--nv-line) !important;
-            border-radius: 12px !important;
+            border-radius: 9999px !important;
             overflow: hidden;
             box-shadow: var(--nv-shadow-card) !important;
         }
         .leaflet-bar a {
             background-color: var(--nv-bg-elevated) !important;
             color: var(--nv-ink) !important;
-            border-bottom: 1px solid var(--nv-line-soft) !important;
+            border-bottom: 1px solid var(--nv-line-subtle) !important;
             transition: all 0.2s ease;
         }
         .leaflet-bar a:hover {
@@ -163,52 +162,50 @@
             left: 24px !important;
             top: auto !important;
             right: auto !important;
-        }
-        .leaflet-control-layers {
-            display: none !important; /* Replaced by our custom luxury pill switcher */
+            border-radius: 12px !important;
         }
         .leaflet-control-attribution {
-            background: rgba(26, 20, 16, 0.75) !important;
+            background: rgba(20, 16, 13, 0.8) !important;
             color: var(--nv-ink-muted) !important;
             font-size: 10px !important;
             backdrop-filter: blur(8px);
             border-top-left-radius: 8px;
-            padding: 2px 8px !important;
+            padding: 3px 10px !important;
         }
         .leaflet-control-attribution a {
             color: var(--nv-sand) !important;
             text-decoration: none;
         }
 
-        /* TOOLTIP ON HOVER */
+        /* MINIMALIST LUXURY TOOLTIP */
         .leaflet-tooltip.custom-map-tooltip {
-            background: rgba(26, 20, 16, 0.92) !important;
-            border: 1px solid var(--nv-line-strong) !important;
+            background: rgba(22, 18, 14, 0.94) !important;
+            border: 1px solid var(--nv-line) !important;
             border-radius: 10px !important;
             color: var(--nv-ink) !important;
             padding: 8px 12px !important;
-            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5) !important;
-            backdrop-filter: blur(12px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6) !important;
+            backdrop-filter: blur(16px);
         }
         .leaflet-tooltip-top:before {
-            border-top-color: rgba(26, 20, 16, 0.92) !important;
+            border-top-color: rgba(22, 18, 14, 0.94) !important;
         }
 
         /* ============================================================
-           FLOATING TOP DOCK (EDITORIAL & SLEEK ARCHITECTURE)
+           TOP LUXURY DOCK (EDITORIAL FLOATING NAVBAR)
            ============================================================ */
         .top-dock {
             position: absolute;
-            top: 18px;
-            left: 20px;
-            right: 20px;
+            top: 20px;
+            left: 24px;
+            right: 24px;
             z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 14px;
+            gap: 12px;
             pointer-events: none;
-            transition: right 0.35s var(--ease);
+            transition: right 0.4s var(--ease);
         }
 
         @media (min-width: 1200px) {
@@ -221,136 +218,120 @@
             pointer-events: auto;
         }
 
-        /* Glass Pill Containers */
-        .glass-pill {
-            background: var(--nv-glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+        /* Floating Glass Container */
+        .glass-island {
+            background: var(--nv-bg-glass);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             border: 1px solid var(--nv-line);
             border-radius: 9999px;
-            padding: 6px 16px;
+            padding: 6px 14px;
             box-shadow: var(--nv-shadow-card);
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 12px;
             transition: all 0.3s var(--ease);
         }
-
-        .glass-pill:hover {
+        .glass-island:hover {
             border-color: rgba(255, 255, 255, 0.14);
         }
 
-        /* BRAND PILL (LEFT) */
+        /* BRAND PILL */
         .brand-pill {
-            padding: 8px 18px;
-            gap: 14px;
             text-decoration: none;
             color: inherit;
+            padding: 8px 18px;
+            gap: 12px;
+            cursor: pointer;
         }
         .brand-iso {
-            width: 24px;
+            width: 22px;
             height: 18px;
-            color: var(--nv-cream);
+            color: var(--nv-ink-hi);
             display: block;
+            flex-shrink: 0;
         }
         .brand-text-block {
             display: flex;
             flex-direction: column;
+            line-height: 1.1;
         }
         .brand-title {
             font-family: var(--nv-font-display);
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 500;
-            letter-spacing: -0.02em;
+            letter-spacing: 0.04em;
             color: var(--nv-ink-hi);
-            line-height: 1.1;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .brand-title-dot {
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background-color: var(--nv-accent);
+            text-transform: uppercase;
         }
         .brand-subtitle {
-            font-size: 10.5px;
-            letter-spacing: 0.12em;
+            font-size: 9.5px;
+            letter-spacing: 0.16em;
             text-transform: uppercase;
             color: var(--nv-ink-muted);
             font-weight: 500;
+            margin-top: 1px;
         }
-
-        /* METRICS CHIP */
-        .kpi-chip {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 11.5px;
-            font-weight: 500;
-            color: var(--nv-ink-hi);
-            padding: 4px 10px;
-            border-radius: 9999px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--nv-line-soft);
+        .brand-sep {
+            width: 1px;
+            height: 24px;
+            background: var(--nv-line);
         }
-        .kpi-chip-num {
-            font-family: var(--nv-font-body);
-            font-weight: 700;
+        .brand-stats-tag {
+            font-size: 11px;
             color: var(--nv-sand);
+            font-weight: 500;
             font-variant-numeric: tabular-nums;
+            white-space: nowrap;
         }
 
-        /* FILTER ISLAND (CENTER) */
-        .filter-dock {
-            padding: 4px 8px;
+        /* CENTER FILTER DOCK */
+        .center-dock {
+            padding: 5px 8px;
             gap: 6px;
             flex: 1;
-            max-width: 620px;
+            max-width: 660px;
             justify-content: center;
         }
 
-        .search-wrap {
+        .search-box {
             position: relative;
             display: flex;
             align-items: center;
             flex: 1;
-            max-width: 180px;
+            max-width: 170px;
         }
-        .search-icon {
+        .search-box svg {
             position: absolute;
             left: 10px;
-            width: 13px;
-            height: 13px;
             color: var(--nv-ink-muted);
             pointer-events: none;
         }
-        .search-input {
+        .search-field {
             width: 100%;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--nv-line-soft);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--nv-line);
             border-radius: 9999px;
-            padding: 6px 10px 6px 28px;
+            padding: 6px 12px 6px 28px;
             color: var(--nv-ink-hi);
             font-family: var(--nv-font-body);
             font-size: 11.5px;
             outline: none;
             transition: all 0.2s ease;
         }
-        .search-input:focus {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: var(--nv-accent);
+        .search-field:focus {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: var(--nv-sand);
         }
-        .search-input::placeholder {
+        .search-field::placeholder {
             color: var(--nv-ink-muted);
         }
 
-        .select-custom {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--nv-line-soft);
+        .state-select {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--nv-line);
             color: var(--nv-ink);
-            padding: 6px 24px 6px 12px;
+            padding: 6px 26px 6px 12px;
             border-radius: 9999px;
             font-family: var(--nv-font-body);
             font-size: 11.5px;
@@ -359,133 +340,143 @@
             outline: none;
             appearance: none;
             -webkit-appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6' fill='none'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%238A7B65' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5' fill='none'%3E%3Cpath d='M1 1L4 4L7 1' stroke='%238E8270' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: right 8px center;
+            background-position: right 10px center;
             transition: all 0.2s ease;
-            max-width: 145px;
+            max-width: 150px;
         }
-        .select-custom:focus {
-            border-color: var(--nv-accent);
+        .state-select:focus {
+            border-color: var(--nv-sand);
             color: var(--nv-ink-hi);
         }
-        .select-custom option {
+        .state-select option {
             background-color: var(--nv-bg-elevated);
             color: var(--nv-ink);
             padding: 8px;
         }
 
-        /* STATUS FILTER CHIPS */
-        .status-chips-wrap {
+        /* STATUS FILTER SEGMENTS (NO EMOJIS) */
+        .filter-segments {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
         }
-        .chip-filter {
+        .segment-btn {
             background: transparent;
             border: 1px solid transparent;
             color: var(--nv-ink-muted);
             font-family: var(--nv-font-body);
-            font-size: 11.5px;
+            font-size: 11px;
             font-weight: 500;
-            padding: 5px 10px;
-            border-radius: 9999px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            transition: all 0.2s var(--ease);
-            white-space: nowrap;
-        }
-        .chip-filter:hover {
-            color: var(--nv-ink);
-            background: rgba(255, 255, 255, 0.03);
-        }
-        .chip-filter.active {
-            background: rgba(255, 255, 255, 0.08);
-            color: var(--nv-ink-hi);
-            border-color: var(--nv-line-strong);
-        }
-        .chip-filter.active.green {
-            background: var(--sem-green-bg);
-            border-color: var(--sem-green-border);
-            color: var(--sem-green-text);
-        }
-        .chip-filter.active.yellow {
-            background: var(--sem-yellow-bg);
-            border-color: var(--sem-yellow-border);
-            color: var(--sem-yellow-text);
-        }
-        .chip-filter.active.red {
-            background: var(--sem-red-bg);
-            border-color: var(--sem-red-border);
-            color: var(--sem-red-text);
-        }
-
-        .dot-indicator {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            display: inline-block;
-        }
-        .dot-indicator.green { background-color: var(--sem-green-marker); box-shadow: 0 0 6px var(--sem-green-marker); }
-        .dot-indicator.yellow { background-color: var(--sem-yellow-marker); box-shadow: 0 0 6px var(--sem-yellow-marker); }
-        .dot-indicator.red { background-color: var(--sem-red-marker); box-shadow: 0 0 6px var(--sem-red-marker); }
-
-        /* ACTION DOCK (RIGHT) */
-        .action-dock {
-            gap: 8px;
-            padding: 5px 8px;
-        }
-        .btn-dock {
-            background: transparent;
-            border: 1px solid transparent;
-            color: var(--nv-ink);
-            font-family: var(--nv-font-body);
-            font-size: 12px;
-            font-weight: 500;
-            padding: 6px 12px;
+            padding: 5px 9px;
             border-radius: 9999px;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             gap: 6px;
             transition: all 0.2s var(--ease);
+            white-space: nowrap;
+        }
+        .segment-btn:hover {
+            color: var(--nv-ink);
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .segment-btn.active {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--nv-ink-hi);
+            border-color: var(--nv-line);
+        }
+        .segment-btn.active.green {
+            background: var(--sem-green-bg);
+            border-color: var(--sem-green-border);
+            color: var(--sem-green-text);
+        }
+        .segment-btn.active.yellow {
+            background: var(--sem-yellow-bg);
+            border-color: var(--sem-yellow-border);
+            color: var(--sem-yellow-text);
+        }
+        .segment-btn.active.red {
+            background: var(--sem-red-bg);
+            border-color: var(--sem-red-border);
+            color: var(--sem-red-text);
+        }
+
+        .dot-badge {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .dot-badge.green { background-color: var(--sem-green-dot); }
+        .dot-badge.yellow { background-color: var(--sem-yellow-dot); }
+        .dot-badge.red { background-color: var(--sem-red-dot); }
+
+        /* ACTION DOCK (RIGHT) */
+        .action-dock {
+            padding: 5px 8px;
+            gap: 6px;
+        }
+        .action-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--nv-ink);
+            font-family: var(--nv-font-body);
+            font-size: 11.5px;
+            font-weight: 500;
+            padding: 6px 11px;
+            border-radius: 9999px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: all 0.2s var(--ease);
             text-decoration: none;
         }
-        .btn-dock:hover {
+        .action-btn svg {
+            color: var(--nv-ink-muted);
+            transition: color 0.2s ease;
+        }
+        .action-btn:hover {
             background: rgba(255, 255, 255, 0.06);
             color: var(--nv-ink-hi);
         }
-        .btn-dock.primary {
-            background: var(--nv-sand);
-            color: var(--nv-bg-deep);
-            font-weight: 600;
-        }
-        .btn-dock.primary:hover {
-            background: var(--nv-stone);
+        .action-btn:hover svg {
+            color: var(--nv-sand);
         }
 
-        /* LAYER SWITCHER DOCK (BOTTOM-LEFT FLOATING) */
+        /* LIVE SYNC PULSE */
+        .sync-pulse {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #10B981;
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.7);
+        }
+
+        /* BASEMAP SEGMENTED PILL (BOTTOM-LEFT) */
         .bottom-dock {
             position: absolute;
             bottom: 24px;
             left: 24px;
             z-index: 1000;
             display: flex;
-            gap: 6px;
+            gap: 4px;
             pointer-events: auto;
         }
-        .layer-btn {
-            background: var(--nv-glass);
-            backdrop-filter: blur(16px);
+        .layer-switch-btn {
+            background: var(--nv-bg-glass);
+            backdrop-filter: blur(20px);
             border: 1px solid var(--nv-line);
             border-radius: 9999px;
             color: var(--nv-ink-muted);
-            font-size: 11.5px;
+            font-size: 11px;
             font-family: var(--nv-font-body);
             font-weight: 500;
-            padding: 6px 14px;
+            padding: 6px 12px;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
@@ -493,33 +484,24 @@
             box-shadow: var(--nv-shadow-card);
             transition: all 0.2s ease;
         }
-        .layer-btn:hover {
+        .layer-switch-btn svg {
+            color: var(--nv-ink-muted);
+        }
+        .layer-switch-btn:hover {
             color: var(--nv-ink);
             border-color: rgba(255, 255, 255, 0.16);
         }
-        .layer-btn.active {
-            background: rgba(255, 255, 255, 0.12);
+        .layer-switch-btn.active {
+            background: rgba(255, 255, 255, 0.1);
             color: var(--nv-ink-hi);
             border-color: var(--nv-sand);
         }
-
-        /* SYNC PULSE BADGE */
-        .pulse-live {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: #10B981;
-            box-shadow: 0 0 8px #10B981;
-            animation: pulse-dot 2s infinite ease-out;
-        }
-        @keyframes pulse-dot {
-            0% { transform: scale(0.95); opacity: 0.8; }
-            50% { transform: scale(1.15); opacity: 1; }
-            100% { transform: scale(0.95); opacity: 0.8; }
+        .layer-switch-btn.active svg {
+            color: var(--nv-sand);
         }
 
         /* ============================================================
-           DETAIL DRAWER / FLOATING CARD (RIGHT SLIDE-OVER)
+           INSPECTOR DRAWER (RIGHT SLIDE-OVER EDITORIAL CARD)
            ============================================================ */
         .inspector-panel {
             position: absolute;
@@ -530,9 +512,9 @@
             max-width: calc(100vw - 40px);
             z-index: 1050;
             background: var(--nv-bg-card);
-            backdrop-filter: blur(28px);
-            -webkit-backdrop-filter: blur(28px);
-            border: 1px solid var(--nv-line-strong);
+            backdrop-filter: blur(32px);
+            -webkit-backdrop-filter: blur(32px);
+            border: 1px solid var(--nv-line);
             border-radius: 24px;
             box-shadow: var(--nv-shadow-lg);
             display: flex;
@@ -547,55 +529,53 @@
         }
 
         .panel-header {
-            padding: 24px 24px 16px;
-            border-bottom: 1px solid var(--nv-line-soft);
+            padding: 24px 24px 18px;
+            border-bottom: 1px solid var(--nv-line);
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
             gap: 16px;
-            position: relative;
         }
         .panel-title-group {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
         }
         .panel-overline {
-            font-size: 11px;
-            letter-spacing: 0.15em;
+            font-size: 10.5px;
+            letter-spacing: 0.18em;
             text-transform: uppercase;
-            color: var(--nv-accent);
+            color: var(--nv-sand);
             font-weight: 600;
         }
         .panel-title {
             font-family: var(--nv-font-display);
             font-size: 26px;
             font-weight: 500;
-            letter-spacing: -0.025em;
+            letter-spacing: -0.02em;
             color: var(--nv-ink-hi);
             line-height: 1.15;
         }
-        .btn-close-panel {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--nv-line-soft);
+        .btn-icon-close {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--nv-line);
             color: var(--nv-ink-muted);
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             cursor: pointer;
             display: grid;
             place-items: center;
-            font-size: 14px;
             transition: all 0.2s ease;
             flex-shrink: 0;
         }
-        .btn-close-panel:hover {
+        .btn-icon-close:hover {
             background: rgba(255, 255, 255, 0.1);
             color: var(--nv-ink-hi);
         }
 
         .panel-body {
-            padding: 20px 24px;
+            padding: 22px 24px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -605,142 +585,138 @@
             width: 4px;
         }
         .panel-body::-webkit-scrollbar-thumb {
-            background: var(--nv-line-strong);
+            background: var(--nv-line);
             border-radius: 4px;
         }
 
-        /* Status Hero Badge in Drawer */
-        .status-hero-card {
-            border-radius: 16px;
+        /* Status Badge Card in Drawer */
+        .drawer-status-box {
+            border-radius: 14px;
             padding: 16px 18px;
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
+            flex-direction: column;
+            gap: 4px;
         }
-        .status-hero-card.verde {
+        .drawer-status-box.verde {
             background: var(--sem-green-bg);
             border: 1px solid var(--sem-green-border);
         }
-        .status-hero-card.amarillo {
+        .drawer-status-box.amarillo {
             background: var(--sem-yellow-bg);
             border: 1px solid var(--sem-yellow-border);
         }
-        .status-hero-card.rojo {
+        .drawer-status-box.rojo {
             background: var(--sem-red-bg);
             border: 1px solid var(--sem-red-border);
         }
-        .status-hero-title {
-            font-size: 13.5px;
-            font-weight: 700;
+        .drawer-status-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12.5px;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.06em;
         }
-        .status-hero-card.verde .status-hero-title { color: var(--sem-green-text); }
-        .status-hero-card.amarillo .status-hero-title { color: var(--sem-yellow-text); }
-        .status-hero-card.rojo .status-hero-title { color: var(--sem-red-text); }
-
-        .status-hero-sub {
-            font-size: 11px;
+        .drawer-status-box.verde .drawer-status-header { color: var(--sem-green-text); }
+        .drawer-status-box.amarillo .drawer-status-header { color: var(--sem-yellow-text); }
+        .drawer-status-box.rojo .drawer-status-header { color: var(--sem-red-text); }
+        .drawer-status-desc {
+            font-size: 11.5px;
             color: var(--nv-ink-muted);
-            margin-top: 2px;
+            line-height: 1.45;
         }
 
-        /* Assessment Card */
-        .quote-card {
+        /* Dictamen Quote Card */
+        .editorial-quote {
             background: rgba(255, 255, 255, 0.02);
             border-left: 2px solid var(--nv-sand);
             border-radius: 0 12px 12px 0;
             padding: 14px 18px;
         }
-        .quote-label {
-            font-size: 10.5px;
-            letter-spacing: 0.15em;
+        .editorial-label {
+            font-size: 10px;
+            letter-spacing: 0.16em;
             text-transform: uppercase;
-            color: var(--nv-accent);
+            color: var(--nv-sand);
             font-weight: 600;
             margin-bottom: 6px;
         }
-        .quote-text {
-            font-size: 13px;
+        .editorial-text {
+            font-size: 12.5px;
             color: var(--nv-ink);
             line-height: 1.6;
             font-style: italic;
         }
 
-        /* 3 Pillars Score Bars */
-        .pillars-block {
+        /* 3 Security Pillars Meters */
+        .pillars-group {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
-        .pillar-row {
+        .pillar-card {
             background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--nv-line-soft);
+            border: 1px solid var(--nv-line);
             border-radius: 12px;
             padding: 12px 16px;
         }
-        .pillar-header {
+        .pillar-top {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 8px;
         }
-        .pillar-name {
-            font-size: 12px;
+        .pillar-title {
+            font-size: 11.5px;
             font-weight: 600;
             color: var(--nv-ink-hi);
         }
-        .pillar-score {
-            font-size: 11.5px;
-            font-weight: 700;
+        .pillar-score-text {
+            font-size: 11px;
+            font-weight: 600;
             font-variant-numeric: tabular-nums;
         }
-        .pillar-bar-bg {
-            height: 4px;
+        .pillar-track {
+            height: 3px;
             background: rgba(255, 255, 255, 0.06);
             border-radius: 9999px;
             overflow: hidden;
         }
-        .pillar-bar-fill {
+        .pillar-fill {
             height: 100%;
             border-radius: 9999px;
             transition: width 0.6s var(--ease);
         }
-        .pillar-bar-fill.green { background: var(--sem-green-marker); }
-        .pillar-bar-fill.yellow { background: var(--sem-yellow-marker); }
-        .pillar-bar-fill.red { background: var(--sem-red-marker); }
+        .pillar-fill.green { background: var(--sem-green-dot); }
+        .pillar-fill.yellow { background: var(--sem-yellow-dot); }
+        .pillar-fill.red { background: var(--sem-red-dot); }
 
-        /* Location Coordinates Card */
-        .geo-card {
+        /* Coordinates & Navigation */
+        .coords-box {
             background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--nv-line-soft);
+            border: 1px solid var(--nv-line);
             border-radius: 14px;
             padding: 14px 18px;
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
-        .geo-coords-val {
-            font-family: monospace;
-            font-size: 12.5px;
+        .coords-display {
+            font-family: var(--nv-font-body);
+            font-size: 12px;
             color: var(--nv-ink-hi);
-            background: rgba(0, 0, 0, 0.25);
-            padding: 6px 12px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px 12px;
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
-        .geo-actions-row {
-            display: flex;
-            gap: 8px;
-        }
-        .btn-geo-action {
-            flex: 1;
-            padding: 8px 12px;
+        .btn-action-outline {
+            padding: 8px 14px;
             border-radius: 9999px;
-            border: 1px solid var(--nv-line-strong);
+            border: 1px solid var(--nv-line);
             background: transparent;
             color: var(--nv-ink);
             font-family: var(--nv-font-body);
@@ -754,135 +730,187 @@
             text-decoration: none;
             transition: all 0.2s ease;
         }
-        .btn-geo-action:hover {
-            background: rgba(255, 255, 255, 0.08);
+        .btn-action-outline:hover {
+            background: rgba(255, 255, 255, 0.06);
             color: var(--nv-ink-hi);
             border-color: var(--nv-sand);
         }
 
-        /* Sources Card */
-        .sources-card {
-            padding: 12px 0 0;
-            border-top: 1px solid var(--nv-line-soft);
-            font-size: 11px;
+        /* Official Evidence Footnote */
+        .audit-footer {
+            padding-top: 12px;
+            border-top: 1px solid var(--nv-line);
+            font-size: 10.5px;
             color: var(--nv-ink-muted);
             line-height: 1.5;
         }
 
         /* ============================================================
-           MODALS (TABLE & COVERAGE)
+           DATA CATALOG MODAL (ADVANCED FILTERS & SORTING)
            ============================================================ */
-        .modal-backdrop {
+        .modal-overlay {
             position: fixed;
             inset: 0;
             background: rgba(14, 11, 8, 0.88);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             z-index: 2000;
             display: none;
             align-items: center;
             justify-content: center;
             padding: 24px;
         }
-        .modal-window {
+        .modal-box {
             background: var(--nv-bg-elevated);
-            border: 1px solid var(--nv-line-strong);
-            border-radius: 24px;
+            border: 1px solid var(--nv-line);
+            border-radius: 20px;
             width: 100%;
-            max-width: 1300px;
-            max-height: 88vh;
+            max-width: 1380px;
+            height: 90vh;
             display: flex;
             flex-direction: column;
             box-shadow: var(--nv-shadow-lg);
             overflow: hidden;
-            animation: modalFadeIn 0.25s var(--ease);
+            animation: modalPop 0.25s var(--ease);
         }
-        @keyframes modalFadeIn {
-            from { opacity: 0; transform: scale(0.98); }
+        @keyframes modalPop {
+            from { opacity: 0; transform: scale(0.985); }
             to { opacity: 1; transform: scale(1); }
         }
 
-        .modal-header {
-            padding: 20px 28px;
-            border-bottom: 1px solid var(--nv-line-soft);
+        .modal-topbar {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--nv-line);
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 16px;
+            background: rgba(26, 20, 16, 0.6);
         }
-        .modal-title {
+        .modal-heading {
             font-family: var(--nv-font-display);
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 500;
+            letter-spacing: -0.01em;
             color: var(--nv-ink-hi);
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        .modal-body {
-            padding: 24px 28px;
-            overflow-y: auto;
-            flex: 1;
+
+        /* ADVANCED FILTER TOOLBAR INSIDE TABLE MODAL */
+        .modal-filter-toolbar {
+            padding: 12px 24px;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid var(--nv-line);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .table-filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
-        /* Data Table Styling */
-        .navana-table {
+        .modal-table-scroll {
+            flex: 1;
+            overflow-y: auto;
+            position: relative;
+        }
+        .modal-table-scroll::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .modal-table-scroll::-webkit-scrollbar-thumb {
+            background: var(--nv-line);
+            border-radius: 4px;
+        }
+
+        /* DATA TABLE */
+        .nv-table {
             width: 100%;
             border-collapse: collapse;
             text-align: left;
-            font-size: 12.5px;
+            font-size: 12px;
         }
-        .navana-table th {
-            font-size: 11px;
-            letter-spacing: 0.1em;
+        .nv-table th {
+            font-size: 10px;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
             color: var(--nv-ink-muted);
-            padding: 10px 14px;
-            border-bottom: 1px solid var(--nv-line-strong);
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--nv-line);
             position: sticky;
             top: 0;
-            background: var(--nv-bg-elevated);
+            background: #1C1915;
             z-index: 10;
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.15s ease;
         }
-        .navana-table td {
-            padding: 12px 14px;
-            border-bottom: 1px solid var(--nv-line-soft);
+        .nv-table th:hover {
+            color: var(--nv-ink-hi);
+        }
+        .nv-table td {
+            padding: 11px 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
             color: var(--nv-ink);
         }
-        .navana-table tr:hover td {
-            background-color: var(--nv-bg-raised);
+        .nv-table tr:hover td {
+            background-color: rgba(255, 255, 255, 0.03);
         }
 
-        /* Status Badge Pills */
-        .badge-pill {
+        /* TABLE FOOTER / PAGINATION */
+        .modal-pagination-bar {
+            padding: 12px 24px;
+            border-top: 1px solid var(--nv-line);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(26, 20, 16, 0.6);
+            font-size: 11.5px;
+            color: var(--nv-ink-muted);
+        }
+        .page-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* MINIMALIST STATUS TAGS (NO EMOJIS) */
+        .status-tag {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
             padding: 3px 9px;
             border-radius: 9999px;
-            font-size: 11px;
+            font-size: 10.5px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.04em;
         }
-        .badge-pill.verde {
+        .status-tag.verde {
             background: var(--sem-green-bg);
             border: 1px solid var(--sem-green-border);
             color: var(--sem-green-text);
         }
-        .badge-pill.amarillo {
+        .status-tag.amarillo {
             background: var(--sem-yellow-bg);
             border: 1px solid var(--sem-yellow-border);
             color: var(--sem-yellow-text);
         }
-        .badge-pill.rojo {
+        .status-tag.rojo {
             background: var(--sem-red-bg);
             border: 1px solid var(--sem-red-border);
             color: var(--sem-red-text);
         }
 
-        /* TOAST NOTIFICATION */
-        .toast {
+        /* TOAST */
+        .toast-banner {
             position: fixed;
             bottom: 30px;
             left: 50%;
@@ -890,9 +918,9 @@
             background: var(--nv-bg-raised);
             border: 1px solid var(--nv-sand);
             color: var(--nv-ink-hi);
-            padding: 10px 22px;
+            padding: 9px 20px;
             border-radius: 9999px;
-            font-size: 12.5px;
+            font-size: 12px;
             font-weight: 500;
             box-shadow: var(--nv-shadow-lg);
             z-index: 3000;
@@ -903,12 +931,12 @@
             align-items: center;
             gap: 8px;
         }
-        .toast.show {
+        .toast-banner.show {
             transform: translateX(-50%) translateY(0);
             opacity: 1;
         }
 
-        /* RESPONSIVE QUERIES */
+        /* RESPONSIVE LAYOUT */
         @media (max-width: 1024px) {
             .top-dock {
                 flex-direction: column;
@@ -918,7 +946,7 @@
                 right: 12px;
                 gap: 8px;
             }
-            .filter-dock {
+            .center-dock {
                 max-width: 100%;
                 flex-wrap: wrap;
                 border-radius: 16px;
@@ -946,80 +974,84 @@
 </head>
 <body>
 
-    <!-- GIS LEAFLET MAP CANVAS -->
+    <!-- FULLSCREEN GIS MAP -->
     <div id="map-canvas"></div>
 
-    <!-- FLOATING TOP DOCK -->
+    <!-- FLOATING TOP NAVIGATION DOCK -->
     <header class="top-dock">
         <!-- BRAND PILL (LEFT) -->
-        <a href="javascript:void(0)" onclick="resetViewToNational()" class="glass-pill brand-pill" title="Centrar Mapa Nacional">
+        <div class="glass-island brand-pill" onclick="resetViewToNational()" title="Centrar Mapa Nacional">
             <svg class="brand-iso" viewBox="0 38 245 84" fill="currentColor" aria-label="Navana Isotipo">
                 <path d="M2.66634 104.329C3.79041 103.137 4.92477 101.955 6.06871 100.783C11.0694 95.6908 50.3429 55.0267 53.2197 55.3865C55.0036 55.6097 57.1898 57.5938 58.5165 58.7587C68.2923 67.3419 77.1703 77.438 86.3831 86.6614C91.7602 92.0442 99.2692 97.6846 103.427 103.963C104.496 105.576 104.362 106.497 104.048 108.287C93.5565 119.268 96.6641 116.544 85.3251 107.779C76.8047 100.974 62.2704 90.2762 51.0772 91.8979C35.1084 94.2115 24.2033 106.404 12.3748 115.72C9.62687 117.885 3.11422 109.3 2.06771 107.199C1.52849 106.116 2.17722 105.397 2.66634 104.329Z"></path>
                 <path d="M140.666 104.329C141.79 103.137 142.925 101.955 144.069 100.783C149.069 95.6908 188.343 55.0267 191.22 55.3865C193.004 55.6097 195.19 57.5938 196.517 58.7587C206.292 67.3419 215.17 77.438 224.383 86.6614C229.76 92.0442 237.269 97.6846 241.427 103.963C242.496 105.576 242.362 106.497 242.048 108.287C231.556 119.268 234.664 116.544 223.325 107.779C214.805 100.974 200.27 90.2762 189.077 91.8979C173.108 94.2115 162.203 106.404 150.375 115.72C147.627 117.885 141.114 109.3 140.068 107.199C139.528 106.116 140.177 105.397 140.666 104.329Z"></path>
                 <path d="M172.812 55.1488C171.688 56.341 170.553 57.5229 169.409 58.6952C164.409 63.7874 125.135 104.451 122.258 104.092C120.475 103.869 118.288 101.884 116.962 100.719C107.186 92.1363 98.3079 82.0402 89.095 72.8168C83.718 67.434 76.209 61.7936 72.0507 55.5156C70.9826 53.9019 71.1163 52.9807 71.4298 51.1915C81.9217 40.2101 78.8141 42.9346 90.1531 51.6992C98.6734 58.5041 113.208 69.202 124.401 67.5803C140.37 65.2667 151.275 53.0747 163.103 43.7584C165.851 41.5936 172.364 50.1785 173.41 52.2792C173.95 53.3618 173.301 54.0808 172.812 55.1488Z"></path>
             </svg>
             <div class="brand-text-block">
-                <span class="brand-title">NAVANA <span class="brand-title-dot"></span></span>
+                <span class="brand-title">NAVANA</span>
                 <span class="brand-subtitle">Inteligencia Territorial</span>
             </div>
-            <div class="kpi-chip" title="Cobertura Nacional Total">
-                <span class="kpi-chip-num" id="kpi-total">2,491</span>
-                <span>Zonas · 32 Estados</span>
-            </div>
-        </a>
+            <div class="brand-sep"></div>
+            <span class="brand-stats-tag"><strong id="kpi-total">2,491</strong> Zonas · 32 Estados</span>
+        </div>
 
-        <!-- FILTER DOCK (CENTER) -->
-        <div class="glass-pill filter-dock">
+        <!-- CENTER FILTER DOCK -->
+        <div class="glass-island center-dock">
             <!-- Search Input -->
-            <div class="search-wrap">
-                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="filter-search" class="search-input" placeholder="Buscar municipio o estado..." oninput="applyFilters()">
+            <div class="search-box">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="map-search" class="search-field" placeholder="Buscar municipio..." oninput="syncAndFilterMap()">
             </div>
 
             <!-- State Selector Dropdown -->
-            <select id="filter-state" class="select-custom" onchange="applyFilters()">
+            <select id="map-state-select" class="state-select" onchange="syncAndFilterMap()">
                 <option value="ALL">Todos los Estados (32)</option>
             </select>
 
-            <!-- Status Chips Filter -->
-            <div class="status-chips-wrap">
-                <button class="chip-filter active" data-filter="ALL" onclick="setSemaphoreFilter('ALL')">Todos</button>
-                <button class="chip-filter green" data-filter="verde" onclick="setSemaphoreFilter('verde')">
-                    <span class="dot-indicator green"></span> Viables (<span id="kpi-green">703</span>)
+            <!-- Status Filter Segments (No Emojis) -->
+            <div class="filter-segments">
+                <button class="segment-btn active" data-status="ALL" onclick="setStatusFilter('ALL')">Todos</button>
+                <button class="segment-btn green" data-status="verde" onclick="setStatusFilter('verde')">
+                    <span class="dot-badge green"></span> Viables (<span id="kpi-green">703</span>)
                 </button>
-                <button class="chip-filter yellow" data-filter="amarillo" onclick="setSemaphoreFilter('amarillo')">
-                    <span class="dot-indicator yellow"></span> Condicionados (<span id="kpi-yellow">1,570</span>)
+                <button class="segment-btn yellow" data-status="amarillo" onclick="setStatusFilter('amarillo')">
+                    <span class="dot-badge yellow"></span> Condicionados (<span id="kpi-yellow">1,570</span>)
                 </button>
-                <button class="chip-filter red" data-filter="rojo" onclick="setSemaphoreFilter('rojo')">
-                    <span class="dot-indicator red"></span> No-Go (<span id="kpi-red">218</span>)
+                <button class="segment-btn red" data-status="rojo" onclick="setStatusFilter('rojo')">
+                    <span class="dot-badge red"></span> No-Go (<span id="kpi-red">218</span>)
                 </button>
             </div>
         </div>
 
         <!-- ACTION DOCK (RIGHT) -->
-        <div class="glass-pill action-dock">
-            <button class="btn-dock" onclick="openTableModal()">
-                <span>📋</span> <span>Catálogo</span>
+        <div class="glass-island action-dock">
+            <button class="action-btn" onclick="openTableModal()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/></svg>
+                <span>Catálogo</span>
             </button>
-            <button class="btn-dock" onclick="openCoverageModal()">
-                <span>🗺️</span> <span>Cobertura (32/32)</span>
+            <button class="action-btn" onclick="openCoverageModal()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+                <span>Cobertura (32/32)</span>
             </button>
-            <button class="btn-dock" onclick="fetchLiveGoogleSheetData(true)" title="Sincronizar en vivo con Google Sheets">
-                <span class="pulse-live"></span> <span id="sync-btn-label">Sincronizar</span>
+            <button class="action-btn" onclick="fetchLiveGoogleSheetData(true)" title="Sincronizar Google Sheets">
+                <span class="sync-pulse"></span>
+                <span id="sync-btn-label">Sincronizar</span>
             </button>
         </div>
     </header>
 
     <!-- FLOATING BASEMAP SWITCHER (BOTTOM-LEFT) -->
     <div class="bottom-dock">
-        <button class="layer-btn active" id="btn-layer-google" onclick="switchBaseLayer('google')">
-            <span>🛰️</span> <span>Satelital</span>
+        <button class="layer-switch-btn" id="btn-layer-dark" onclick="switchBaseLayer('dark')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18v-18z"/></svg>
+            <span>Carbón</span>
         </button>
-        <button class="layer-btn" id="btn-layer-dark" onclick="switchBaseLayer('dark')">
-            <span>🌑</span> <span>Carbón</span>
+        <button class="layer-switch-btn active" id="btn-layer-google" onclick="switchBaseLayer('google')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg>
+            <span>Satelital</span>
         </button>
-        <button class="layer-btn" id="btn-layer-roadmap" onclick="switchBaseLayer('roadmap')">
-            <span>🗺️</span> <span>Calles</span>
+        <button class="layer-switch-btn" id="btn-layer-roadmap" onclick="switchBaseLayer('roadmap')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+            <span>Calles</span>
         </button>
     </div>
 
@@ -1030,166 +1062,235 @@
                 <span class="panel-overline" id="drawer-state">ESTADO</span>
                 <h2 class="panel-title" id="drawer-muni">Municipio</h2>
             </div>
-            <button class="btn-close-panel" onclick="closeInspector()" title="Cerrar Ficha Técnica">✕</button>
+            <button class="btn-icon-close" onclick="closeInspector()" title="Cerrar">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
         </div>
 
         <div class="panel-body">
             <!-- Status Card -->
-            <div class="status-hero-card" id="drawer-status-card">
-                <div>
-                    <div class="status-hero-title" id="drawer-status-label">🟢 Viabilidad Alta (Aprobado)</div>
-                    <div class="status-hero-sub" id="drawer-status-sub">Aprobado para prospección e inversión territorial directa.</div>
+            <div class="drawer-status-box" id="drawer-status-card">
+                <div class="drawer-status-header">
+                    <span class="dot-badge" id="drawer-status-dot"></span>
+                    <span id="drawer-status-label">Viabilidad Alta (Aprobado)</span>
                 </div>
+                <div class="drawer-status-desc" id="drawer-status-sub">Aprobado para prospección e inversión territorial directa.</div>
             </div>
 
-            <!-- Strategic Assessment Quote -->
-            <div class="quote-card">
-                <div class="quote-label">Dictamen & Justificación Estratégica</div>
-                <div class="quote-text" id="drawer-dictamen">"Cargando dictamen estratégico..."</div>
+            <!-- Dictamen Estratégico Quote -->
+            <div class="editorial-quote">
+                <div class="editorial-label">Dictamen & Justificación Estratégica</div>
+                <div class="editorial-text" id="drawer-dictamen">"Cargando análisis..."</div>
             </div>
 
             <!-- 3 Security Pillars Meters -->
-            <div class="pillars-block">
-                <div class="pillar-row">
-                    <div class="pillar-header">
-                        <span class="pillar-name">Pilar 1 · Suelo & Riesgo de Extorsión</span>
-                        <span class="pillar-score" id="drawer-p1-val">Bajo (9/10)</span>
+            <div class="pillars-group">
+                <div class="pillar-card">
+                    <div class="pillar-top">
+                        <span class="pillar-title">Pilar 1 · Suelo & Riesgo de Extorsión</span>
+                        <span class="pillar-score-text" id="drawer-p1-val">Bajo (9/10)</span>
                     </div>
-                    <div class="pillar-bar-bg">
-                        <div class="pillar-bar-fill green" id="drawer-p1-bar" style="width: 90%;"></div>
-                    </div>
-                </div>
-
-                <div class="pillar-row">
-                    <div class="pillar-header">
-                        <span class="pillar-name">Pilar 2 · Movilidad Vial & Carreteras</span>
-                        <span class="pillar-score" id="drawer-p2-val">Bajo (9/10)</span>
-                    </div>
-                    <div class="pillar-bar-bg">
-                        <div class="pillar-bar-fill green" id="drawer-p2-bar" style="width: 90%;"></div>
+                    <div class="pillar-track">
+                        <div class="pillar-fill green" id="drawer-p1-bar" style="width: 90%;"></div>
                     </div>
                 </div>
 
-                <div class="pillar-row">
-                    <div class="pillar-header">
-                        <span class="pillar-name">Pilar 3 · Certeza Social & Comunitaria</span>
-                        <span class="pillar-score" id="drawer-p3-val">Bajo (10/10)</span>
+                <div class="pillar-card">
+                    <div class="pillar-top">
+                        <span class="pillar-title">Pilar 2 · Tránsito Carretero & Movilidad</span>
+                        <span class="pillar-score-text" id="drawer-p2-val">Bajo (9/10)</span>
                     </div>
-                    <div class="pillar-bar-bg">
-                        <div class="pillar-bar-fill green" id="drawer-p3-bar" style="width: 100%;"></div>
+                    <div class="pillar-track">
+                        <div class="pillar-fill green" id="drawer-p2-bar" style="width: 90%;"></div>
+                    </div>
+                </div>
+
+                <div class="pillar-card">
+                    <div class="pillar-top">
+                        <span class="pillar-title">Pilar 3 · Certeza Social & Comunitaria</span>
+                        <span class="pillar-score-text" id="drawer-p3-val">Bajo (10/10)</span>
+                    </div>
+                    <div class="pillar-track">
+                        <div class="pillar-fill green" id="drawer-p3-bar" style="width: 100%;"></div>
                     </div>
                 </div>
             </div>
 
             <!-- Geographic Coordinates & Actions -->
-            <div class="geo-card">
-                <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--nv-ink-muted); font-weight: 600;">Georreferencia & Coordenadas</div>
-                <div class="geo-coords-val">
+            <div class="coords-box">
+                <div style="font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--nv-ink-muted); font-weight: 600;">Georreferencia Satelital</div>
+                <div class="coords-display">
                     <span id="drawer-coords">23.6345, -102.5528</span>
-                    <button onclick="copyCoordinates()" class="btn-dock" style="padding: 2px 8px; font-size: 10.5px; border-color: var(--nv-line-strong);">📋 Copiar</button>
+                    <button onclick="copyCoordinates()" class="btn-action-outline" style="padding: 4px 10px; font-size: 10.5px;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        <span>Copiar</span>
+                    </button>
                 </div>
-                <div class="geo-actions-row">
-                    <a id="drawer-gmaps-link" href="#" target="_blank" class="btn-geo-action">
-                        <span>↗</span> <span>Abrir en Google Maps</span>
-                    </a>
-                </div>
+                <a id="drawer-gmaps-link" href="#" target="_blank" class="btn-action-outline">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    <span>Ver en Google Maps</span>
+                </a>
             </div>
 
-            <!-- Sources & Auditing Evidence -->
-            <div class="sources-card">
-                <strong style="color: var(--nv-ink-hi); display: block; margin-bottom: 4px;">Auditoría Oficial:</strong>
+            <!-- Audit Sources -->
+            <div class="audit-footer">
+                <span style="color: var(--nv-ink-hi); font-weight: 500; display: block; margin-bottom: 2px;">Auditoría Oficial:</span>
                 <span id="drawer-fuentes-val">Secretariado Ejecutivo del Sistema Nacional de Seguridad Pública (SESNSP) / Guardia Nacional</span>
             </div>
         </div>
     </aside>
 
-    <!-- FULLSCREEN DATA CATALOG MODAL -->
-    <div class="modal-backdrop" id="table-modal">
-        <div class="modal-window">
-            <div class="modal-header">
-                <div class="modal-title">
-                    <svg style="width: 20px; height: 16px; color: var(--nv-sand);" viewBox="0 38 245 84" fill="currentColor"><path d="M2.66634 104.329C3.79041 103.137 4.92477 101.955 6.06871 100.783C11.0694 95.6908 50.3429 55.0267 53.2197 55.3865C55.0036 55.6097 57.1898 57.5938 58.5165 58.7587C68.2923 67.3419 77.1703 77.438 86.3831 86.6614C91.7602 92.0442 99.2692 97.6846 103.427 103.963C104.496 105.576 104.362 106.497 104.048 108.287C93.5565 119.268 96.6641 116.544 85.3251 107.779C76.8047 100.974 62.2704 90.2762 51.0772 91.8979C35.1084 94.2115 24.2033 106.404 12.3748 115.72C9.62687 117.885 3.11422 109.3 2.06771 107.199C1.52849 106.116 2.17722 105.397 2.66634 104.329Z"></path></svg>
-                    <span>Catálogo Nacional de Viabilidad Territorial (<span id="modal-table-count">2,491</span>)</span>
+    <!-- FULLSCREEN DATA CATALOG MODAL WITH ADVANCED FILTERS -->
+    <div class="modal-overlay" id="table-modal">
+        <div class="modal-box">
+            <!-- Modal Header -->
+            <div class="modal-topbar">
+                <div class="modal-heading">
+                    <svg class="brand-iso" style="width: 18px; height: 15px; color: var(--nv-sand);" viewBox="0 38 245 84" fill="currentColor"><path d="M2.66634 104.329C3.79041 103.137 4.92477 101.955 6.06871 100.783C11.0694 95.6908 50.3429 55.0267 53.2197 55.3865C55.0036 55.6097 57.1898 57.5938 58.5165 58.7587C68.2923 67.3419 77.1703 77.438 86.3831 86.6614C91.7602 92.0442 99.2692 97.6846 103.427 103.963C104.496 105.576 104.362 106.497 104.048 108.287C93.5565 119.268 96.6641 116.544 85.3251 107.779C76.8047 100.974 62.2704 90.2762 51.0772 91.8979C35.1084 94.2115 24.2033 106.404 12.3748 115.72C9.62687 117.885 3.11422 109.3 2.06771 107.199C1.52849 106.116 2.17722 105.397 2.66634 104.329Z"></path></svg>
+                    <span>Catálogo Nacional de Viabilidad Territorial</span>
                 </div>
-                <div style="display: flex; gap: 10px; align-items: center;">
-                    <button onclick="exportFilteredCSV()" class="btn-dock primary">📥 Descargar CSV</button>
-                    <button onclick="closeTableModal()" class="btn-close-panel">✕</button>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <button onclick="exportFilteredCSV()" class="btn-action-outline" style="background: var(--nv-sand); color: #14100D; font-weight: 600; border-color: var(--nv-sand);">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        <span>Descargar CSV</span>
+                    </button>
+                    <button onclick="closeTableModal()" class="btn-icon-close">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
                 </div>
             </div>
-            <div class="modal-body">
-                <table class="navana-table">
+
+            <!-- TABLE INTERNAL FILTERS TOOLBAR -->
+            <div class="modal-filter-toolbar">
+                <div class="table-filter-group">
+                    <!-- Text Search inside table -->
+                    <div class="search-box" style="max-width: 220px;">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" id="tbl-filter-search" class="search-field" placeholder="Filtrar tabla..." oninput="updateTableFilterState()">
+                    </div>
+
+                    <!-- State Selector inside table -->
+                    <select id="tbl-filter-state" class="state-select" style="max-width: 170px;" onchange="updateTableFilterState()">
+                        <option value="ALL">Todos los Estados (32)</option>
+                    </select>
+
+                    <!-- Status Filter buttons inside table -->
+                    <div class="filter-segments">
+                        <button class="segment-btn active" data-tbl-status="ALL" onclick="setTableStatusFilter('ALL')">Todos</button>
+                        <button class="segment-btn green" data-tbl-status="verde" onclick="setTableStatusFilter('verde')">
+                            <span class="dot-badge green"></span> Viables
+                        </button>
+                        <button class="segment-btn yellow" data-tbl-status="amarillo" onclick="setTableStatusFilter('amarillo')">
+                            <span class="dot-badge yellow"></span> Condicionados
+                        </button>
+                        <button class="segment-btn red" data-tbl-status="rojo" onclick="setTableStatusFilter('rojo')">
+                            <span class="dot-badge red"></span> No-Go
+                        </button>
+                    </div>
+
+                    <button onclick="resetTableFilters()" class="btn-action-outline" style="font-size: 11px; padding: 4px 10px; border-radius: 9999px;" title="Restablecer filtros">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                        <span>Limpiar</span>
+                    </button>
+                </div>
+
+                <!-- Results Counter -->
+                <div style="font-size: 11.5px; color: var(--nv-sand); font-weight: 500;">
+                    <span id="tbl-filtered-count">2,491</span> ubicaciones encontradas
+                </div>
+            </div>
+
+            <!-- Scrollable Table -->
+            <div class="modal-table-scroll">
+                <table class="nv-table">
                     <thead>
                         <tr>
-                            <th>Estado</th>
-                            <th>Municipio / Nodo</th>
-                            <th>Viabilidad</th>
+                            <th onclick="sortTableBy('estado')">Estado &#8597;</th>
+                            <th onclick="sortTableBy('municipio')">Municipio / Zona &#8597;</th>
+                            <th onclick="sortTableBy('status')">Viabilidad &#8597;</th>
                             <th>Pilar 1 (Suelo)</th>
                             <th>Pilar 2 (Vial)</th>
                             <th>Pilar 3 (Social)</th>
-                            <th>Latitud</th>
-                            <th>Longitud</th>
+                            <th>Coordenadas</th>
                             <th>Dictamen Estratégico</th>
-                            <th>Acción</th>
+                            <th style="text-align: right;">Acción</th>
                         </tr>
                     </thead>
-                    <tbody id="table-tbody">
-                        <!-- Injected via JavaScript -->
+                    <tbody id="tbl-rows-tbody">
+                        <!-- Rendered dynamically -->
                     </tbody>
                 </table>
+            </div>
+
+            <!-- Table Pagination Bar -->
+            <div class="modal-pagination-bar">
+                <div id="tbl-page-info">Mostrando 1 - 50 de 2,491</div>
+                <div class="page-controls">
+                    <button onclick="changeTablePage(-1)" class="btn-action-outline" id="btn-page-prev" style="padding: 4px 10px; font-size: 11px;">Anterior</button>
+                    <span id="tbl-page-num" style="font-weight: 600; color: var(--nv-ink-hi);">Página 1</span>
+                    <button onclick="changeTablePage(1)" class="btn-action-outline" id="btn-page-next" style="padding: 4px 10px; font-size: 11px;">Siguiente</button>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- COVERAGE MODAL -->
-    <div class="modal-backdrop" id="coverage-modal">
-        <div class="modal-window" style="max-width: 980px;">
-            <div class="modal-header">
-                <div class="modal-title">
-                    <span>Cobertura Territorial Nacional</span>
-                    <span class="badge-pill verde" id="cov-modal-badge">32 / 32 Estados (100%)</span>
+    <div class="modal-overlay" id="coverage-modal">
+        <div class="modal-box" style="max-width: 960px; height: auto; max-height: 85vh;">
+            <div class="modal-topbar">
+                <div class="modal-heading">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+                    <span>Auditoría Territorial Nacional</span>
                 </div>
-                <button onclick="closeCoverageModal()" class="btn-close-panel">✕</button>
+                <button onclick="closeCoverageModal()" class="btn-icon-close">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
             </div>
-            <div class="modal-body" style="display: flex; flex-direction: column; gap: 24px;">
-                <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--nv-line-soft); border-radius: 16px; padding: 20px 24px;">
+
+            <div style="padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px;">
+                <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--nv-line); border-radius: 14px; padding: 18px 22px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                        <span style="font-size: 13px; font-weight: 600; color: var(--nv-ink-hi);">Auditoría Territorial Completada</span>
-                        <span style="font-size: 13px; font-weight: 700; color: var(--nv-sand);">2,491 de 2,478 municipios/nodos</span>
+                        <span style="font-size: 13px; font-weight: 600; color: var(--nv-ink-hi);">Cobertura Integral Completada</span>
+                        <span style="font-size: 12px; font-weight: 700; color: var(--sem-green-text);">32 / 32 Estados Auditados (100%)</span>
                     </div>
-                    <div style="height: 6px; background: rgba(255, 255, 255, 0.08); border-radius: 9999px; overflow: hidden;">
-                        <div style="width: 100%; height: 100%; background: var(--sem-green-marker);"></div>
+                    <div style="height: 4px; background: rgba(255, 255, 255, 0.06); border-radius: 9999px; overflow: hidden;">
+                        <div style="width: 100%; height: 100%; background: var(--sem-green-dot);"></div>
                     </div>
                 </div>
 
-                <div>
-                    <h3 style="font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--nv-accent); margin-bottom: 14px; font-weight: 600;">Estados Auditoría Integral (32 de 32)</h3>
-                    <div id="cov-completed-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;">
-                        <!-- Injected via JS -->
-                    </div>
+                <div id="coverage-states-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px;">
+                    <!-- Rendered via JS -->
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- TOAST NOTIFICATION -->
-    <div class="toast" id="toast-msg">✨ Actualización completada</div>
+    <!-- TOAST BANNER -->
+    <div class="toast-banner" id="toast-banner">Actualización completada</div>
 
-    <!-- JAVASCRIPT APPLICATION CORE -->
+    <!-- APPLICATION LOGIC -->
     <script>
-        // Google Sheet CSV Sync Endpoint
         const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRMiFyBn86Jv2fQ9_kA01aJbZ5Pgj2qeG1fKwQx76oqYARL3J01_Mm3pbBzFvdRg6CEybrYYzxhtJ8r/pub?gid=0&single=true&output=csv";
 
-        // Global App State
+        // Global State
         let rawDataset = [];
         let filteredDataset = [];
         let leafletMap = null;
         let markersGroup = null;
-        let currentSemaphoreFilter = 'ALL';
+        let currentMapStatus = 'ALL';
         let activeSelectedMuni = null;
         let activeBaseLayer = null;
         let baseLayers = {};
 
-        // State Geographic Focus Centers
+        // Table Modal State
+        let tableFilteredDataset = [];
+        let currentTableStatus = 'ALL';
+        let currentTablePage = 1;
+        const TABLE_PAGE_SIZE = 50;
+        let sortField = 'estado';
+        let sortAsc = true;
+
+        // Focus Centers
         const STATE_CENTERS = {
             "BAJA CALIFORNIA": [30.84, -115.28, 7],
             "BAJA CALIFORNIA SUR": [25.5, -111.5, 7],
@@ -1225,27 +1326,25 @@
             }
         });
 
-        // Initialize GIS Engine with Leaflet
         function initLeafletMap() {
             leafletMap = L.map('map-canvas', {
-                center: [23.6, -102.5],
+                center: [23.8, -102.5],
                 zoom: 5,
                 minZoom: 4,
                 maxZoom: 19,
                 zoomControl: true,
-                preferCanvas: false
+                preferCanvas: true
             });
 
-            // Modern basemaps
             baseLayers = {
+                "dark": L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; CartoDB Dark Matter'
+                }),
                 "google": L.tileLayer('https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
                     subdomains: '0123',
                     maxZoom: 20,
                     attribution: '&copy; Google Maps Satelital'
-                }),
-                "dark": L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-                    maxZoom: 16,
-                    attribution: '&copy; Esri World Dark'
                 }),
                 "roadmap": L.tileLayer('https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
                     subdomains: '0123',
@@ -1254,7 +1353,7 @@
                 })
             };
 
-            // Default to high-contrast realistic satellite
+            // Default to high-contrast satellite
             switchBaseLayer('google');
 
             markersGroup = L.featureGroup().addTo(leafletMap);
@@ -1265,9 +1364,39 @@
                 }
             });
 
+            leafletMap.on('zoomend', () => {
+                updateMarkerScales();
+            });
+
             setTimeout(() => {
-                if (leafletMap) leafletMap.invalidateSize();
+                if (leafletMap) {
+                    leafletMap.invalidateSize();
+                    leafletMap.fitBounds([[14.5, -118.5], [32.8, -86.5]], { padding: [30, 30] });
+                }
             }, 300);
+        }
+
+        function getMarkerRadius() {
+            const z = leafletMap ? leafletMap.getZoom() : 5;
+            if (z <= 5) return 4;
+            if (z <= 6) return 5.5;
+            if (z <= 8) return 7;
+            return 9.5;
+        }
+
+        function getMarkerWeight() {
+            const z = leafletMap ? leafletMap.getZoom() : 5;
+            return z <= 5 ? 0.75 : 1.5;
+        }
+
+        function updateMarkerScales() {
+            if (!markersGroup) return;
+            const r = getMarkerRadius();
+            const w = getMarkerWeight();
+            markersGroup.eachLayer(layer => {
+                if (layer.setRadius) layer.setRadius(r);
+                if (layer.setStyle) layer.setStyle({ weight: w });
+            });
         }
 
         function switchBaseLayer(type) {
@@ -1287,7 +1416,6 @@
             });
         }
 
-        // Data Loading: Instant Local Seed -> Silent Google Sheets Sync
         async function loadInitialData() {
             if (window.NAVANA_SEED_DATA && window.NAVANA_SEED_DATA.length > 0) {
                 await loadLocalSeedData(true);
@@ -1295,25 +1423,70 @@
             fetchLiveGoogleSheetData(false);
         }
 
+        function parseCSVFallback(text) {
+            const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
+            if (lines.length < 2) return [];
+            const parseLine = (line) => {
+                const res = [];
+                let cur = '';
+                let inQuotes = false;
+                for (let i = 0; i < line.length; i++) {
+                    const c = line[i];
+                    if (c === '"') {
+                        if (inQuotes && line[i+1] === '"') {
+                            cur += '"';
+                            i++;
+                        } else {
+                            inQuotes = !inQuotes;
+                        }
+                    } else if (c === ',' && !inQuotes) {
+                        res.push(cur.trim());
+                        cur = '';
+                    } else {
+                        cur += c;
+                    }
+                }
+                res.push(cur.trim());
+                return res;
+            };
+
+            const headers = parseLine(lines[0]);
+            const rows = [];
+            for (let i = 1; i < lines.length; i++) {
+                const vals = parseLine(lines[i]);
+                const row = {};
+                headers.forEach((h, idx) => {
+                    row[h] = vals[idx] || '';
+                });
+                rows.push(row);
+            }
+            return rows;
+        }
+
         async function fetchLiveGoogleSheetData(isManual = false) {
             const btnLabel = document.getElementById("sync-btn-label");
-            if (isManual && btnLabel) btnLabel.innerText = "Cargando...";
+            if (isManual && btnLabel) btnLabel.innerText = "Sincronizando...";
 
             try {
                 const response = await fetch(GOOGLE_SHEET_CSV_URL, { cache: 'no-cache' });
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const csvText = await response.text();
-                const results = Papa.parse(csvText, { header: true, skipEmptyLines: true });
                 
-                if (results.data && results.data.length > 0) {
-                    processRawRows(results.data);
-                    if (isManual) showToast(`✨ Sincronizadas ${results.data.length} zonas en vivo desde Google Sheets`);
-                    return results.data;
+                let parsedRows = [];
+                if (typeof Papa !== 'undefined' && Papa.parse) {
+                    const results = Papa.parse(csvText, { header: true, skipEmptyLines: true });
+                    parsedRows = results.data;
                 } else {
-                    throw new Error("CSV vacío");
+                    parsedRows = parseCSVFallback(csvText);
+                }
+                
+                if (parsedRows && parsedRows.length > 0) {
+                    processRawRows(parsedRows);
+                    if (isManual) showToast(`Sincronizadas ${parsedRows.length} zonas en tiempo real`);
+                    return parsedRows;
                 }
             } catch (err) {
-                console.warn("⚠️ Google Sheets fetch fallback to local seed:", err);
+                console.warn("Google Sheets fallback to seed:", err);
                 if (!rawDataset || rawDataset.length === 0) {
                     await loadLocalSeedData(false);
                 }
@@ -1341,7 +1514,7 @@
                     "Longitud": d.lng,
                     "Fuentes / Evidencias Encontradas": d.fuentes
                 })));
-                if (!isSilent) showToast(`💾 Cargadas ${rawDataset.length} ubicaciones territoriales`);
+                if (!isSilent) showToast(`Cargadas ${rawDataset.length} ubicaciones`);
             } catch (e) {
                 console.error("Critical fallback failed:", e);
             }
@@ -1380,32 +1553,39 @@
                     status: status,
                     semRaw: semRaw,
                     dictamen: row["Dictamen & Justificación Estratégica"] || "Sin observaciones específicas.",
-                    fuentes: row["Fuentes / Evidencias Encontradas"] || "[Histórico SESNSP] Sistema Nacional de Seguridad Pública",
+                    fuentes: row["Fuentes / Evidencias Encontradas"] || "Secretariado Ejecutivo del Sistema Nacional de Seguridad Pública (SESNSP)",
                     lat: (!isNaN(lat) && !isNaN(lng)) ? lat : null,
                     lng: (!isNaN(lat) && !isNaN(lng)) ? lng : null
                 });
             });
 
-            populateStateDropdown(Array.from(statesSet).sort());
+            const sortedStates = Array.from(statesSet).sort();
+            populateDropdowns(sortedStates);
             updateKPIMetrics();
-            applyFilters();
+            syncAndFilterMap();
             renderCoverageGrid();
+            updateTableFilterState();
         }
 
-        function populateStateDropdown(states) {
-            const select = document.getElementById("filter-state");
-            const currentVal = select.value;
-            select.innerHTML = '<option value="ALL">Todos los Estados (32)</option>';
-            states.forEach(st => {
-                const count = rawDataset.filter(d => d.estado.toUpperCase() === st.toUpperCase()).length;
-                const opt = document.createElement("option");
-                opt.value = st;
-                opt.innerText = `${st} (${count})`;
-                select.appendChild(opt);
+        function populateDropdowns(states) {
+            const mapSelect = document.getElementById("map-state-select");
+            const tblSelect = document.getElementById("tbl-filter-state");
+
+            [mapSelect, tblSelect].forEach(select => {
+                if (!select) return;
+                const currentVal = select.value;
+                select.innerHTML = '<option value="ALL">Todos los Estados (32)</option>';
+                states.forEach(st => {
+                    const count = rawDataset.filter(d => d.estado.toUpperCase() === st.toUpperCase()).length;
+                    const opt = document.createElement("option");
+                    opt.value = st;
+                    opt.innerText = `${st} (${count})`;
+                    select.appendChild(opt);
+                });
+                if (currentVal && states.includes(currentVal)) {
+                    select.value = currentVal;
+                }
             });
-            if (currentVal && states.includes(currentVal)) {
-                select.value = currentVal;
-            }
         }
 
         function updateKPIMetrics() {
@@ -1418,23 +1598,22 @@
             document.getElementById("kpi-green").innerText = green.toLocaleString('es-MX');
             document.getElementById("kpi-yellow").innerText = yellow.toLocaleString('es-MX');
             document.getElementById("kpi-red").innerText = red.toLocaleString('es-MX');
-            document.getElementById("modal-table-count").innerText = total.toLocaleString('es-MX');
         }
 
-        function setSemaphoreFilter(status) {
-            currentSemaphoreFilter = status;
-            document.querySelectorAll(".chip-filter").forEach(btn => {
-                btn.classList.toggle("active", btn.getAttribute("data-filter") === status);
+        function setStatusFilter(status) {
+            currentMapStatus = status;
+            document.querySelectorAll(".center-dock .segment-btn").forEach(btn => {
+                btn.classList.toggle("active", btn.getAttribute("data-status") === status);
             });
-            applyFilters();
+            syncAndFilterMap();
         }
 
-        function applyFilters() {
-            const searchQuery = document.getElementById("filter-search").value.toLowerCase().trim();
-            const selectedState = document.getElementById("filter-state").value;
+        function syncAndFilterMap() {
+            const searchQuery = document.getElementById("map-search").value.toLowerCase().trim();
+            const selectedState = document.getElementById("map-state-select").value;
 
             filteredDataset = rawDataset.filter(item => {
-                if (currentSemaphoreFilter !== 'ALL' && item.status !== currentSemaphoreFilter) return false;
+                if (currentMapStatus !== 'ALL' && item.status !== currentMapStatus) return false;
                 if (selectedState !== 'ALL' && item.estado.toUpperCase() !== selectedState.toUpperCase()) return false;
                 if (searchQuery) {
                     const matchText = `${item.municipio} ${item.estado} ${item.dictamen}`.toLowerCase();
@@ -1443,8 +1622,7 @@
                 return true;
             });
 
-            plotFilteredMarkers();
-            renderTableRows();
+            plotMarkers();
 
             if (selectedState !== 'ALL') {
                 const centerData = STATE_CENTERS[selectedState.toUpperCase()];
@@ -1454,44 +1632,43 @@
                     leafletMap.fitBounds(markersGroup.getBounds(), { padding: [50, 50], maxZoom: 10 });
                 }
             } else if (markersGroup.getLayers().length > 0 && !searchQuery) {
-                leafletMap.fitBounds(markersGroup.getBounds(), { padding: [30, 30] });
+                leafletMap.fitBounds([[14.5, -118.5], [32.8, -86.5]], { padding: [30, 30] });
             }
-            if (leafletMap && leafletMap.invalidateSize) leafletMap.invalidateSize();
         }
 
-        function plotFilteredMarkers() {
+        function plotMarkers() {
             if (!leafletMap || !markersGroup) return;
             markersGroup.clearLayers();
 
-            const styleMap = {
-                verde: { fill: '#458B60', stroke: '#8ED4A2' },
-                amarillo: { fill: '#C49746', stroke: '#F3D27E' },
-                rojo: { fill: '#A83B24', stroke: '#E2745D' }
+            const styling = {
+                verde: { fill: '#4E9A68', stroke: '#82DC9F', label: 'Viable' },
+                amarillo: { fill: '#C49746', stroke: '#F3D27E', label: 'Condicionado' },
+                rojo: { fill: '#B84328', stroke: '#F28C77', label: 'No-Go' }
             };
 
             filteredDataset.forEach(item => {
                 if (!item.lat || !item.lng) return;
 
-                const styling = styleMap[item.status] || styleMap.verde;
+                const style = styling[item.status] || styling.verde;
 
                 const marker = L.circleMarker([item.lat, item.lng], {
-                    radius: 6.5,
-                    fillColor: styling.fill,
-                    color: styling.stroke,
-                    weight: 1.5,
+                    radius: getMarkerRadius(),
+                    fillColor: style.fill,
+                    color: style.stroke,
+                    weight: getMarkerWeight(),
                     opacity: 0.95,
                     fillOpacity: 0.88
                 });
 
                 marker.bindTooltip(`
-                    <div style="font-family: var(--nv-font-body); font-size: 11.5px; line-height: 1.35;">
-                        <strong style="color: #FFF;">${item.municipio}</strong><br/>
+                    <div style="font-family: var(--nv-font-body); font-size: 11px; line-height: 1.35;">
+                        <strong style="color: #F2EEE5; font-size: 12px;">${item.municipio}</strong><br/>
                         <span style="color: var(--nv-sand); font-size: 10px; text-transform: uppercase;">${item.estado}</span><br/>
-                        <span style="color: ${styling.stroke}; font-weight: bold; font-size: 10px; text-transform: uppercase;">
-                            ${item.status === 'verde' ? '🟢 Viable' : (item.status === 'amarillo' ? '🟡 Condicionado' : '🔴 Restringido')}
+                        <span style="color: ${style.stroke}; font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em;">
+                            ${style.label}
                         </span>
                     </div>
-                `, { direction: 'top', offset: [0, -6], className: 'custom-map-tooltip' });
+                `, { direction: 'top', offset: [0, -5], className: 'custom-map-tooltip' });
 
                 marker.on('click', () => {
                     openInspector(item);
@@ -1509,18 +1686,21 @@
             document.getElementById("drawer-muni").innerText = item.municipio;
 
             const card = document.getElementById("drawer-status-card");
+            const dot = document.getElementById("drawer-status-dot");
             const label = document.getElementById("drawer-status-label");
             const sub = document.getElementById("drawer-status-sub");
 
-            card.className = `status-hero-card ${item.status}`;
+            card.className = `drawer-status-box ${item.status}`;
+            dot.className = `dot-badge ${item.status}`;
+
             if (item.status === 'verde') {
-                label.innerText = "🟢 Viabilidad Alta (Aprobado)";
+                label.innerText = "Viabilidad Alta (Aprobado)";
                 sub.innerText = "Entorno seguro, libre tránsito de gama alta y alta certeza legal para despliegue.";
             } else if (item.status === 'amarillo') {
-                label.innerText = "🟡 Viabilidad Condicionada";
+                label.innerText = "Viabilidad Condicionada";
                 sub.innerText = "Viable prioritariamente dentro de entornos privados o con control de acceso perimetral.";
             } else {
-                label.innerText = "🔴 Restringido (No-Go)";
+                label.innerText = "Restringido (No-Go)";
                 sub.innerText = "No recomendado para prospección o adquisición territorial por incidencia delictiva.";
             }
 
@@ -1535,15 +1715,15 @@
 
             document.getElementById("drawer-p1-val").innerText = item.p1;
             document.getElementById("drawer-p1-bar").style.width = `${s1 * 10}%`;
-            document.getElementById("drawer-p1-bar").className = `pillar-bar-fill ${s1 >= 8 ? 'green' : (s1 >= 6 ? 'yellow' : 'red')}`;
+            document.getElementById("drawer-p1-bar").className = `pillar-fill ${s1 >= 8 ? 'green' : (s1 >= 6 ? 'yellow' : 'red')}`;
 
             document.getElementById("drawer-p2-val").innerText = item.p2;
             document.getElementById("drawer-p2-bar").style.width = `${s2 * 10}%`;
-            document.getElementById("drawer-p2-bar").className = `pillar-bar-fill ${s2 >= 8 ? 'green' : (s2 >= 6 ? 'yellow' : 'red')}`;
+            document.getElementById("drawer-p2-bar").className = `pillar-fill ${s2 >= 8 ? 'green' : (s2 >= 6 ? 'yellow' : 'red')}`;
 
             document.getElementById("drawer-p3-val").innerText = item.p3;
             document.getElementById("drawer-p3-bar").style.width = `${s3 * 10}%`;
-            document.getElementById("drawer-p3-bar").className = `pillar-bar-fill ${s3 >= 8 ? 'green' : (s3 >= 6 ? 'yellow' : 'red')}`;
+            document.getElementById("drawer-p3-bar").className = `pillar-fill ${s3 >= 8 ? 'green' : (s3 >= 6 ? 'yellow' : 'red')}`;
 
             document.getElementById("drawer-dictamen").innerText = `"${item.dictamen}"`;
             document.getElementById("drawer-fuentes-val").innerText = item.fuentes || "Secretariado Ejecutivo del Sistema Nacional de Seguridad Pública (SESNSP)";
@@ -1571,39 +1751,134 @@
             if (!activeSelectedMuni || !activeSelectedMuni.lat) return;
             const str = `${activeSelectedMuni.lat.toFixed(6)}, ${activeSelectedMuni.lng.toFixed(6)}`;
             navigator.clipboard.writeText(str).then(() => {
-                showToast(`📋 Coordenadas copiadas: ${str}`);
+                showToast(`Coordenadas copiadas: ${str}`);
             });
         }
 
         function resetViewToNational() {
-            document.getElementById("filter-search").value = "";
-            document.getElementById("filter-state").value = "ALL";
-            setSemaphoreFilter('ALL');
+            document.getElementById("map-search").value = "";
+            document.getElementById("map-state-select").value = "ALL";
+            setStatusFilter('ALL');
             if (markersGroup.getLayers().length > 0) {
-                leafletMap.fitBounds(markersGroup.getBounds(), { padding: [30, 30] });
+                leafletMap.fitBounds([[14.5, -118.5], [32.8, -86.5]], { padding: [30, 30] });
             }
         }
 
-        function renderTableRows() {
-            const tbody = document.getElementById("table-tbody");
+        // ============================================================
+        // TABLE MODAL FILTERING, SORTING & PAGINATION
+        // ============================================================
+        function setTableStatusFilter(status) {
+            currentTableStatus = status;
+            document.querySelectorAll(".table-filter-group .segment-btn").forEach(btn => {
+                btn.classList.toggle("active", btn.getAttribute("data-tbl-status") === status);
+            });
+            currentTablePage = 1;
+            updateTableFilterState();
+        }
+
+        function resetTableFilters() {
+            const s = document.getElementById("tbl-filter-search");
+            if (s) s.value = "";
+            const st = document.getElementById("tbl-filter-state");
+            if (st) st.value = "ALL";
+            setTableStatusFilter('ALL');
+        }
+
+        function updateTableFilterState() {
+            const query = (document.getElementById("tbl-filter-search")?.value || "").toLowerCase().trim();
+            const state = document.getElementById("tbl-filter-state")?.value || "ALL";
+
+            tableFilteredDataset = rawDataset.filter(item => {
+                if (currentTableStatus !== 'ALL' && item.status !== currentTableStatus) return false;
+                if (state !== 'ALL' && item.estado.toUpperCase() !== state.toUpperCase()) return false;
+                if (query) {
+                    const haystack = `${item.municipio} ${item.estado} ${item.dictamen} ${item.p1} ${item.p2}`.toLowerCase();
+                    if (!haystack.includes(query)) return false;
+                }
+                return true;
+            });
+
+            // Apply Sort
+            tableFilteredDataset.sort((a, b) => {
+                let vA = a[sortField] || "";
+                let vB = b[sortField] || "";
+                if (typeof vA === 'string') {
+                    return sortAsc ? vA.localeCompare(vB) : vB.localeCompare(vA);
+                }
+                return sortAsc ? vA - vB : vB - vA;
+            });
+
+            const countEl = document.getElementById("tbl-filtered-count");
+            if (countEl) countEl.innerText = tableFilteredDataset.length.toLocaleString('es-MX');
+
+            renderTablePage();
+        }
+
+        function sortTableBy(field) {
+            if (sortField === field) {
+                sortAsc = !sortAsc;
+            } else {
+                sortField = field;
+                sortAsc = true;
+            }
+            updateTableFilterState();
+        }
+
+        function changeTablePage(delta) {
+            const maxPages = Math.ceil(tableFilteredDataset.length / TABLE_PAGE_SIZE) || 1;
+            const target = currentTablePage + delta;
+            if (target >= 1 && target <= maxPages) {
+                currentTablePage = target;
+                renderTablePage();
+            }
+        }
+
+        function renderTablePage() {
+            const tbody = document.getElementById("tbl-rows-tbody");
             if (!tbody) return;
 
-            tbody.innerHTML = filteredDataset.map(row => `
-                <tr>
-                    <td style="font-weight: 500; color: var(--nv-ink-hi);">${row.estado}</td>
-                    <td style="font-weight: 600; color: var(--nv-sand); cursor: pointer;" onclick="inspectFromTable(${row.id})">${row.municipio}</td>
-                    <td><span class="badge-pill ${row.status}">${row.status === 'verde' ? 'Viable' : (row.status === 'amarillo' ? 'Condicionado' : 'No-Go')}</span></td>
-                    <td>${row.p1}</td>
-                    <td>${row.p2}</td>
-                    <td>${row.p3}</td>
-                    <td style="font-family: monospace; font-size: 11px;">${row.lat ? row.lat.toFixed(4) : '-'}</td>
-                    <td style="font-family: monospace; font-size: 11px;">${row.lng ? row.lng.toFixed(4) : '-'}</td>
-                    <td style="max-width: 280px; font-size: 11.5px; color: var(--nv-ink-muted);">${row.dictamen}</td>
-                    <td>
-                        <button onclick="inspectFromTable(${row.id})" class="btn-dock" style="font-size: 11px; padding: 3px 8px; border-color: var(--nv-line-strong);">Ver</button>
-                    </td>
-                </tr>
-            `).join("");
+            const total = tableFilteredDataset.length;
+            const maxPages = Math.ceil(total / TABLE_PAGE_SIZE) || 1;
+            if (currentTablePage > maxPages) currentTablePage = maxPages;
+
+            const startIdx = (currentTablePage - 1) * TABLE_PAGE_SIZE;
+            const endIdx = Math.min(startIdx + TABLE_PAGE_SIZE, total);
+            const pageRows = tableFilteredDataset.slice(startIdx, endIdx);
+
+            document.getElementById("tbl-page-info").innerText = total > 0 
+                ? `Mostrando ${(startIdx + 1).toLocaleString('es-MX')} - ${endIdx.toLocaleString('es-MX')} de ${total.toLocaleString('es-MX')} zonas`
+                : "No se encontraron resultados con estos filtros";
+
+            document.getElementById("tbl-page-num").innerText = `Página ${currentTablePage} de ${maxPages}`;
+            document.getElementById("btn-page-prev").disabled = (currentTablePage <= 1);
+            document.getElementById("btn-page-next").disabled = (currentTablePage >= maxPages);
+
+            tbody.innerHTML = pageRows.map(row => {
+                const label = row.status === 'verde' ? 'Viable' : (row.status === 'amarillo' ? 'Condicionado' : 'No-Go');
+                return `
+                    <tr>
+                        <td style="font-weight: 500; color: var(--nv-ink-hi);">${row.estado}</td>
+                        <td style="font-weight: 600; color: var(--nv-sand); cursor: pointer;" onclick="inspectFromTable(${row.id})">${row.municipio}</td>
+                        <td>
+                            <span class="status-tag ${row.status}">
+                                <span class="dot-badge ${row.status}"></span> ${label}
+                            </span>
+                        </td>
+                        <td>${row.p1}</td>
+                        <td>${row.p2}</td>
+                        <td>${row.p3}</td>
+                        <td style="font-family: monospace; font-size: 11px; color: var(--nv-ink-muted);">
+                            ${row.lat ? `${row.lat.toFixed(4)}, ${row.lng.toFixed(4)}` : '-'}
+                        </td>
+                        <td style="max-width: 280px; font-size: 11px; color: var(--nv-ink-muted); line-height: 1.4;">${row.dictamen}</td>
+                        <td style="text-align: right;">
+                            <button onclick="inspectFromTable(${row.id})" class="btn-action-outline" style="font-size: 10.5px; padding: 3px 8px;">
+                                <span>Ver</span>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join("");
         }
 
         function inspectFromTable(id) {
@@ -1619,6 +1894,7 @@
 
         function openTableModal() {
             document.getElementById("table-modal").style.display = "flex";
+            updateTableFilterState();
         }
 
         function closeTableModal() {
@@ -1639,21 +1915,22 @@
                 counts[d.estado] = (counts[d.estado] || 0) + 1;
             });
 
-            const grid = document.getElementById("cov-completed-grid");
+            const grid = document.getElementById("coverage-states-grid");
             if (!grid) return;
 
             const sortedStates = Object.keys(counts).sort();
             grid.innerHTML = sortedStates.map(st => `
-                <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--nv-line-soft); border-radius: 10px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between;">
-                    <span style="font-size: 12px; font-weight: 500; color: var(--nv-ink-hi);">${st}</span>
-                    <span class="badge-pill verde" style="font-size: 10px;">${counts[st]}</span>
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--nv-line); border-radius: 10px; padding: 9px 12px; display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-size: 11.5px; font-weight: 500; color: var(--nv-ink-hi);">${st}</span>
+                    <span class="status-tag verde" style="font-size: 10px;">${counts[st]}</span>
                 </div>
             `).join("");
         }
 
         function exportFilteredCSV() {
+            const dataToExport = tableFilteredDataset.length > 0 ? tableFilteredDataset : rawDataset;
             let csv = "\uFEFFEstado,Municipio,Zona,Calle,Pilar 1 (Suelo/Extorsion),Pilar 2 (Vial/Carretera),Pilar 3 (Social/Certeza),Semaforo,Dictamen Estrategico,Latitud,Longitud,Fuentes\n";
-            filteredDataset.forEach(r => {
+            dataToExport.forEach(r => {
                 const clean = (txt) => `"${String(txt || '').replace(/"/g, '""')}"`;
                 csv += `${clean(r.estado)},${clean(r.municipio)},${clean(r.zona)},${clean(r.calle)},${clean(r.p1)},${clean(r.p2)},${clean(r.p3)},${clean(r.semRaw)},${clean(r.dictamen)},${clean(r.lat)},${clean(r.lng)},${clean(r.fuentes)}\n`;
             });
@@ -1665,11 +1942,11 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            showToast("📥 Base de datos territorial descargada");
+            showToast("Base de datos descargada en CSV");
         }
 
         function showToast(msg) {
-            const toast = document.getElementById("toast-msg");
+            const toast = document.getElementById("toast-banner");
             toast.innerText = msg;
             toast.classList.add("show");
             setTimeout(() => {
