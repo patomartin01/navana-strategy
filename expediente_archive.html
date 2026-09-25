@@ -1,0 +1,3080 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estructuración Corporativa y Financiera - NAVANA GROUP</title>
+    <link rel="icon" type="image/png" href="logo_gold.png">
+    
+    <!-- Leaflet Real-time OpenStreetMap Engine CDN -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- PapaParse Library to stream Google Sheets CSV in real-time -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js" integrity="sha512-dfX5uYVXzyU8+KHAVK3bIp70HSzW8ODp7VNykbeIPGf7wgN23gYKgvUMcAtK6fL2gK97pD60G1q20fwgUFYig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <style>
+        /* Import official Navana Fonts from CDN */
+        @import url('https://api.fontshare.com/v2/css?f[]=ranade@300,400,500,700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            /* Colores Primarios Oficiales del Navana Brand Book */
+            --navana-terracotta: #8B2E1B;
+            --navana-olive: #6B6826;
+            --navana-sand: #A8956A;
+            --navana-slate: #607384;
+            --navana-earth: #5C4C32;
+            --navana-cream: #DED9CB;
+            
+            /* Paleta Operativa Oscura (AGENTS.md) */
+            --nv-bg: #1A1410;          /* carbón cálido base */
+            --nv-bg-deep: #16130F;     /* secciones hondas / headers */
+            --nv-bg-elevated: #1E1C18; /* cards / paneles */
+            --nv-bg-raised: #232119;   /* hover */
+            
+            --nv-ink-hi: #E8E2D6;      /* títulos (crema alto) */
+            --nv-ink: #DCD7C9;         /* texto principal */
+            --nv-ink-muted: #8A7B65;   /* captions / secundario */
+            
+            --nv-accent: #84724D;      /* bronce */
+            --nv-accent-hover: #B8AE9C;/* piedra */
+            --nv-text-gradient: linear-gradient(to right, #DCD7C9, #84724D);
+            --nv-accent-gradient: linear-gradient(to right, #DCD7C9, #B8AE9C);
+            
+            --nv-line: rgba(255, 255, 255, 0.08);
+            --nv-line-soft: rgba(255, 255, 255, 0.05);
+            --nv-line-strong: rgba(255, 255, 255, 0.14);
+            --nv-veil: rgba(255, 255, 255, 0.03);
+            --nv-veil-hover: rgba(255, 255, 255, 0.06);
+            
+            /* Tipografía */
+            --nv-font-display: 'Ranade', 'Gill Sans', Optima, sans-serif;
+            --nv-font-body: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+            
+            --nv-radius-md: 12px;
+            --nv-radius-lg: 16px;
+            --nv-radius-xl: 24px;
+            --nv-radius-full: 9999px;
+            
+            --nv-dur: 420ms;
+            --nv-ease: cubic-bezier(.22,.61,.36,1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--nv-font-body);
+            color: var(--nv-ink);
+            background-color: var(--nv-bg-deep);
+            line-height: 1.7;
+            font-size: 15px;
+            padding: 0;
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        /* Barra de Control de Idioma arriba en Pantalla (Oculta al imprimir) */
+        .language-bar {
+            background-color: var(--nv-bg-deep);
+            border-bottom: 1px solid var(--nv-line);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* Botón de Descarga PDF Premium */
+        .pdf-btn {
+            background: linear-gradient(135deg, var(--navana-terracotta), #a93c27);
+            border: none;
+            color: var(--nv-ink-hi) !important;
+            padding: 8px 20px;
+            font-family: var(--nv-font-body);
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 700;
+            border-radius: var(--nv-radius-full);
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(139, 46, 27, 0.4);
+            transition: all var(--nv-dur) var(--nv-ease);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-right: auto; /* Alinear a la izquierda de la barra */
+        }
+
+        .pdf-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 46, 27, 0.6);
+            filter: brightness(1.1);
+        }
+
+        .pdf-btn:active {
+            transform: translateY(0);
+        }
+
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--nv-line-strong);
+            color: var(--nv-ink-muted);
+            padding: 8px 18px;
+            font-family: var(--nv-font-body);
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+            border-radius: var(--nv-radius-full);
+            cursor: pointer;
+            transition: all var(--nv-dur) var(--nv-ease);
+        }
+
+        .lang-btn.active {
+            background: var(--navana-terracotta);
+            color: var(--nv-ink-hi);
+            border-color: var(--navana-terracotta);
+            box-shadow: 0 4px 15px rgba(139, 46, 27, 0.3);
+        }
+
+        .lang-btn:hover {
+            border-color: var(--nv-accent-hover);
+            color: var(--nv-ink-hi);
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 0; /* Margen 0 para sangrado completo (full-bleed) de fondo y ocultar encabezados del navegador */
+            }
+            .language-bar, .pdf-btn {
+                display: none !important;
+            }
+            html, body {
+                background-color: var(--nv-bg-deep) !important;
+                color: var(--nv-ink) !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                font-size: 13.5px !important;
+                line-height: 1.5 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            header {
+                border-radius: 0 !important;
+                border-bottom: 1px solid var(--nv-line-strong) !important;
+                padding: 24mm 20mm 16mm 20mm !important; /* Espaciado premium para la portada del PDF */
+                background-color: var(--nv-bg-deep) !important;
+                margin: 0 !important;
+            }
+            .container {
+                border: none !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                background-color: var(--nv-bg) !important;
+                padding: 16mm 20mm !important; /* Márgenes premium interiores que respiran con holgura */
+                margin: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                box-sizing: border-box !important;
+            }
+            footer {
+                border-radius: 0 !important;
+                margin-top: 0 !important;
+                padding: 12mm 20mm !important;
+                background-color: var(--nv-bg-deep) !important;
+                page-break-inside: avoid !important;
+            }
+            /* Desplegar rejillas de 2 columnas de manera vertical en el PDF para evitar distorsión o textos apretados */
+            .grid-2 {
+                display: block !important;
+            }
+            .card {
+                width: 100% !important;
+                margin-bottom: 24px !important;
+                box-sizing: border-box !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                background-color: var(--nv-veil) !important;
+                border: 1px solid var(--nv-line-soft) !important;
+            }
+            /* Evitar cortes feos en filas de tabla y elementos de lista individuales */
+            tr, li, blockquote, .callout {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+            h2, h3, h4 {
+                page-break-after: avoid !important;
+                break-after: avoid !important;
+            }
+            /* Forzar tabla responsive a ancho completo en impresión */
+            .table-responsive {
+                overflow: visible !important;
+                width: 100% !important;
+            }
+            table {
+                width: 100% !important;
+                table-layout: auto !important;
+                page-break-inside: avoid !important;
+            }
+            th, td {
+                padding: 8px 10px !important;
+                font-size: 11.5px !important;
+            }
+        }
+
+        /* Auth Screen Styles */
+        #auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #0c0a08;
+            background-image: radial-gradient(circle at 50% 50%, #1c1510 0%, #0c0a08 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999999;
+            padding: 24px;
+            box-sizing: border-box;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .auth-card {
+            background-color: var(--nv-bg-elevated);
+            border: 1px solid var(--nv-line-strong);
+            border-radius: var(--nv-radius-xl);
+            width: 100%;
+            max-width: 440px;
+            padding: 40px 32px;
+            box-sizing: border-box;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            text-align: center;
+        }
+
+        .auth-logo {
+            font-family: var(--nv-font-display);
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: var(--nv-ink-hi);
+            margin-bottom: 4px;
+        }
+
+        .auth-sub {
+            font-family: var(--nv-font-body);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--nv-accent);
+            margin-bottom: 24px;
+        }
+
+        .auth-title {
+            font-family: var(--nv-font-display);
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--nv-ink);
+            margin-bottom: 8px;
+        }
+
+        .auth-desc {
+            font-family: var(--nv-font-body);
+            font-size: 13px;
+            color: var(--nv-ink-muted);
+            margin-bottom: 24px;
+            line-height: 1.4;
+        }
+
+        .auth-input-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .auth-label {
+            display: block;
+            font-family: var(--nv-font-body);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--nv-ink-muted);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .auth-input {
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--nv-line);
+            border-radius: var(--nv-radius-md);
+            padding: 12px 16px;
+            font-family: var(--nv-font-body);
+            font-size: 14px;
+            color: var(--nv-ink-hi);
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .auth-input:focus {
+            border-color: var(--nv-accent);
+            background-color: rgba(0, 0, 0, 0.35);
+        }
+
+        .auth-submit-btn {
+            width: 100%;
+            background-color: var(--navana-terracotta);
+            border: none;
+            border-radius: var(--nv-radius-md);
+            padding: 14px;
+            font-family: var(--nv-font-body);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        .auth-submit-btn:hover {
+            background-color: #a33822;
+            box-shadow: 0 4px 15px rgba(139, 46, 27, 0.4);
+        }
+
+        .auth-submit-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Hide auth elements on print completely */
+        @media print {
+            #auth-overlay {
+                display: none !important;
+            }
+        }
+
+        /* Contenedor Editorial en Carbón Base */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 72px;
+            background-color: var(--nv-bg);
+            border-radius: var(--nv-radius-xl);
+            margin-top: 48px;
+            margin-bottom: 48px;
+            border: 1px solid var(--nv-line);
+            box-shadow: 0 12px 40px rgba(12, 9, 6, 0.44);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Maximizar legibilidad del texto en pantallas anchas manteniendo la elegancia */
+        .container > p, .container > ul, .container > ol {
+            max-width: 880px;
+            margin-left: 0;
+            margin-right: auto;
+        }
+
+        /* Header Editorial con Fondo Oscuro Hondo */
+        header {
+            background-color: var(--nv-bg-deep);
+            color: var(--nv-ink-hi);
+            padding: 96px 48px;
+            text-align: center;
+            border-bottom: 1px solid var(--nv-line-strong);
+            border-radius: var(--nv-radius-xl) var(--nv-radius-xl) 0 0;
+            position: relative;
+        }
+
+        .brand-logo-img {
+            display: block;
+            height: 64px;
+            margin: 0 auto 20px auto;
+            object-fit: contain;
+            mix-blend-mode: screen;
+        }
+
+        .auth-logo-img {
+            display: block;
+            height: 48px;
+            margin: 0 auto 16px auto;
+            object-fit: contain;
+            mix-blend-mode: screen;
+        }
+
+        .logo-text {
+            font-family: var(--nv-font-display);
+            font-size: 52px;
+            letter-spacing: 14px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: var(--nv-ink-hi);
+            text-transform: uppercase;
+        }
+
+        .logo-sub {
+            font-family: var(--nv-font-body);
+            font-size: 11px;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: var(--nv-accent);
+            font-weight: 600;
+            margin-bottom: 28px;
+        }
+
+        .doc-title {
+            font-family: var(--nv-font-display);
+            font-size: 28px;
+            font-weight: 400;
+            max-width: 720px;
+            margin: 0 auto;
+            line-height: 1.25;
+            letter-spacing: var(--nv-tracking-tight);
+            color: var(--nv-ink-hi);
+        }
+
+        .confidential-tag {
+            font-family: var(--nv-font-body);
+            display: inline-block;
+            background-color: rgba(132, 114, 77, 0.12);
+            color: var(--nv-accent-hover);
+            border: 1px solid rgba(132, 114, 77, 0.3);
+            padding: 6px 18px;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-radius: var(--nv-radius-full);
+            margin-top: 24px;
+            font-weight: 500;
+        }
+
+        /* Firma Visual: Overline con Línea antes de cada H2 */
+        h2 {
+            font-family: var(--nv-font-display);
+            font-size: 22px;
+            color: var(--nv-ink-hi);
+            margin-top: 64px;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            text-transform: capitalize;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            position: relative;
+            page-break-after: avoid !important;
+            break-after: avoid !important;
+        }
+
+        h2::before {
+            content: '';
+            display: block;
+            width: 32px;
+            height: 1px;
+            background-color: rgba(220, 215, 201, 0.22);
+            margin-bottom: 12px;
+        }
+
+        h3 {
+            font-family: var(--nv-font-display);
+            font-size: 17px;
+            color: var(--nv-accent-hover);
+            margin-top: 40px;
+            margin-bottom: 14px;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+        }
+
+        p {
+            margin-bottom: 20px;
+            text-align: justify;
+            color: var(--nv-ink);
+            font-weight: 400;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        strong {
+            color: var(--nv-ink-hi);
+            font-weight: 500;
+        }
+
+        /* Grid en base a Cards de Vidrio */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin: 32px 0;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background-color: var(--nv-veil);
+            border: 1px solid var(--nv-line-soft);
+            padding: 28px;
+            border-radius: var(--nv-radius-lg);
+            transition: border-color var(--nv-dur) var(--nv-ease), background-color var(--nv-dur) var(--nv-ease);
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+
+        .card:hover {
+            background-color: var(--nv-veil-hover);
+            border-color: rgba(220, 215, 201, 0.2);
+        }
+
+        .card.gold {
+            border-top: 4px solid var(--nv-accent);
+            background-color: rgba(132, 114, 77, 0.04);
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+        
+        .card.gold:hover {
+            background-color: rgba(132, 114, 77, 0.07);
+        }
+
+        .card-title {
+            font-family: var(--nv-font-display);
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--nv-ink-hi);
+            margin-bottom: 14px;
+            letter-spacing: -0.01em;
+        }
+
+        /* Callout Corporativo de Marca */
+        .callout {
+            background-color: rgba(255, 255, 255, 0.02);
+            border-radius: var(--nv-radius-lg);
+            padding: 28px;
+            margin: 36px 0;
+            border: 1px solid var(--nv-line-soft);
+            border-left: 4px solid var(--nv-accent);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            margin: 32px 0;
+            border-radius: var(--nv-radius-lg);
+            border: 1px solid var(--nv-line-soft);
+            background-color: rgba(255, 255, 255, 0.01);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--nv-line-soft);
+            color: var(--nv-ink);
+        }
+
+        th {
+            background-color: rgba(132, 114, 77, 0.1);
+            color: var(--nv-ink-hi);
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            border-bottom: 1px solid var(--nv-line-strong);
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.01);
+        }
+        
+        tr:hover {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .font-bold {
+            font-weight: 600;
+            color: var(--nv-ink-hi);
+        }
+
+        ul, ol {
+            margin-left: 24px;
+            margin-bottom: 24px;
+            color: var(--nv-ink);
+            font-weight: 400;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        /* Alineación Tabular de Números en Cifras */
+        td, .tabular-nums {
+            font-variant-numeric: tabular-nums;
+        }
+
+        footer {
+            margin-top: 96px;
+            background-color: var(--nv-bg-deep);
+            color: var(--nv-ink-muted);
+            padding: 48px 32px;
+            text-align: center;
+            border-top: 1px solid var(--nv-line-strong);
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-radius: 0 0 var(--nv-radius-xl) var(--nv-radius-xl);
+        }
+
+        /* Subtle, Hidden Admin Lock Icon */
+        .admin-lock-anchor {
+            display: inline-block;
+            margin-top: 24px;
+            color: rgba(138, 123, 101, 0.05); /* Almost completely invisible */
+            cursor: pointer;
+            transition: color 0.5s ease;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .admin-lock-anchor:hover {
+            color: rgba(138, 123, 101, 0.3); /* Slightly visible on hover */
+        }
+
+        /* Dashboard Password Overlay */
+        #dash-auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(12, 10, 8, 0.95);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000000;
+            padding: 24px;
+            box-sizing: border-box;
+        }
+
+        /* Dashboard Full-screen Panel */
+        #telemetry-dashboard {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #0c0a08;
+            background-image: radial-gradient(circle at 50% 50%, #15110d 0%, #080605 100%);
+            display: none;
+            z-index: 999999;
+            overflow-y: auto;
+            color: var(--nv-ink);
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        .dash-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .dash-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--nv-line-strong);
+            padding-bottom: 24px;
+            margin-bottom: 32px;
+        }
+
+        .dash-title-group {
+            text-align: left;
+        }
+
+        .dash-title {
+            font-family: var(--nv-font-display);
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--nv-ink-hi);
+            margin: 0 0 6px 0;
+            text-transform: uppercase;
+        }
+
+        .dash-subtitle {
+            font-family: var(--nv-font-body);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--nv-accent);
+            margin: 0;
+        }
+
+        .dash-close-btn {
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--nv-line);
+            color: var(--nv-ink);
+            padding: 10px 20px;
+            font-family: var(--nv-font-body);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: var(--nv-radius-md);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dash-close-btn:hover {
+            background-color: var(--navana-terracotta);
+            border-color: var(--navana-terracotta);
+            color: white;
+        }
+
+        /* --- NAVANA DASHBOARD TABS AND SAFEZONE MAP SYSTEM --- */
+        .dash-tabs {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--nv-line-soft);
+            padding-bottom: 12px;
+        }
+
+        .dash-tab-btn {
+            background: none;
+            border: none;
+            color: var(--nv-ink-muted);
+            font-family: var(--nv-font-display);
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .dash-tab-btn:hover {
+            color: var(--nv-accent-hover);
+        }
+
+        .dash-tab-btn.active {
+            color: var(--nv-ink-hi);
+        }
+
+        .dash-tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -13px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--navana-terracotta);
+        }
+
+        .dash-tab-content {
+            display: none;
+        }
+
+        .dash-tab-content.active {
+            display: block;
+        }
+
+        /* SafeZone Grid */
+        .safezone-layout {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+
+        @media (max-width: 1024px) {
+            .safezone-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* SafeZone State Map SVG Container */
+        .mexico-map-container {
+            position: relative;
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--nv-line-soft);
+            border-radius: var(--nv-radius-lg);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            min-height: 480px;
+        }
+
+        #safezone-leaflet-map {
+            width: 100%;
+            height: 480px;
+            border-radius: var(--nv-radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: #110d0a !important;
+            margin-bottom: 12px;
+            z-index: 1;
+        }
+
+        /* Premium Dark Theme Tile Filter for Leaflet Map */
+        .leaflet-tile-container {
+            filter: invert(100%) hue-rotate(180deg) brightness(85%) contrast(90%);
+        }
+
+        .leaflet-container {
+            font-family: var(--nv-font-body) !important;
+        }
+
+        .leaflet-popup-content-wrapper {
+            background: #181412 !important;
+            color: var(--nv-ink-hi) !important;
+            border: 1px solid var(--nv-line-soft) !important;
+            border-radius: var(--nv-radius-md) !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6) !important;
+        }
+
+        .leaflet-popup-tip {
+            background: #181412 !important;
+            border: 1px solid var(--nv-line-soft) !important;
+        }
+
+        .leaflet-control-zoom-in, .leaflet-control-zoom-out {
+            background-color: #181412 !important;
+            color: #fff !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .mexico-map-svg {
+            display: none !important; /* Hide old SVG vector map */
+            width: 100%;
+            max-height: 480px;
+            fill: #2c221a;
+            stroke: #44352a;
+            stroke-width: 1.5;
+            transition: all 0.3s ease;
+        }
+
+        .mexico-state-path {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mexico-state-path:hover {
+            fill: var(--nv-accent);
+            opacity: 0.8;
+        }
+
+        .mexico-state-path.selected {
+            fill: var(--navana-terracotta);
+            stroke: #fff;
+            stroke-width: 2;
+        }
+
+        /* SafeZone Details Panel */
+        .safezone-details {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .safezone-state-header {
+            border-bottom: 1px solid var(--nv-line-soft);
+            padding-bottom: 16px;
+            text-align: left;
+        }
+
+        .safezone-state-title {
+            font-family: var(--nv-font-display);
+            font-size: 24px;
+            color: var(--nv-ink-hi);
+            margin: 0 0 4px 0;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .safezone-state-subtitle {
+            font-family: var(--nv-font-body);
+            font-size: 12px;
+            color: var(--nv-accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0;
+        }
+
+        .safezone-legend {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 16px;
+            font-family: var(--nv-font-body);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        /* SafeZone Table styles */
+        .safezone-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: var(--nv-font-body);
+            font-size: 13px;
+            text-align: left;
+        }
+
+        .safezone-table th, .safezone-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--nv-line-soft);
+        }
+
+        .safezone-table th {
+            font-family: var(--nv-font-display);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--nv-ink-muted);
+            background-color: rgba(255,255,255,0.01);
+            border-bottom: 1px solid var(--nv-line-strong);
+        }
+
+        .safezone-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: var(--nv-radius-full);
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .safezone-badge.verde {
+            background-color: rgba(40, 167, 69, 0.15);
+            color: #28a745;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+
+        .safezone-badge.amarillo {
+            background-color: rgba(255, 193, 7, 0.15);
+            color: #ffc107;
+            border: 1px solid rgba(255, 193, 7, 0.3);
+        }
+
+        .safezone-badge.rojo {
+            background-color: rgba(220, 53, 69, 0.15);
+            color: #dc3545;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+
+        /* Analytics Grid */
+        .dash-grid-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .metric-card {
+            background-color: var(--nv-bg-elevated);
+            border: 1px solid var(--nv-line-strong);
+            border-radius: var(--nv-radius-lg);
+            padding: 24px;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: var(--nv-accent);
+        }
+
+        .metric-card.alert::before {
+            background-color: var(--navana-terracotta);
+        }
+
+        .metric-title {
+            font-family: var(--nv-font-body);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--nv-ink-muted);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-family: var(--nv-font-display);
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--nv-ink-hi);
+            margin-bottom: 4px;
+        }
+
+        .metric-desc {
+            font-family: var(--nv-font-body);
+            font-size: 12px;
+            color: var(--nv-ink-muted);
+        }
+
+        /* Two-Column Analytics Layout */
+        .dash-layout-split {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+
+        @media (max-width: 1024px) {
+            .dash-layout-split {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dash-panel {
+            background-color: var(--nv-bg-elevated);
+            border: 1px solid var(--nv-line);
+            border-radius: var(--nv-radius-xl);
+            padding: 32px;
+            text-align: left;
+        }
+
+        .panel-heading {
+            font-family: var(--nv-font-display);
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--nv-ink-hi);
+            margin-top: 0;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--nv-line-soft);
+            padding-bottom: 12px;
+            letter-spacing: 1px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Session List layout */
+        .session-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-height: 520px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .session-row {
+            background-color: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--nv-line-soft);
+            border-radius: var(--nv-radius-md);
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .session-row:hover {
+            border-color: var(--nv-accent);
+            background-color: rgba(255, 255, 255, 0.04);
+        }
+
+        .session-row.active {
+            border-color: var(--nv-accent);
+            background-color: rgba(132, 114, 77, 0.06);
+        }
+
+        .session-meta {
+            text-align: left;
+        }
+
+        .session-name {
+            font-family: var(--nv-font-display);
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--nv-ink-hi);
+            margin-bottom: 4px;
+        }
+
+        .session-email {
+            font-family: var(--nv-font-body);
+            font-size: 12px;
+            color: var(--nv-ink-muted);
+        }
+
+        .session-stats {
+            text-align: right;
+        }
+
+        .session-duration {
+            font-family: var(--nv-font-body);
+            font-size: 13px;
+            font-weight: bold;
+            color: var(--nv-accent-hover);
+        }
+
+        .session-date {
+            font-family: var(--nv-font-body);
+            font-size: 11px;
+            color: var(--nv-ink-muted);
+            margin-top: 4px;
+        }
+
+        /* Section times heatmap indicators */
+        .heatmap-container {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .heatmap-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: var(--nv-font-body);
+            font-size: 13px;
+        }
+
+        .heatmap-label {
+            width: 180px;
+            text-align: left;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            font-weight: 500;
+        }
+
+        .heatmap-track {
+            flex-grow: 1;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: var(--nv-radius-full);
+            margin: 0 16px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .heatmap-bar {
+            height: 100%;
+            background: linear-gradient(to right, var(--nv-accent), var(--navana-terracotta));
+            border-radius: var(--nv-radius-full);
+            width: 0%;
+            transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .heatmap-value {
+            width: 60px;
+            text-align: right;
+            font-weight: bold;
+            color: var(--nv-ink-hi);
+        }
+
+        /* Mobile Premium Responsiveness (No afecta la versión desktop) */
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 20px !important;
+                margin-top: 16px !important;
+                margin-bottom: 16px !important;
+                border-radius: var(--nv-radius-lg) !important;
+            }
+            header {
+                padding: 56px 20px 40px 20px !important;
+                border-radius: var(--nv-radius-lg) var(--nv-radius-lg) 0 0 !important;
+            }
+            .logo-text {
+                font-size: 24px !important;
+                letter-spacing: 6px !important;
+            }
+            .logo-sub {
+                font-size: 9px !important;
+                letter-spacing: 3px !important;
+                margin-bottom: 20px !important;
+            }
+            .doc-title {
+                font-size: 18px !important;
+                line-height: 1.35 !important;
+            }
+            h2 {
+                font-size: 17px !important;
+                margin-top: 36px !important;
+                margin-bottom: 16px !important;
+            }
+            h3 {
+                font-size: 14px !important;
+                margin-top: 24px !important;
+            }
+            p, ul, ol, li {
+                font-size: 13.5px !important;
+                line-height: 1.6 !important;
+            }
+            .card {
+                padding: 20px !important;
+            }
+            .callout {
+                padding: 20px !important;
+                margin: 24px 0 !important;
+            }
+            /* Table optimization */
+            table {
+                font-size: 11.5px !important;
+            }
+            th, td {
+                padding: 10px 8px !important;
+            }
+            /* Language bar adjustments */
+            .language-bar {
+                padding: 12px !important;
+                gap: 8px !important;
+                flex-wrap: wrap;
+                justify-content: center !important;
+            }
+            .pdf-btn {
+                margin-right: 0 !important;
+                width: auto !important;
+                justify-content: center !important;
+                order: 2;
+                margin-top: 8px;
+                padding: 6px 14px !important;
+                font-size: 10px !important;
+            }
+            .lang-btn {
+                padding: 6px 12px !important;
+                font-size: 10px !important;
+                letter-spacing: 1px !important;
+            }
+            /* Auth card layout */
+            .auth-card {
+                padding: 32px 20px !important;
+                border-radius: var(--nv-radius-lg) !important;
+            }
+            .auth-logo {
+                font-size: 24px !important;
+                letter-spacing: 2px !important;
+            }
+            /* Telemetry Dashboard Mobile scaling */
+            #telemetry-dashboard {
+                padding: 16px !important;
+            }
+            .dash-header {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 16px !important;
+            }
+            .dash-title {
+                font-size: 18px !important;
+            }
+            .dash-close-btn {
+                width: 100% !important;
+                text-align: center !important;
+            }
+            .metric-value {
+                font-size: 24px !important;
+            }
+            .session-row {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 12px !important;
+            }
+            .session-stats {
+                text-align: left !important;
+                width: 100% !important;
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                border-top: 1px solid var(--nv-line-soft) !important;
+                padding-top: 8px !important;
+            }
+            .heatmap-row {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 8px !important;
+            }
+            .heatmap-label {
+                width: 100% !important;
+            }
+            .heatmap-track {
+                width: 100% !important;
+                margin: 4px 0 !important;
+            }
+            .heatmap-value {
+                width: 100% !important;
+                text-align: right !important;
+            }
+        }
+
+        /* Hide full dashboard on print completely */
+        @media print {
+            #telemetry-dashboard, #dash-auth-overlay, .admin-lock-anchor {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Auth / Telemetry Overlay Screen -->
+    <div id="auth-overlay">
+        <div class="auth-card">
+            <img src="logo_gold.png" alt="NAVANA" class="auth-logo-img" onclick="togglePartnerMode()" style="cursor: pointer;">
+            <div class="auth-logo">NAVANA</div>
+            <div class="auth-sub">Eco-Luxury Cabins</div>
+            <div class="auth-title" id="auth-card-title">Acceso al Expediente Financiero</div>
+            <div class="auth-desc" id="auth-card-desc">Por motivos de confidencialidad, por favor ingrese su nombre y correo institucional para autorizar la visualización de este documento.</div>
+            
+            <form id="auth-form" onsubmit="handleAuthSubmit(event)">
+                <div class="auth-input-group" id="name-group">
+                    <label class="auth-label" for="user-name">Nombre Completo</label>
+                    <input class="auth-input" type="text" id="user-name" required placeholder="Escriba su nombre">
+                </div>
+                <div class="auth-input-group" id="email-group">
+                    <label class="auth-label" for="user-email">Correo Electrónico</label>
+                    <input class="auth-input" type="email" id="user-email" required placeholder="ejemplo@empresa.com">
+                </div>
+                <div id="exclude-telemetry-container" class="auth-input-group" style="display: none; align-items: center; gap: 8px; margin-top: 12px; margin-bottom: 8px;">
+                    <input type="checkbox" id="exclude-telemetry" style="width: auto; cursor: pointer; accent-color: var(--navana-terracotta);">
+                    <label for="exclude-telemetry" style="margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--nv-ink-muted); cursor: pointer; user-select: none;">No medir mis visitas (Modo Socio)</label>
+                </div>
+                <button class="auth-submit-btn" type="submit" id="auth-submit-btn">Ingresar al Expediente</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="language-bar">
+        <button class="pdf-btn" onclick="window.print()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Descargar PDF
+        </button>
+        <a href="mapa.html" target="_blank" class="map-btn" style="text-decoration: none; display: flex; align-items: center; gap: 8px; background: rgba(197, 160, 89, 0.12); border: 1px solid rgba(197, 160, 89, 0.35); color: var(--nv-accent-hover); padding: 8px 18px; border-radius: var(--nv-radius-full); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; transition: all var(--nv-dur) var(--nv-ease); margin-right: 8px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                <line x1="8" y1="2" x2="8" y2="18"></line>
+                <line x1="16" y1="6" x2="16" y2="22"></line>
+            </svg>
+            🗺️ Mapa Territorial (301 Zonas)
+        </a>
+        <button class="lang-btn" onclick="location.href='index_nl.html'">NL</button>
+        <button class="lang-btn" onclick="location.href='index_en.html'">EN</button>
+        <button class="lang-btn active" onclick="location.href='index.html'">Español</button>
+    </div>
+
+    <div class="container">
+
+        <header>
+            <img src="logo_gold.png" alt="NAVANA" class="brand-logo-img">
+            <div class="logo-text">NAVANA</div>
+            <div class="logo-sub">Eco-Luxury Cabins</div>
+            <div class="doc-title">Expediente de Modelado Financiero y Estructuración Corporativa</div>
+            <div class="confidential-tag">Material de Alineación de Socios - Confidencial</div>
+        </header>
+
+        <!-- Leyenda de Divisa Global -->
+        <div style="text-align: right; font-family: var(--nv-font-body); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--nv-ink-muted); margin-top: 16px; margin-bottom: -16px; border-bottom: 1px solid var(--nv-line-soft); padding-bottom: 8px;">
+            Todas las cifras están expresadas en Pesos Mexicanos (MXN) a menos que se indique lo contrario.
+        </div>
+
+        <!-- Secciones de Contenido -->
+        <h2>1. Definición del Negocio y Tesis de Inversión</h2>
+        <p><strong>NAVANA</strong> es una plataforma PropTech / Hospitality diseñada para desarrollar, desplegar y operar ecosistemas de alojamiento ecológicos y de alto diseño (tiny houses / cabañas sobre remolques) para rentas de corta estancia.</p>
+        <p>El objetivo es escalar de un piloto (POC) a 1,000+ unidades operativas a nivel internacional (México y Caribe) en 5 años, logrando dos salidas financieras (Exits):</p>
+        <ul>
+            <li><strong>Exit Inmobiliario:</strong> Venta de los clústeres de cabañas estabilizadas a fondos de Real Estate (FIBRAs/REITs) bajo métricas de Cap Rate.</li>
+            <li><strong>Exit Tecnológico/Plataforma:</strong> Venta de la empresa matriz (Operadora y Marca) a un fondo de Venture Capital o Conglomerado Hotelero bajo métricas de Múltiplo de EBITDA.</li>
+        </ul>
+
+        <h2>2. Arquitectura Corporativa (El Modelo Dual)</h2>
+        <p>Para aislar el riesgo físico, optimizar las valuaciones y permitir el escalamiento masivo sin diluir a los fundadores, el modelo de negocio está estrictamente separado en dos vehículos corporativos:</p>
+
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-title">A. NAVANA OpCo (Operating Company - "La Mente")</div>
+                <p><strong>Activos:</strong> Marca, software, diseño arquitectónico, IP, modelo de negocio, tecnología de manufactura. (No posee inmuebles fijos).</p>
+                <p><strong>Fuentes de Ingreso:</strong></p>
+                <ul style="font-size: 13.5px; margin-left: 15px; margin-bottom: 12px;">
+                    <li>Markup de despliegue/instalación por cabaña física.</li>
+                    <li>Brand Management Fee ($50,000 MXN anual fijo por cabaña).</li>
+                    <li>Platform Revenue Share (15% sobre ingresos brutos de renta mediante la OTA).</li>
+                </ul>
+                <p><strong>Valuación:</strong> Cotiza a múltiplos de tecnología/hospitalidad Asset-Light (12x - 15x EBITDA).</p>
+            </div>
+
+            <div class="card gold">
+                <div class="card-title" style="color: var(--nv-ink-hi);">B. NAVANA PropCo (Property Company - "El Músculo")</div>
+                <p><strong>Activos:</strong> Propiedad física de las cabañas sobre remolques, contratos de arrendamiento/revenue share con dueños de terrenos.</p>
+                <p><strong>Fuentes de Ingreso:</strong> Rentas por hospedaje (vía la OTA/Plataforma directa de Navana).</p>
+                <p><strong>Estructura:</strong> Funciona mediante Fideicomisos por Clúster operando bajo un esquema institucional de <strong>Pool de Rentas Consolidadas</strong>. Los inversionistas (Family Offices, Fondos Inmobiliarios, HNWIs y F&F) aportan capital semilla para la construcción a cambio de acciones o certificados de participación patrimonial unificada.</p>
+                <p><strong>Valuación:</strong> Cotiza bajo métricas de bienes raíces (Cap Rate del 10% - 12% en el Exit consolidado).</p>
+            </div>
+        </div>
+
+        <!-- Estrategia de Ubicación y Tierras -->
+        <div class="callout" style="border-left-color: var(--navana-olive); background-color: rgba(107, 104, 38, 0.05); margin-top: 15px; margin-bottom: 20px;">
+            <p style="font-size: 14px; font-weight: bold; color: var(--nv-accent-hover); margin-top: 0; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+                Estrategia de Ubicación y Tierras (Clúster Óptimo):
+            </p>
+            <p style="font-size: 13.5px; margin-bottom: 0; line-height: 1.6; text-align: justify; color: var(--nv-ink);">
+                Para maximizar la eficiencia en la búsqueda de tierra, la administración corporativa y la operación logística en sitio (atribución de OpCo), NAVANA selecciona exclusivamente terrenos con capacidad de alojar un <strong>clúster óptimo de entre 30 y 50 cabañas</strong>. Esta escala unificada garantiza la privacidad, el aislamiento y la experiencia de lujo para el huésped, al tiempo que genera la masa crítica y la demanda operativa necesarias para superar holgadamente las tasas de ocupación proyectadas en el modelo financiero de PropCo.
+            </p>
+        </div>
+
+        <h2>3. El Gran Pivote Logístico (Tecnología Framecrete)</h2>
+        <p>El cuello de botella para escalar a 1,000 cabañas era la producción y el flete. Esto se resuelve mediante la alianza con un <strong>Socio Industrial de Manufactura</strong>, integrando un esquema de manufactura industrial avanzada.</p>
+        <div class="callout" style="border-left-color: var(--navana-olive); background-color: rgba(107, 104, 38, 0.05);">
+            <p style="font-size: 14px; font-weight: bold; color: var(--nv-accent-hover); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">La Estrategia de Producción Híbrida ("Micro-Fábricas Pop-Up"):</p>
+            <ul style="font-size: 13.5px; margin-left: 15px; margin-bottom: 12px; color: var(--nv-ink);">
+                <li><strong>Tecnología Framecrete (Acero CNC):</strong> Las estructuras no usan acero tradicional ni soldadura que dependa de mano de obra experta. Se utiliza acero galvanizado conformado en frío (Light Gauge Steel), cortado milimétricamente por máquinas robóticas (Framecrete), que se ensambla únicamente con remaches (ensamble "Idiot-proof").</li>
+                <li><strong>Hub Central (Consolidación):</strong> Una planta central donde se extruye el acero Framecrete, se empaqueta en "Flat-Packs" (paquetes planos, tipo IKEA) y se consolidan las compras de volumen tecnológico (paneles solares, inversores, electrodomésticos).</li>
+                <li><strong>Unidades de Ensamble (Pop-Up):</strong> Se rentan naves industriales temporales cerca de los destinos finales (San Miguel, Jalisco, Caribe). El "Flat-Pack" llega vía remolque/contenedor por centavos (comparado con mover cabañas armadas). Mano de obra local ensambla el acero remachado sobre remolques, se montan paneles y techos, y se transporta fácilmente al terreno.</li>
+            </ul>
+            <p style="margin-top: 10px; margin-bottom: 0; font-size: 13.5px; color: var(--nv-ink-hi);"><strong>Impacto Financiero de la Alianza:</strong> Reducción del CAPEX unitario en un <strong>-30%</strong> frente a proveedores tradicionales.</p>
+        </div>
+
+        <h2>4. La Mesa Redonda y Estructura de Equity (Cap Table)</h2>
+        <p>NAVANA se encuentra en un proceso de levantamiento y estructuración para la "Mesa Redonda". Las reglas de dilución y de participación de socios en el corporativo son las siguientes:</p>
+        <ul>
+            <li><strong>Los Fundadores (Patricio, Diego, Daniela):</strong> Aportan la propiedad intelectual (IP), la marca, la estrategia de marketing digital, el desarrollo de la plataforma OTA de reservas y la comercialización del ecosistema global. Mantienen el control de OpCo y construyen su patrimonio co-invirtiendo de manera opcional utilidades de OpCo en los clústeres físicos de PropCo.</li>
+            <li><strong>Socios Estratégicos de Manufactura (Co-Fundadores Industriales):</strong> Se integran como pilares técnico-operativos fundamentales en OpCo. Su aportación consiste en la industrialización de la arquitectura (Tecnología Framecrete), la logística centralizada de materiales, el despliegue de las Unidades de Ensamble (Pop-Up) regionales, la coordinación de las cuadrillas locales de montaje, y la optimización de los tiempos de entrega. Su participación accionaria en OpCo está sujeta a un esquema de liberación gradual de acciones (Vesting) ligado al cumplimiento de hitos industriales compartidos, enfocados principalmente en garantizar y consolidar la reducción del 30% del CAPEX global del portafolio.</li>
+            <li><strong>Inversionistas de Capital Puro (Family Offices, Fondos Inmobiliarios, Inversionistas de Alto Patrimonio - HNWIs y F&F):</strong> Su dinero se inyecta en los Fideicomisos de PropCo bajo el modelo de <strong>Pool de Rentas Consolidadas</strong>. Tienen la copropiedad unificada de los activos físicos que fondean, recibiendo un ROI esperado del ~35-40% anual (EBITDA), pero NO diluyen a la empresa matriz (OpCo) y se benefician de la plusvalía de un exit conjunto.</li>
+        </ul>
+
+        <h2>5. Unit Economics (Cifras Base para el Modelo)</h2>
+        <p style="font-size: 13px; color: var(--nv-ink-muted); margin-top: -16px; margin-bottom: 20px;">
+            * Para consultar las fórmulas dinámicas y el desglose de cálculo interactivo, acceda al <a href="https://docs.google.com/spreadsheets/d/1iLzs24eUzsWNOZCm4seoF0R_8-Bge1m2nCWjpXOr-8A/edit?usp=sharing" target="_blank" style="color: var(--nv-accent); text-decoration: none; font-weight: 500; border-bottom: 1px dotted var(--nv-accent); transition: color var(--nv-dur) var(--nv-ease);">Modelo Financiero en Google Sheets</a>.
+        </p>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Concepto Unitario</th>
+                        <th>Monto (MXN)</th>
+                        <th>Descripción Técnica / Operativa</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="font-bold">Costo de Cabaña 100% Equipada (Socio Manufactura)</td>
+                        <td>$525,000</td>
+                        <td>Costo de fabricación industrializado, optimizado y 100% equipado.</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">Margen Cabaña OpCo (Markup)</td>
+                        <td>$26,250</td>
+                        <td>Margen cobrado por Navana OpCo por diseño e instalación (5%).</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">Logística, Traslado y Matrícula</td>
+                        <td>$35,000</td>
+                        <td>Costo variable (cotización base para San Miguel de Allende). Incluye flete, maniobra de izaje regional y gestoría de matrícula de circulación para el remolque.</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">Adecuación e Infraestructura (Clúster)</td>
+                        <td>$70,000</td>
+                        <td>Adecuación de sitio, biodigestor, cisternas y manuales.</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">CAPEX Unitario Llave en Mano</td>
+                        <td class="font-bold">$656,250</td>
+                        <td>CAPEX total llave en mano financiado por inversionistas de PropCo.</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">ADR (Tarifa Promedio Noche)</td>
+                        <td>$3,000</td>
+                        <td>Tarifa promedio por noche proyectada conservadoramente en base a mercado de lujo ecológico.</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">Ocupación Promedio Estable</td>
+                        <td>65%</td>
+                        <td>Ocupación anual promedio estabilizada a partir del mes 6 de operación del clúster.</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">Ingreso Mensual por Cabaña</td>
+                        <td>$58,500</td>
+                        <td>Ingreso bruto proyectado mensual por unidad ($3,000 ADR * 30 días * 65% ocupación).</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">Gasto Operativo Mensual (OPEX)</td>
+                        <td>$17,550</td>
+                        <td>Costo de operación hotelera de Navana (30% de ingresos brutos). Incluye limpieza, consumibles, mantenimiento y amenities.</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">Platform Fee (Comisión OTA)</td>
+                        <td>$8,775</td>
+                        <td>Comisión de plataforma de Navana OpCo (15% sobre ingresos brutos).</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">EBITDA Mensual por Cabaña</td>
+                        <td class="font-bold">$32,175</td>
+                        <td>Utilidad neta operativa mensual por cabaña para el Pool de Rentas de PropCo (55% de margen EBITDA).</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2>6. Desempeño Financiero y P&L Consolidado del Grupo (5 Años)</h2>
+        <p style="font-size: 13px; color: var(--nv-ink-muted); margin-top: -16px; margin-bottom: 20px;">
+            * El desglose analítico completo y las sensibilidades dinámicas pueden consultarse en el <a href="https://docs.google.com/spreadsheets/d/1iLzs24eUzsWNOZCm4seoF0R_8-Bge1m2nCWjpXOr-8A/edit?usp=sharing" target="_blank" style="color: var(--nv-accent); text-decoration: none; font-weight: 500; border-bottom: 1px dotted var(--nv-accent); transition: color var(--nv-dur) var(--nv-ease);">Libro de Cálculo Interactivo de Navana</a>.
+        </p>
+        <p>Para analizar el negocio en su conjunto y entender la verdadera potencia de la estructura dual, a continuación se consolida el Estado de Resultados (P&L), el porcentaje de contribución al EBITDA total y el nivel de apalancamiento que logramos al reinvirtir flujos:</p>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr style="background-color: var(--navana-olive); color: white;">
+                        <th style="text-align: left;">Concepto Financiero (MXN)</th>
+                        <th>Año 1</th>
+                        <th>Año 2</th>
+                        <th>Año 3</th>
+                        <th>Año 4</th>
+                        <th>Año 5</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="background-color: rgba(132, 114, 77, 0.08); font-weight: bold; color: var(--nv-accent-hover);">
+                        <td colspan="6" style="text-align: left; padding-left: 10px; text-transform: uppercase; letter-spacing: 1.5px; font-size: 11px;">1. P&L CONSOLIDADO</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; padding-left: 15px;">Ingresos PropCo</td>
+                        <td>$15,056,250</td>
+                        <td>$66,398,063</td>
+                        <td>$183,009,660</td>
+                        <td>$403,536,300</td>
+                        <td>$735,862,566</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; padding-left: 15px;">Egresos PropCo</td>
+                        <td>$9,199,988</td>
+                        <td>$39,620,109</td>
+                        <td>$106,704,358</td>
+                        <td>$230,036,117</td>
+                        <td>$410,366,457</td>
+                    </tr>
+                    <tr style="font-weight: bold; color: var(--nv-accent-hover);">
+                        <td style="text-align: left; padding-left: 15px;">EBITDA PropCo</td>
+                        <td>$5,856,263</td>
+                        <td>$26,777,953</td>
+                        <td>$76,305,301</td>
+                        <td>$173,500,183</td>
+                        <td>$325,496,109</td>
+                    </tr>
+                    <tr style="border-top: 1px dashed rgba(255, 255, 255, 0.12);">
+                        <td style="text-align: left; padding-left: 15px;">Ingresos OpCo</td>
+                        <td>$4,320,938</td>
+                        <td>$17,047,209</td>
+                        <td>$44,907,699</td>
+                        <td>$94,957,320</td>
+                        <td>$166,891,095</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; padding-left: 15px;">Egresos OpCo</td>
+                        <td>$2,881,953</td>
+                        <td>$11,063,216</td>
+                        <td>$22,156,290</td>
+                        <td>$38,956,528</td>
+                        <td>$59,602,768</td>
+                    </tr>
+                    <tr style="font-weight: bold; color: var(--nv-accent-hover);">
+                        <td style="text-align: left; padding-left: 15px;">EBITDA OpCo</td>
+                        <td>$1,438,984</td>
+                        <td>$5,983,994</td>
+                        <td>$22,751,409</td>
+                        <td>$56,000,792</td>
+                        <td>$107,288,327</td>
+                    </tr>
+                    <tr style="background-color: rgba(255, 255, 255, 0.03); font-weight: bold; border-top: 1.5px solid var(--nv-accent); border-bottom: 1.5px solid var(--nv-accent); color: var(--nv-ink-hi);">
+                        <td style="text-align: left;">EBITDA Navana Consolidado</td>
+                        <td>$7,295,247</td>
+                        <td>$32,761,947</td>
+                        <td>$99,056,710</td>
+                        <td>$229,500,975</td>
+                        <td>$432,784,436</td>
+                    </tr>
+                    
+                    <tr style="background-color: rgba(132, 114, 77, 0.08); font-weight: bold; color: var(--nv-accent-hover);">
+                        <td colspan="6" style="text-align: left; padding-left: 10px; text-transform: uppercase; letter-spacing: 1.5px; font-size: 11px;">2. DISTRIBUCIÓN DE CONTRIBUCIÓN AL EBITDA CONSOLIDADO</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; padding-left: 15px;">Contribución de PropCo %</td>
+                        <td>80.28%</td>
+                        <td>81.73%</td>
+                        <td>77.03%</td>
+                        <td>75.60%</td>
+                        <td>75.21%</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; padding-left: 15px;">Contribución de OpCo %</td>
+                        <td>19.72%</td>
+                        <td>18.27%</td>
+                        <td>22.97%</td>
+                        <td>24.40%</td>
+                        <td>24.79%</td>
+                    </tr>
+ 
+                    <tr style="background-color: rgba(132, 114, 77, 0.08); font-weight: bold; color: var(--nv-accent-hover);">
+                        <td colspan="6" style="text-align: left; padding-left: 10px; text-transform: uppercase; letter-spacing: 1.5px; font-size: 11px;">3. CAPEX E INTENSIDAD DE CAPITAL (APALANCAMIENTO)</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; padding-left: 15px;">CAPEX PropCo Total Requerido</td>
+                        <td>$32,812,500</td>
+                        <td>$68,906,250</td>
+                        <td>$144,703,125</td>
+                        <td>$227,907,422</td>
+                        <td>$282,377,296</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; padding-left: 15px;">Inversión OpCo Total Requerida</td>
+                        <td>$2,881,953</td>
+                        <td>$0</td>
+                        <td>$0</td>
+                        <td>$0</td>
+                        <td>$0</td>
+                    </tr>
+                    <tr style="font-weight: bold; color: var(--navana-terracotta); border-top: 1px solid var(--nv-line-strong);">
+                        <td style="text-align: left; padding-left: 15px; color: var(--navana-terracotta);">CAPEX & INVERSIÓN TOTAL</td>
+                        <td>$35,694,453</td>
+                        <td>$68,906,250</td>
+                        <td>$144,703,125</td>
+                        <td>$227,907,422</td>
+                        <td>$282,377,296</td>
+                    </tr>
+                    <tr style="color: #8A7B65; font-size: 12px;">
+                        <td style="text-align: left; padding-left: 15px; font-style: italic;">Déficit / Superávit de Caja del Año (Flujo Neto)</td>
+                        <td>-$35,694,453</td>
+                        <td>-$61,611,003</td>
+                        <td>-$111,941,178</td>
+                        <td>-$128,850,711</td>
+                        <td>-$52,876,321</td>
+                    </tr>
+                    <tr style="font-weight: bold; color: var(--navana-earth);">
+                        <td style="text-align: left; padding-left: 15px;">% de Apalancamiento de Expansión Sistémico</td>
+                        <td>—</td>
+                        <td>10.59%</td>
+                        <td>22.64%</td>
+                        <td>43.46%</td>
+                        <td>81.27%</td>
+                    </tr>
+                    <tr style="font-weight: bold; color: var(--navana-terracotta);">
+                        <td style="text-align: left; padding-left: 15px;">Capacidad Adquisición OpCo (Skin in the Game)</td>
+                        <td>2 cabañas</td>
+                        <td>9 cabañas</td>
+                        <td>31 cabañas</td>
+                        <td>74 cabañas</td>
+                        <td>135 cabañas</td>
+                    </tr>
+                    <tr style="font-weight: bold; background-color: rgba(255, 255, 255, 0.02); color: var(--nv-accent-hover); border-top: 1px dashed rgba(255, 255, 255, 0.12);">
+                        <td style="text-align: left; padding-left: 15px;">Cabañas Propias Acumuladas OpCo</td>
+                        <td>2 cabañas</td>
+                        <td>11 cabañas</td>
+                        <td>42 cabañas</td>
+                        <td>116 cabañas</td>
+                        <td>251 cabañas (24.95%)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Justificación del Doble Apalancamiento -->
+        <div class="callout" style="border-left-color: var(--navana-olive); background-color: rgba(107, 104, 38, 0.05); margin-top: 15px;">
+            <p><strong>Doble Perspectiva de Apalancamiento y Patrimonio (Análisis Ajustado):</strong></p>
+            <p style="margin-top: 5px; margin-bottom: 8px; font-size: 13.5px;">
+                Para presentar una tesis sólida a fondos institucionales, dividimos el análisis en dos métricas clave:
+            </p>
+            <ul style="font-size: 13px; margin-left: 15px; margin-bottom: 12px; color: var(--nv-ink);">
+                <li style="margin-bottom: 6px;">
+                    <strong>1. Apalancamiento de Expansión Sistémico (81.27% en Año 5):</strong> Mide la capacidad del de ecosistema conjunto para reinvertir flujos consolidados. Demuestra que, asumiendo esquemas de fideicomiso y coinversión, el sistema es virtualmente autónomo en su madurez, requiriendo levantar muy poco capital externo nuevo para expandirse.
+                </li>
+                <li>
+                    <strong>2. Capacidad de Adquisición de Activos de OpCo (Skin in the Game):</strong> Representa el flujo libre de la operadora tecnológica (EBITDA de OpCo) utilizado de manera <strong>opcional</strong> para comprar y absorber propiedad física en PropCo. El modelo simula un escenario de reinversión donde al cierre del Año 5, los fundadores habrán adquirido acumuladamente un portafolio de <strong>251 cabañas físicas (el 24.95% del total del grupo)</strong> 100% de su propiedad, pagadas con las utilidades de su plataforma. ¡Esto representa un patrimonio inmobiliario libre de deuda de <strong>$164.7M MXN</strong> creado sin descapitalizarse!
+                </li>
+            </ul>
+
+            <p style="margin-top: 10px; margin-bottom: 8px; font-size: 13.5px; font-weight: bold; color: var(--nv-accent-hover);">
+                Escenario de Exit Unificado para Socios Fundadores (Año 5 - Suma de las Partes / SOTP):
+            </p>
+
+            <div class="table-container" style="margin-top: 5px; margin-bottom: 5px; background: rgba(0, 0, 0, 0.15); padding: 10px; border-radius: 6px; box-shadow: none; border: 1px solid var(--nv-line-soft);">
+                <table style="width: 100%; margin: 0; font-size: 12px;">
+                    <thead>
+                        <tr style="background-color: rgba(132, 114, 77, 0.15); color: var(--nv-ink-hi);">
+                            <th style="text-align: left; padding: 6px;">Componente de Exit</th>
+                            <th style="padding: 6px;">Valor Estimado (MXN)</th>
+                            <th style="padding: 6px;">Criterio de Valuación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="text-align: left; padding: 6px; font-weight: bold;">Valuación Operadora (OpCo)</td>
+                            <td>$1,287,459,926</td>
+                            <td>Múltiplo de 12x EBITDA Tecnológico ($107.2M)</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left; padding: 6px; font-weight: bold;">Participación Física Adquirida (PropCo)</td>
+                            <td>$649,796,443</td>
+                            <td>24.95% de los Activos de PropCo ($2.60B)</td>
+                        </tr>
+                        <tr style="background-color: rgba(255, 255, 255, 0.02); font-weight: bold; color: var(--nv-accent-hover); border-top: 1.5px solid var(--nv-accent);">
+                            <td style="text-align: left; padding: 6px;">SUMA DE LAS PARTES (EXIT TOTAL)</td>
+                            <td>$1,937,256,369</td>
+                            <td>~110.5M USD Recolectados por Socios</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p style="margin-top: 8px; margin-bottom: 0; font-size: 12.5px; font-style: italic; color: var(--nv-ink-muted);">
+                *Nota: Este análisis demuestra la enorme opcionalidad y la "suma de las partes" que ofrece el esquema dual. No obliga a los fundadores a reinvertir el 100% de la caja de OpCo en ladrillo físico, pero sí modela la potencia patrimonial de destinar excedentes de la plataforma hacia activos tangibles.
+            </p>
+        </div>
+
+        <h2>7. El Tema Del Financiamiento Y Proyecciones De Valuación (5 Años)</h2>
+        <p>Dependiendo de la decisión estructural que se tome hoy, la estrategia de financiamiento, las metas de levantamiento de capital y el valor final del negocio cambian drásticamente:</p>
+
+        <div class="grid-2">
+            <div class="card" style="border-top-color: var(--navana-terracotta); background-color: #1E1715;">
+                <div class="card-title" style="color: var(--navana-terracotta); font-weight: bold;">Escenario A: Estructura Dual (OpCo y PropCo)</div>
+                <p>Este camino nos permite dividir el levantamiento en dos rieles independientes con objetivos específicos:</p>
+                <p><strong>RIEL 1 - CAPITAL SEMILLA PARA OPCO (SOFTWARE/RUNWAY):</strong></p>
+                <ul style="font-size: 13.5px; margin-left: 15px;">
+                    <li><strong>Monto a Levantar:</strong> $3,500,000 MXN.</li>
+                    <li><strong>Destino:</strong> Runway operativo de arranque (software de reservas de la plataforma, nómina central e integraciones).</li>
+                    <li><strong>Formato Legal:</strong> SAFE con un Valuation Cap de $35,000,000 MXN y 20% de descuento (~10% de la OpCo futura).</li>
+                    <li><strong>Valuación al Año 5:</strong> Con 1,000 cabañas activas, la OpCo proyecta un EBITDA de $107,208,327 MXN. Con un múltiplo tecnológico de 12x EBITDA, la OpCo se valúa en $1,287,499,920 MXN ($73,571,118 USD). El 10.0% del inversionista semilla valdría $128,749,992 MXN, dando un retorno exacto de 36.78x.</li>
+                </ul>
+                <p><strong>RIEL 2 - CAPITAL PARA PROPCO (CAPEX/CABAÑAS):</strong></p>
+                <ul style="font-size: 13.5px; margin-left: 15px;">
+                    <li><strong>Estructura de Captación:</strong> Fideicomisos de Pool de Rentas Consolidadas. En el Año 1, el CAPEX total para las primeras 50 cabañas instaladas en operación asciende a un total de $18,400,250 MXN (con un CAPEX Llave en Mano acumulado de $32,812,500 MXN).</li>
+                    <li><strong>ROI y Flujos unificados:</strong> Al Año 5, con 1,000 cabañas estabilizadas, la PropCo genera un Flujo Neto (Utilidad Neta) anual de $129,510,128 MXN con un ROI promedio anualizado del 21.75% distribuido de manera proporcional a todos los tenedores de certificados de participación (payback de 2.05 años).</li>
+                    <li><strong>Valuación y Exit Consolidado:</strong> Tasándose como un portafolio de activos estables a 8x EBITDA, la PropCo consolidada se valúa en $3,002,881,872 MXN ($153,101,118 USD) al momento de la venta unificada al Fondo Institucional de Real Estate.</li>
+                </ul>
+            </div>
+
+            <div class="card" style="border-top-color: var(--navana-slate); background-color: #171B1F;">
+                <div class="card-title" style="color: var(--navana-slate); font-weight: bold;">Escenario B: Estructura de Capital Tradicional</div>
+                <p>En este escenario no hay separación de OpCo y PropCo; todo el capital de los inversionistas entra directamente a una sola S.A.P.I. corporativa global:</p>
+                <ul style="font-size: 13.5px; margin-left: 15px;">
+                    <li><strong>Monto a Levantar:</strong> Se requiere levantar todo el CAPEX inicial directamente en la empresa madre. Para el Año 1, esto representa levantar $18,400,250 MXN para el piloto. Al diluir a la empresa madre con capital para construir activos pesados (fierros), los fundadores pierden el control mayoritario desde el Año 1.</li>
+                    <li><strong>La Mezcla de Multiplicadores:</strong> Un fondo de venture capital o un adquirente tecnológico de software no pagará un múltiplo de 12x EBITDA sobre activos físicos pesados (PropCo), sino que se tasará la empresa completa bajo múltiplos tradicionales de Real Estate de baja valuación (8x - 10x EBITDA global). Esto reduce a la mitad el valor de salida de los fundadores.</li>
+                    <li><strong>Riesgo Sistémico:</strong> Si un clúster físico tiene un problema legal o de ocupación local, contamina directamente a la S.A.P.I. controladora de la marca y de toda la red, asfixiando financieramente la operación del software central.</li>
+                </ul>
+                <p style="margin-top: 10px; margin-bottom: 0; font-size: 13.5px; color: var(--nv-ink-hi);"><strong>Conclusión Estratégica:</strong> El <strong>Escenario A (Estructura Dual)</strong> es el único camino viable para maximizar el valor de la empresa, proteger el capital de trabajo y asegurar que los fundadores conserven el control mayoritario de la propiedad intelectual de NAVANA.</p>
+            </div>
+        </div>
+
+        <h2>8. Estrategias De Retención De Equity Del Corporativo (OpCo)</h2>
+        <p>Para evitar diluir la empresa matriz (OpCo) al levantar capital para las cabañas de PropCo, se estructuran tres opciones de alineación y retención de valor:</p>
+
+        <div class="grid-2">
+            <div class="card" style="border-top-color: var(--navana-sand); background-color: #1E1C15;">
+                <div class="card-title" style="color: var(--navana-sand);">Opción A: Reinversión de Utilidades en PropCo (GP Co-Investment)</div>
+                <p>NAVANA OpCo utiliza una parte de los flujos de efectivo excedentes y del markup cobrado por cabaña instalada para adquirir certificados de participación en los Fideicomisos físicos de PropCo.</p>
+                <p><strong>La Jugada:</strong> Conforme se expande la red, OpCo se convierte en dueña de una parte del portafolio inmobiliario. Al Año 5, OpCo puede llegar a poseer un porcentaje significativo de la PropCo sin haber diluido un solo punto porcentual de sus acciones corporativas frente a inversionistas de capital pesado.</p>
+                <p><strong>La Flexibilidad:</strong> No es un compromiso rígido ni obligatorio del 100%. El modelo financiero simula el potencial máximo de esta estrategia (adquiriendo un 24.95% de la red al Año 5), pero ustedes pueden pausar, reducir o desviar este flujo hacia dividendos, marketing o expansión internacional de software según convenga.</p>
+                <p><strong>Resultado:</strong> Funciona como un acelerador patrimonial opcional que dota de activos tangibles a la operadora tecnológica.</p>
+            </div>
+
+            <div class="card" style="border-top-color: var(--navana-slate); background-color: #1A1815;">
+                <div class="card-title" style="color: var(--navana-slate);">Opción B: Carried Interest (Sweat Equity por Operación)</div>
+                <p>En desarrollos financiados al 100% por inversionistas institucionales pesados, el trabajo y el "know-how" operativo de NAVANA se recompensa mediante cláusulas contractuales de desempeño.</p>
+                <p><strong>La Jugada:</strong> Se pacta que una vez que el inversionista recupera su capital y obtiene su tasa de rendimiento preferente (<em>Hurdle Rate</em>, ej. 12% anual), un porcentaje del flujo excedente (ej. 20%) se convierte de manera automática en títulos de copropiedad física de las cabañas para los fundadores.</p>
+                <p><strong>Resultado:</strong> Propiedad inmobiliaria directa ganada por su excelencia operativa en sitio, sin comprometer recursos ni flujo de caja de la OpCo.</p>
+            </div>
+        </div>
+
+        <div class="callout" style="border-left-color: var(--navana-terracotta); background-color: rgba(182, 107, 75, 0.05); margin-top: 15px; margin-bottom: 20px;">
+            <p style="font-size: 14px; font-weight: bold; color: var(--navana-terracotta); margin-top: 0; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+                Opción C: Co-Inversión Selectiva (GP / LP - General Partner / Limited Partner):
+            </p>
+            <p style="font-size: 13.5px; margin-bottom: 0; line-height: 1.6; text-align: justify; color: var(--nv-ink);">
+                Al estructurar fondos institucionales, los fundadores actúan como el socio administrador (GP) y los inversionistas externos como aportadores de capital pasivo (LP). En lugar de reinvertir de forma automática, los socios deciden de forma discrecional co-invertir un porcentaje menor (ej. del 1% al 5%) en proyectos de altísima rentabilidad para demostrar "Skin in the game". Esto alinea perfectamente los incentivos con los fondos grandes sin asfixiar la liquidez corporativa de la OpCo.
+            </p>
+        </div>
+
+        <h2>9. Plan de Manufactura Avanzada: Micro-Fábricas "Pop-Up" (Hub & Spoke)</h2>
+        <p>Para escalar con calidad de forma internacional y evitar los destructivos costos de flete por carretera de cabañas armadas de gran tamaño, se deconstruye la logística de fabricación en un esquema híbrido y descentralizado:</p>
+
+        <ul>
+            <li><strong>El Hub Central de Tecnología (Consolidación):</strong> Una sola bodega fija ubicada en un punto de conexión logística premium. Compra y consolida a escala masiva industrial todo lo que requiere precisión tecnológica, altos acabados o equipamiento clave: paneles solares de alta eficiencia, inversores híbridos, cancelerías de aluminio a medida, cocinas modulares, pisos de alta resistencia, mobiliario de diseño, refrigeradores y electrodomésticos eficientes. Todo se empaqueta milimétricamente en contenedores planos (<strong>Tech-Kits</strong>) y se envía por centavos a las unidades de ensamblaje regional.</li>
+            <li><strong>Las Micro-Fábricas "Pop-Up" (Unidades de Ensamblaje Regional):</strong> Nuestros socios estratégicos de construcción buscan y seleccionan ubicaciones o naves industriales de manera estratégica y cercana a donde se instalará el clúster final de cabañas. En esta zona se renta un espacio temporalmente o se realiza una alianza local. Hacia allí se envía directamente el acero estructural para construir las cabañas directamente sobre los remolques. Se contrata a una cuadrilla local de operarios y carpinteros, liderados y guiados por un supervisor experto certificado de NAVANA para garantizar el correcto montaje y la correcta integración de todos los componentes.</li>
+            <li><strong>El Hack Logístico de Control de Calidad y Estandarización:</strong> Para asegurar que cada cabaña cumpla con un estándar idéntico al milímetro y optimizar los tiempos de entrega, nuestro socio industrial de manufactura desarrolla y provee <strong>Jigs o Moldes Maestros de Ensamblaje Físico</strong>. Estos marcos no solo estandarizan la estructura de acero, sino también los cortes de maderas, la carpintería fina y el montaje de muebles fijos. Esto eficienta la mano de obra, garantiza que el "Tech-Kit" encaje a la perfección y reduce los desperdicios en sitio a cero.</li>
+        </ul>
+
+        <h2>10. Estrategia de Expansión Internacional (Escalamiento sin Fronteras)</h2>
+        <p>Una de las mayores virtudes de la <strong>Estructura Dual (OpCo/PropCo)</strong> y el modelo descentralizado de <strong>Unidades de Ensamble (Pop-Up)</strong> es su replicabilidad inmediata y sin fronteras. Cuando la capacidad instalada o la absorción de mercado en México encuentre límites naturales (por ejemplo, al consolidar nuestros primeros clústeres), el "playbook" de NAVANA se puede exportar de manera ágil a cualquier país del mundo:</p>
+        
+        <div class="callout" style="border-left-color: var(--navana-olive); background-color: #1A1815; margin-top: 10px;">
+            <p><strong>El Modelo de Expansión Global "Plug & Play":</strong></p>
+            <ul style="font-size: 13px; margin-left: 15px; margin-bottom: 0;">
+                <li style="margin-bottom: 6px;">
+                    <strong>Socio de Manufactura Local (Aliados de Construcción):</strong> En lugar de exportar las cabañas físicas desde México cruzando aduanas complejas, NAVANA OpCo simplemente exporta la tecnología y la propiedad intelectual. Buscamos y cerramos alianzas estratégicas con plantas de acero y constructoras locales en el país destino (ej. EE.UU., Colombia o Costa Rica), capacitándolos para usar nuestros <strong>Jigs Maestros</strong> y ensamblar los Tech-Kits localmente.
+                </li>
+                <li style="margin-bottom: 6px;">
+                    <strong>Pools de Capital Localizados (PropCo por País):</strong> Para financiar el CAPEX en el nuevo mercado, estructuramos Fideicomisos o Pools de Rentas locales con Family Offices e inversionistas de alto patrimonio (HNWIs) de esa región. La operadora central (NAVANA OpCo) controla la marca y cobra su Platform Fee del 15% en dólares o moneda local de manera unificada, sin tener que diluirse ante el capital de construcción regional.
+                </li>
+                <li>
+                    <strong>Escalamiento Infinito Asset-Light:</strong> Este esquema nos blinda ante riesgos cambiarios y de infraestructura local. NAVANA se consolida como un software y una marca global de eco-hospitalidad de rápido despliegue, capaz de abrir mercados internacionales en cuestión de meses y con cero endeudamiento corporativo.
+                </li>
+            </ul>
+        </div>
+
+        <h2>11. Conclusión y Siguiente Paso para los Socios</h2>
+        <p>La combinación del <strong>Esquema Dual (OpCo/PropCo)</strong> y el modelo logístico de <strong>Unidades de Ensamble Pop-Up</strong> representa la estructura corporativa más ágil, valiosa y escalable de la hotelería moderna. No solo los blinda frente a deudas de infraestructura pesada, sino que abre el camino para lograr el doble exit de salida a 5 años y construir un patrimonio inmobiliario de por vida.</p>
+
+    </div>
+
+    <footer>
+        NAVANA ECO-LUXURY CABINS • S.A.P.I. DE C.V. • 2026
+        <br>
+        <span class="admin-lock-anchor" onclick="openDashAuthOverlay(event)">🔒</span>
+    </footer>
+
+    <!-- PASSWORD OVERLAY FOR TELEMETRY DASHBOARD -->
+    <div id="dash-auth-overlay">
+        <div class="auth-card" style="max-width: 380px;">
+            <div class="auth-logo">NAVANA</div>
+            <div class="auth-sub">Telemetry Terminal</div>
+            <div class="auth-title">Acceso de Administrador</div>
+            <div class="auth-desc">Por favor, escriba la contraseña de autorización para ingresar al panel de métricas.</div>
+            
+            <form id="dash-auth-form" onsubmit="handleDashAuthSubmit(event)">
+                <div class="auth-input-group" style="margin-bottom: 24px;">
+                    <label class="auth-label" for="dash-pwd">Contraseña</label>
+                    <input class="auth-input" type="password" id="dash-pwd" required placeholder="••••••••">
+                </div>
+                <button class="auth-submit-btn" type="submit" id="dash-auth-submit-btn">Desbloquear Panel</button>
+            </form>
+            <button class="dash-close-btn" onclick="closeDashAuthOverlay()" style="margin-top: 16px; width: 100%;">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- FULL SCREEN INTERACTIVE TELEMETRY DASHBOARD -->
+    <div id="telemetry-dashboard">
+        <div class="dash-container">
+            <div class="dash-header">
+                <div class="dash-title-group">
+                    <h1 class="dash-title">NAVANA Performance Terminal</h1>
+                    <p class="dash-subtitle">Consola de Métrica de Comportamiento y Análisis de Audiencia</p>
+                </div>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <button class="dash-close-btn" onclick="fetchActiveSessions()" style="background-color: rgba(132, 114, 77, 0.1); border-color: rgba(132, 114, 77, 0.4); color: var(--nv-ink-hi);">Refrescar</button>
+                    <button class="dash-close-btn" onclick="closeTelemetryDashboard()">Cerrar Consola</button>
+                </div>
+            </div>
+
+            <!-- Global KPI Cards -->
+            <div class="dash-grid-metrics">
+                <div class="metric-card">
+                    <div class="metric-title">Visitas Totales</div>
+                    <div class="metric-value" id="kpi-total-views">0</div>
+                    <div class="metric-desc">Sesiones de lectura registradas</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-title">Tiempo Promedio</div>
+                    <div class="metric-value" id="kpi-avg-time">0m 0s</div>
+                    <div class="metric-desc">Atención de lectura dedicada</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-title">Profundidad Promedio</div>
+                    <div class="metric-value" id="kpi-avg-scroll">0%</div>
+                    <div class="metric-desc">Scroll máximo alcanzado</div>
+                </div>
+                <div class="metric-card alert">
+                    <div class="metric-title">Tasa de Rebote</div>
+                    <div class="metric-value" id="kpi-bounce-rate">0%</div>
+                    <div class="metric-desc">Lectores que salieron en menos de 15s</div>
+                </div>
+            </div>
+
+            <!-- TAB SELECTION BAR -->
+            <div class="dash-tabs">
+                <button class="dash-tab-btn active" id="tab-btn-telemetry" onclick="switchDashboardTab('telemetry')">Métricas de Audiencia</button>
+                <button class="dash-tab-btn" id="tab-btn-safezone" onclick="switchDashboardTab('safezone')">NAVANA SafeZone (Mapeo de Inversión)</button>
+            </div>
+
+            <!-- TAB 1: TELEMETRY VIEW -->
+            <div id="tab-content-telemetry" class="dash-tab-content active">
+                <!-- Two Column Live Analytics -->
+                <div class="dash-layout-split">
+                    <!-- Left: List of Reader Sessions -->
+                    <div class="dash-panel">
+                        <h3 class="panel-heading">
+                            <span>Audiencias Recientes (Sesiones Activas)</span>
+                            <span style="font-size: 11px; font-weight: normal; color: var(--nv-accent); text-transform: uppercase;">Selecciona un lector para ver su mapa de calor</span>
+                        </h3>
+                        <div class="session-list" id="dash-sessions-container">
+                            <!-- Dynamic content loaded via JS -->
+                            <div style="text-align: center; color: var(--nv-ink-muted); padding: 40px;">Cargando sesiones...</div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Active Map & Time Per Section Heatmap -->
+                    <div class="dash-panel">
+                        <h3 class="panel-heading">Mapa de Atención y Heat-Zones</h3>
+                        <div style="margin-bottom: 24px; padding: 12px 16px; background: rgba(255,255,255,0.02); border: 1px solid var(--nv-line-soft); border-radius: var(--nv-radius-md); text-align: left;">
+                            <p style="margin: 0 0 4px 0; font-size: 11px; text-transform: uppercase; color: var(--nv-accent); letter-spacing: 1px;">Lector Seleccionado:</p>
+                            <p style="margin: 0; font-family: var(--nv-font-display); font-size: 16px; font-weight: bold; color: var(--nv-ink-hi);" id="active-viewer-name">-</p>
+                            <p style="margin: 4px 0 0 0; font-size: 12px; color: var(--nv-ink-muted);" id="active-viewer-email">-</p>
+                        </div>
+
+                        <!-- Progress tracking bars for section times -->
+                        <div class="heatmap-container" id="dash-heatmap-bars">
+                            <!-- Dynamic elements -->
+                            <div style="text-align: center; color: var(--nv-ink-muted); padding: 40px;">Selecciona una sesión de la izquierda para ver su mapa de atención.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: SAFEZONE RISK MAP VIEW -->
+            <div id="tab-content-safezone" class="dash-tab-content">
+                <div class="safezone-layout">
+                    <!-- Left Column: Interactive Map -->
+                    <div class="mexico-map-container">
+                        <h4 style="margin: 0 0 16px 0; font-family: var(--nv-font-display); font-size: 16px; font-weight: bold; color: var(--nv-ink-hi); text-transform: uppercase; letter-spacing: 2px;">Mapa de Análisis Territorial de México</h4>
+                        <p style="margin: 0 0 24px 0; font-size: 12px; color: var(--nv-ink-muted); text-align: center;">Haz clic en cualquiera de los estados mapeados para auditar sus municipios y niveles de riesgo de construcción.</p>
+                        
+                        <!-- Leaflet Interactive Map Canvas -->
+                        <div id="safezone-leaflet-map"></div>
+
+                        <!-- Legend Indicator -->
+                        <div class="safezone-legend">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: #28a745;"></div>
+                                <span>🟢 Verde (Aprobado)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: #ffc107;"></div>
+                                <span>🟡 Amarillo (Condicionado)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: #dc3545;"></div>
+                                <span>🔴 Rojo (No-Go)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: #1a1512; border: 1px solid #2a221d;"></div>
+                                <span>Sin evaluar aún</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: State Details & Municipality Level Analysis -->
+                    <div class="dash-panel safezone-details">
+                        <div class="safezone-state-header">
+                            <span id="safezone-back-btn" style="display: none; cursor: pointer; color: var(--nv-accent-hover); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;" onclick="resetSafeZoneStateSelection()">⬅️ Ver Todos los Estados</span>
+                            <h3 class="safezone-state-title" id="selected-state-title">Estados Mapeados</h3>
+                            <p class="safezone-state-subtitle" id="selected-state-subtitle">Región 1: Occidente y Bajío</p>
+                        </div>
+
+                        <!-- Info Box / Table container -->
+                        <div id="safezone-content-panel" style="text-align: left;">
+                            <p style="margin: 0 0 16px 0; color: var(--nv-ink-muted); font-size: 13.5px; line-height: 1.6;">Selecciona un estado iluminado en el mapa de la izquierda para desplegar la auditoría de seguridad a nivel municipal. Toda la información ha sido clasificada con base en los informes del Secretariado Ejecutivo de Seguridad Pública, noticias territoriales y los 3 Pilares de NAVANA.</p>
+                            
+                            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--nv-line-soft); border-radius: var(--nv-radius-md); padding: 16px; margin-bottom: 16px;">
+                                <h4 style="margin: 0 0 8px 0; font-family: var(--nv-font-display); font-size: 13px; color: var(--nv-accent); text-transform: uppercase; letter-spacing: 1px;">📊 Resumen de la Región 1:</h4>
+                                <ul style="margin: 0; padding-left: 20px; font-size: 12.5px; line-height: 1.6; color: var(--nv-ink);">
+                                    <li><strong>Querétaro & Guanajuato Norte:</strong> Zonas recomendadas para clusters vinícolas y de montaña.</li>
+                                    <li><strong>Nayarit & Jalisco Costa:</strong> Ideales para eco-luxury de playa (Punta de Mita / Sayulita).</li>
+                                    <li><strong>Zonas Críticas (Rojo):</strong> Fronteras interiores de Jalisco-Michoacán y el corredor industrial sur de Guanajuato (Celaya).</li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Launch Fullscreen Interactive Visualizer -->
+                            <a href="mapa.html" target="_blank" class="dash-close-btn" style="text-decoration: none; display: block; text-align: center; width: 100%; font-weight: bold; background: linear-gradient(135deg, var(--navana-terracotta), #a93c27); color: #fff; border: none; margin-bottom: 12px; padding: 12px; font-size: 12px; letter-spacing: 1px; text-transform: uppercase;">🗺️ Abrir Visualizador Completo en Pantalla Completa (263 Zonas) ↗</a>
+
+                            <!-- Export Button -->
+                            <button class="dash-close-btn" style="width: 100%; font-weight: bold; background-color: var(--nv-accent); color: #000; border-color: var(--nv-accent);" onclick="downloadSafeZoneExcel()">📊 Descargar Hoja de Excel (.csv) para Google Sheets</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    <!-- INTERACTIVIDAD Y TELEMETRÍA DE ALTO DESEMPEÑO CON FIREBASE -->
+    <script type="module">
+        // Import classic, fast and secure modular Firebase SDKs directly via modern ESModule CDN
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, doc, setDoc, updateDoc, increment, arrayUnion, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Firebase Web Config for NAVANA (Free, Serverless and Dynamic Setup)
+        const firebaseConfig = {
+            apiKey: "AIzaSyAs-FakeKeyForLocalTestingPurposesOnly",
+            authDomain: "navana-telemetry.firebaseapp.com",
+            projectId: "navana-telemetry",
+            storageBucket: "navana-telemetry.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abcdef123456789"
+        };
+
+        // Initialize Firebase Ecosistema
+        let app, db;
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            console.log("Firebase initialized successfully.");
+        } catch (err) {
+            console.warn("Firebase initialization skipped or running offline mode: ", err.message);
+        }
+
+        // --- Telemetry state variables ---
+        let sessionDocId = null;
+        let userData = { name: "", email: "" };
+        let activeSection = "Inicio";
+        let sectionStartTime = Date.now();
+        let sectionTimes = {};      // Accumulates duration in milliseconds per section
+        let scrollHeatmap = {};     // Tracks maximum scroll depth levels (0%, 25%, 50%, 75%, 100%)
+        let heartBeatTimer = null;
+
+        // Map scroll depth levels to track
+        const scrollThresholds = [25, 50, 75, 100];
+
+        // Match headings to track which physical section the reader is actively viewing
+        const docSections = [
+            { id: "S1", title: "1. Tesis de Inversión", query: "h2:nth-of-type(1)" },
+            { id: "S2", title: "2. Estructura Dual", query: "h2:nth-of-type(2)" },
+            { id: "S3", title: "3. Socio Manufactura", query: "h2:nth-of-type(3)" },
+            { id: "S4", title: "4. Cap Table", query: "h2:nth-of-type(4)" },
+            { id: "S5", title: "5. Unit Economics", query: "h2:nth-of-type(5)" },
+            { id: "S6", title: "6. Desempeño Financiero", query: "h2:nth-of-type(6)" },
+            { id: "S7", title: "7. Financiamiento", query: "h2:nth-of-type(7)" },
+            { id: "S8", title: "8. Estructuras Legales", query: "h2:nth-of-type(8)" },
+            { id: "S9", title: "9. Plan de Despliegue", query: "h2:nth-of-type(9)" },
+            { id: "S10", title: "10. Matriz de Riesgos", query: "h2:nth-of-type(10)" },
+            { id: "S11", title: "11. Conclusión", query: "h2:nth-of-type(11)" }
+        ];
+
+        // Pre-flight de carga de fuentes para asegurar impresión perfecta
+        window.addEventListener('DOMContentLoaded', () => {
+            if (document.fonts) {
+                const families = [
+                    '300 16px "Ranade"', '400 16px "Ranade"', '500 16px "Ranade"', '700 16px "Ranade"',
+                    '300 16px "Space Grotesk"', '400 16px "Space Grotesk"', '500 16px "Space Grotesk"', '600 16px "Space Grotesk"', '700 16px "Space Grotesk"'
+                ];
+                Promise.all(families.map(f => document.fonts.load(f).catch(() => {})))
+                    .then(() => document.fonts.ready)
+                    .then(() => console.log('Premium fonts loaded and verified.'));
+            }
+
+            // Helper function to manage the hiding/showing and required attributes
+            window.updatePartnerFormState = function(isPartner) {
+                const nameGroup = document.getElementById("name-group");
+                const emailGroup = document.getElementById("email-group");
+                const nameInput = document.getElementById("user-name");
+                const emailInput = document.getElementById("user-email");
+
+                if (isPartner) {
+                    if (nameGroup) nameGroup.style.display = "none";
+                    if (emailGroup) emailGroup.style.display = "none";
+                    if (nameInput) nameInput.removeAttribute("required");
+                    if (emailInput) emailInput.removeAttribute("required");
+                } else {
+                    if (nameGroup) nameGroup.style.display = "block";
+                    if (emailGroup) emailGroup.style.display = "block";
+                    if (nameInput) nameInput.setAttribute("required", "required");
+                    if (emailInput) emailInput.setAttribute("required", "required");
+                }
+            };
+
+            // Also listen to checkbox manual change
+            document.getElementById("exclude-telemetry")?.addEventListener("change", function(e) {
+                window.updatePartnerFormState(e.target.checked);
+            });
+
+            // Check if user has already unlocked during this session
+            const cachedUser = sessionStorage.getItem("navana_viewer");
+            if (cachedUser) {
+                try {
+                    const parsed = JSON.parse(cachedUser);
+                    userData.name = parsed.name;
+                    userData.email = parsed.email;
+                    document.getElementById("auth-overlay").style.display = "none";
+                    startTelemetrySession();
+                } catch (e) {
+                    sessionStorage.removeItem("navana_viewer");
+                }
+            }
+        });
+
+        // --- EASTER-EGG PARTNER EXCLUSION TOGGLE ---
+        window.togglePartnerMode = function() {
+            const container = document.getElementById("exclude-telemetry-container");
+            const checkbox = document.getElementById("exclude-telemetry");
+            if (container) {
+                if (container.style.display === "none") {
+                    container.style.display = "flex";
+                    if (checkbox) {
+                        checkbox.checked = true;
+                        window.updatePartnerFormState(true);
+                    }
+                    console.log("Partner mode activated via logo click.");
+                } else {
+                    container.style.display = "none";
+                    if (checkbox) {
+                        checkbox.checked = false;
+                        window.updatePartnerFormState(false);
+                    }
+                }
+            }
+        };
+
+        // --- AUTH SUBMISSION ---
+        window.handleAuthSubmit = function(event) {
+            event.preventDefault();
+            const btn = document.getElementById("auth-submit-btn");
+            const excludeVal = document.getElementById("exclude-telemetry")?.checked;
+            
+            const nameVal = document.getElementById("user-name").value.trim() || (excludeVal ? "Socio NAVANA" : "");
+            const emailVal = document.getElementById("user-email").value.trim() || (excludeVal ? "socio@navana.co" : "");
+
+            if (!excludeVal && (!nameVal || !emailVal)) return;
+
+            btn.disabled = true;
+            btn.innerText = "Autorizando Acceso...";
+
+            userData.name = nameVal;
+            userData.email = emailVal;
+
+            if (excludeVal) {
+                localStorage.setItem("exclude_navana_telemetry", "true");
+            } else {
+                localStorage.removeItem("exclude_navana_telemetry");
+            }
+
+            // Cache credentials in session storage to avoid asking on page refresh
+            sessionStorage.setItem("navana_viewer", JSON.stringify(userData));
+
+            // Fade out auth overlay beautifully
+            const overlay = document.getElementById("auth-overlay");
+            overlay.style.opacity = "0";
+            setTimeout(() => {
+                overlay.style.display = "none";
+            }, 500);
+
+            startTelemetrySession();
+        };
+
+        // --- TELEMETRY SESSION ENGINE ---
+        async function startTelemetrySession() {
+            if (localStorage.getItem("exclude_navana_telemetry") === "true") {
+                console.log("Telemetry session bypassed: Exclude mode active.");
+                return;
+            }
+
+            // Generate a unique session token
+            sessionDocId = userData.email.replace(/[^a-zA-Z0-9]/g, "_") + "_" + Date.now();
+            console.log("Telemetry session started: " + sessionDocId);
+
+            // Record initial log in Firestore
+            const initialPayload = {
+                viewerName: userData.name,
+                viewerEmail: userData.email,
+                loginTime: new Date().toISOString(),
+                userAgent: navigator.userAgent,
+                language: navigator.language || "es",
+                selectedLanguage: "ES",
+                lastActiveTime: new Date().toISOString(),
+                totalTimeSeconds: 0,
+                maxScrollDepthPercent: 0,
+                sectionAttentionTimes: {},
+                scrollDepthBreakdown: {},
+                devicePlatform: navigator.platform || "unknown"
+            };
+
+            // Save locally in localStorage as a backup
+            localStorage.setItem("session_" + sessionDocId, JSON.stringify(initialPayload));
+
+            if (db) {
+                try {
+                    await setDoc(doc(db, "viewer_sessions", sessionDocId), initialPayload);
+                    console.log("Real-time telemetry established with Cloud Firestore.");
+                } catch (err) {
+                    console.warn("Firestore save skipped: Local telemetry mode running.", err.message);
+                }
+            }
+
+            // Start monitoring section reading focus and scroll heatmap
+            window.addEventListener("scroll", handleScrollTelemetry);
+            
+            // Heartbeat update every 5 seconds to push telemetry updates
+            heartBeatTimer = setInterval(pushTelemetryHeartbeat, 5000);
+        }
+
+        // --- TELEMETRY CALCULATION & ANALYSIS ---
+        function handleScrollTelemetry() {
+            const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
+            if (documentHeight <= 0) return;
+
+            // 1. Calculate Scroll Depth Percentage (Heatmap)
+            const currentScroll = window.scrollY;
+            const scrollPercent = Math.min(Math.round((currentScroll / documentHeight) * 100), 100);
+
+            scrollThresholds.forEach(thresh => {
+                if (scrollPercent >= thresh && !scrollHeatmap[thresh + "%"]) {
+                    scrollHeatmap[thresh + "%"] = new Date().toLocaleTimeString();
+                    console.log(`Heatmap: User reached ${thresh}% scroll threshold.`);
+                }
+            });
+
+            // 2. Track Active Read-focus Section based on scroll positions
+            let currentlyReading = "Inicio";
+            docSections.forEach(section => {
+                const element = document.querySelector(section.query);
+                if (element) {
+                    const rect = element.getBoundingClientRect();
+                    // If heading is in top portion of the screen, user has likely scrolled into it
+                    if (rect.top <= 200) {
+                        currentlyReading = section.title;
+                    }
+                }
+            });
+
+            if (currentlyReading !== activeSection) {
+                // Accumulate elapsed reading time for the exited section
+                const elapsed = Date.now() - sectionStartTime;
+                sectionTimes[activeSection] = (sectionTimes[activeSection] || 0) + elapsed;
+
+                console.log(`Active segment shifted. Exited: "${activeSection}" (${Math.round(elapsed / 1000)}s). Now reading: "${currentlyReading}"`);
+
+                activeSection = currentlyReading;
+                sectionStartTime = Date.now();
+            }
+        }
+
+        // --- HEARTBEAT & REMOTE PUSH ---
+        async function pushTelemetryHeartbeat() {
+            if (!sessionDocId) return;
+
+            // Flush times of the currently active section
+            const elapsed = Date.now() - sectionStartTime;
+            sectionTimes[activeSection] = (sectionTimes[activeSection] || 0) + elapsed;
+            sectionStartTime = Date.now(); // reset start interval anchor
+
+            // Determine maximum depth reached
+            let maxDepth = 0;
+            scrollThresholds.forEach(thresh => {
+                if (scrollHeatmap[thresh + "%"]) maxDepth = thresh;
+            });
+
+            // Clean times map to human readable seconds format
+            const cleanSectionSeconds = {};
+            let totalSecs = 0;
+            Object.keys(sectionTimes).forEach(secKey => {
+                const s = Math.round(sectionTimes[secKey] / 1000);
+                cleanSectionSeconds[secKey] = s;
+                totalSecs += s;
+            });
+
+            const updatePayload = {
+                lastActiveTime: new Date().toISOString(),
+                totalTimeSeconds: totalSecs,
+                maxScrollDepthPercent: maxDepth,
+                sectionAttentionTimes: cleanSectionSeconds,
+                scrollDepthBreakdown: scrollHeatmap
+            };
+
+            // Save state backup in local storage
+            localStorage.setItem("session_" + sessionDocId, JSON.stringify({
+                ...JSON.parse(localStorage.getItem("session_" + sessionDocId) || "{}"),
+                ...updatePayload
+            }));
+
+            if (db) {
+                try {
+                    await updateDoc(doc(db, "viewer_sessions", sessionDocId), updatePayload);
+                    console.log("Telemetry updated cleanly.", cleanSectionSeconds);
+                } catch (err) {
+                    // Fail silently
+                }
+            }
+        }
+
+        // Flush telemetry when tab is closed / navigated away
+        window.addEventListener("beforeunload", () => {
+            if (heartBeatTimer) clearInterval(heartBeatTimer);
+            pushTelemetryHeartbeat();
+        });
+
+        // =========================================================================
+        // --- ADMINISTRATIVE METRICS DASHBOARD ENGINE ---
+        // =========================================================================
+        let loadedSessionsCache = [];
+
+        // Open password overlay modal
+        window.openDashAuthOverlay = function(event) {
+            if (event) event.preventDefault();
+            document.getElementById("dash-pwd").value = "";
+            document.getElementById("dash-auth-overlay").style.display = "flex";
+        };
+
+        // Close password overlay modal
+        window.closeDashAuthOverlay = function() {
+            document.getElementById("dash-auth-overlay").style.display = "none";
+        };
+
+        // Validate Administrative Password
+        window.handleDashAuthSubmit = function(event) {
+            event.preventDefault();
+            const btn = document.getElementById("dash-auth-submit-btn");
+            const passwordVal = document.getElementById("dash-pwd").value;
+
+            if (passwordVal === "Navana2026.") {
+                btn.innerText = "Autorizando...";
+                setTimeout(() => {
+                    closeDashAuthOverlay();
+                    openTelemetryDashboard();
+                }, 400);
+            } else {
+                alert("Contraseña de administrador incorrecta.");
+                document.getElementById("dash-pwd").value = "";
+            }
+        };
+
+        // Close full telemetry dashboard view
+        window.closeTelemetryDashboard = function() {
+            document.getElementById("telemetry-dashboard").style.display = "none";
+            document.body.style.overflow = "auto"; // Unlock page scrolling
+        };
+
+        // Load and Open Telemetry Dashboard Panel
+        async function openTelemetryDashboard() {
+            document.getElementById("telemetry-dashboard").style.display = "block";
+            document.body.style.overflow = "hidden"; // Lock background page scrolling
+
+            await fetchActiveSessions();
+        }
+
+        // Fetch session data from Firestore or LocalStorage backup
+        async function fetchActiveSessions() {
+            const container = document.getElementById("dash-sessions-container");
+            container.innerHTML = `<div style="text-align: center; color: var(--nv-ink-muted); padding: 40px;">Consolidando flujos de audiencia en tiempo real...</div>`;
+
+            let sessions = [];
+
+            // A. Attempt loading from remote Firestore first
+            if (db) {
+                try {
+                    // Import Firestore query operators dynamically
+                    const { collection, getDocs, query, orderBy } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
+                    const q = query(collection(db, "viewer_sessions"), orderBy("loginTime", "desc"));
+                    const querySnapshot = await getDocs(q);
+                    
+                    const deletedList = JSON.parse(localStorage.getItem("deleted_sessions") || "[]");
+                    querySnapshot.forEach((doc) => {
+                        if (!deletedList.includes(doc.id)) {
+                            sessions.push({ id: doc.id, ...doc.data() });
+                        }
+                    });
+                } catch (err) {
+                    console.warn("Could not query firestore remotely. Falling back to local mock streams.", err.message);
+                }
+            }
+
+            // B. If remote db is empty or offline, compile from local storage sessions
+            if (sessions.length === 0) {
+                const deletedList = JSON.parse(localStorage.getItem("deleted_sessions") || "[]");
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key.startsWith("session_")) {
+                        const sessId = key.replace("session_", "");
+                        if (!deletedList.includes(sessId)) {
+                            try {
+                                const parsed = JSON.parse(localStorage.getItem(key));
+                                sessions.push({ id: sessId, ...parsed });
+                            } catch (e) {}
+                        }
+                    }
+                }
+                // Sort local sessions descending by login time
+                sessions.sort((a, b) => new Date(b.loginTime) - new Date(a.loginTime));
+            }
+
+            loadedSessionsCache = sessions;
+            renderDashboardData(sessions);
+        }
+        window.fetchActiveSessions = fetchActiveSessions;
+
+        // Render entire analytics calculations, KPIs and list views
+        function renderDashboardData(sessions) {
+            // 1. Calculate Global KPIs
+            const totalViews = sessions.length;
+            let totalSeconds = 0;
+            let totalMaxScroll = 0;
+            let bounceCount = 0;
+
+            sessions.forEach(s => {
+                totalSeconds += s.totalTimeSeconds || 0;
+                totalMaxScroll += s.maxScrollDepthPercent || 0;
+                if ((s.totalTimeSeconds || 0) < 15) {
+                    bounceCount++;
+                }
+            });
+
+            const avgSeconds = totalViews > 0 ? Math.round(totalSeconds / totalViews) : 0;
+            const avgScroll = totalViews > 0 ? Math.round(totalMaxScroll / totalViews) : 0;
+            const bounceRate = totalViews > 0 ? Math.round((bounceCount / totalViews) * 100) : 0;
+
+            // Formatter for average reading duration
+            const avgMin = Math.floor(avgSeconds / 60);
+            const avgSec = avgSeconds % 60;
+
+            // Update DOM KPIs
+            document.getElementById("kpi-total-views").innerText = totalViews;
+            document.getElementById("kpi-avg-time").innerText = `${avgMin}m ${avgSec}s`;
+            document.getElementById("kpi-avg-scroll").innerText = `${avgScroll}%`;
+            document.getElementById("kpi-bounce-rate").innerText = `${bounceRate}%`;
+
+            // 2. Render session list rows
+            const container = document.getElementById("dash-sessions-container");
+            container.innerHTML = "";
+
+            if (sessions.length === 0) {
+                container.innerHTML = `<div style="text-align: center; color: var(--nv-ink-muted); padding: 32px; font-family: var(--nv-font-body); font-size: 13px;">No hay sesiones de telemetría registradas.</div>`;
+                document.getElementById("active-viewer-name").innerText = "-";
+                document.getElementById("active-viewer-email").innerText = "-";
+                document.getElementById("dash-heatmap-bars").innerHTML = "";
+                return;
+            }
+
+            sessions.forEach((s, idx) => {
+                const row = document.createElement("div");
+                row.className = `session-row ${idx === 0 ? 'active' : ''}`;
+                row.onclick = () => selectSessionForHeatmap(s.id, row);
+
+                const mins = Math.floor((s.totalTimeSeconds || 0) / 60);
+                const secs = (s.totalTimeSeconds || 0) % 60;
+                const dateStr = new Date(s.loginTime).toLocaleDateString("es-MX", {
+                    month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
+                });
+
+                const langBadge = s.selectedLanguage 
+                    ? `<span style="display: inline-block; margin-left: 8px; padding: 2px 6px; font-size: 9px; font-weight: bold; font-family: var(--nv-font-body); border-radius: 4px; background-color: var(--navana-terracotta); color: white;">${s.selectedLanguage}</span>`
+                    : `<span style="display: inline-block; margin-left: 8px; padding: 2px 6px; font-size: 9px; font-weight: bold; font-family: var(--nv-font-body); border-radius: 4px; background-color: rgba(255,255,255,0.06); color: var(--nv-ink-muted);">ES</span>`;
+
+                row.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <div class="session-meta">
+                            <div class="session-name">${s.viewerName} ${langBadge}</div>
+                            <div class="session-email">${s.viewerEmail}</div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 16px;">
+                            <div class="session-stats">
+                                <div class="session-duration">⏱️ ${mins}m ${secs}s</div>
+                                <div class="session-date">${dateStr}</div>
+                            </div>
+                            <button class="delete-session-btn" style="background: none; border: none; cursor: pointer; font-size: 16px; opacity: 0.6; padding: 8px; transition: opacity 0.2s, transform 0.2s;" onmouseover="this.style.opacity='1'; this.style.transform='scale(1.15)'" onmouseout="this.style.opacity='0.6'; this.style.transform='scale(1)'" title="Eliminar este registro">🗑️</button>
+                        </div>
+                    </div>
+                `;
+
+                const deleteBtn = row.querySelector(".delete-session-btn");
+                if (deleteBtn) {
+                    deleteBtn.onclick = (e) => {
+                        if (e) e.stopPropagation();
+                        deleteSession(s.id);
+                    };
+                }
+
+                container.appendChild(row);
+            });
+
+            // Auto-select the first session in list to display details
+            if (sessions.length > 0) {
+                selectSessionForHeatmap(sessions[0].id);
+            }
+        }
+
+        // Delete Session from both Firestore and LocalStorage
+        window.deleteSession = async function(sessionId) {
+
+            // 1. Delete from remote Firestore if connected
+            if (db) {
+                try {
+                    await deleteDoc(doc(db, "viewer_sessions", sessionId));
+                    console.log("Deleted remote session: " + sessionId);
+                } catch (err) {
+                    console.error("Firestore deletion failed or permission denied, continuing local cleanup:", err.message);
+                }
+            }
+
+            // 2. Delete from local storage
+            localStorage.removeItem("session_" + sessionId);
+
+            // Save to locally deleted list to filter out if Firestore delete is blocked
+            try {
+                const deletedList = JSON.parse(localStorage.getItem("deleted_sessions") || "[]");
+                if (!deletedList.includes(sessionId)) {
+                    deletedList.push(sessionId);
+                    localStorage.setItem("deleted_sessions", JSON.stringify(deletedList));
+                }
+            } catch (e) {}
+
+            // 3. Re-fetch active sessions to update UI
+            await fetchActiveSessions();
+            alert("Registro eliminado de la pantalla con éxito.");
+        }
+
+        // Display individual section reading times & scroll-zone bars
+        window.selectSessionForHeatmap = function(sessionId, rowElement) {
+            // Manage visual selection states
+            if (rowElement) {
+                document.querySelectorAll(".session-row").forEach(r => r.classList.remove("active"));
+                rowElement.classList.add("active");
+            }
+
+            const session = loadedSessionsCache.find(s => s.id === sessionId);
+            if (!session) return;
+
+            // Update selection card details
+            document.getElementById("active-viewer-name").innerText = session.viewerName;
+            document.getElementById("active-viewer-email").innerText = session.viewerEmail;
+
+            // Render Heatmap bars
+            const heatmapContainer = document.getElementById("dash-heatmap-bars");
+            heatmapContainer.innerHTML = "";
+
+            // Find maximum time in any section to normalize bars proportionally (100% width)
+            let maxTimeSeconds = 1;
+            const timesMap = session.sectionAttentionTimes || {};
+            Object.keys(timesMap).forEach(key => {
+                if (timesMap[key] > maxTimeSeconds) {
+                    maxTimeSeconds = timesMap[key];
+                }
+            });
+
+            // Map all Spanish document headings
+            const sectionsToRender = [
+                "1. Tesis de Inversión",
+                "2. Estructura Dual",
+                "3. Socio Manufactura",
+                "4. Cap Table",
+                "5. Unit Economics",
+                "6. Desempeño Financiero",
+                "7. Financiamiento",
+                "8. Estructuras Legales",
+                "9. Plan de Despliegue",
+                "10. Matriz de Riesgos",
+                "11. Conclusión"
+            ];
+
+            sectionsToRender.forEach(sectionTitle => {
+                const elapsedSeconds = timesMap[sectionTitle] || 0;
+                const barPercent = Math.min(Math.round((elapsedSeconds / maxTimeSeconds) * 100), 100);
+
+                const row = document.createElement("div");
+                row.className = "heatmap-row";
+
+                row.innerHTML = `
+                    <div class="heatmap-label" title="${sectionTitle}">${sectionTitle}</div>
+                    <div class="heatmap-track">
+                        <div class="heatmap-bar" style="width: ${barPercent}%"></div>
+                    </div>
+                    <div class="heatmap-value">${elapsedSeconds}s</div>
+                `;
+                heatmapContainer.appendChild(row);
+            });
+
+            // Render Scroll-Depth Checklist
+            const scrollMeta = document.createElement("div");
+            scrollMeta.style.cssText = "margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--nv-line-soft); text-align: left;";
+            
+            const depth = session.maxScrollDepthPercent || 0;
+            const breakMap = session.scrollDepthBreakdown || {};
+
+            let checklistHTML = `<p style="margin: 0 0 10px 0; font-size: 11px; text-transform: uppercase; color: var(--nv-accent); letter-spacing: 1px;">Profundidad de Lectura (Scroll Heatmap):</p>`;
+            checklistHTML += `<div style="display: flex; gap: 16px; font-size: 12px; font-family: var(--nv-font-body);">`;
+            
+            [25, 50, 75, 100].forEach(percent => {
+                const reached = depth >= percent;
+                const timeStr = breakMap[percent + "%"] ? ` (${breakMap[percent + "%"]})` : "";
+                checklistHTML += `
+                    <div style="flex: 1; padding: 10px; background: rgba(255,255,255,0.01); border: 1px solid ${reached ? 'var(--nv-accent)' : 'var(--nv-line)'}; border-radius: var(--nv-radius-md); text-align: center; color: ${reached ? 'var(--nv-ink-hi)' : 'var(--nv-ink-muted)'}">
+                        <strong>${percent}%</strong><br>
+                        ${reached ? '✅ Llegó' + timeStr : '❌ No llegó'}
+                    </div>
+                `;
+            });
+            checklistHTML += `</div>`;
+            scrollMeta.innerHTML = checklistHTML;
+            heatmapContainer.appendChild(scrollMeta);
+        };
+
+        // --- INTERACTIVE NAVANA SAFEZONE TABS & ANALYSIS REGISTRY ---
+        
+        // Tab switching controller
+        window.switchDashboardTab = function(tabId) {
+            document.querySelectorAll('.dash-tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.dash-tab-content').forEach(content => content.classList.remove('active'));
+            
+            if (tabId === 'telemetry') {
+                document.getElementById('tab-btn-telemetry').classList.add('active');
+                document.getElementById('tab-content-telemetry').classList.add('active');
+            } else if (tabId === 'safezone') {
+                document.getElementById('tab-btn-safezone').classList.add('active');
+                document.getElementById('tab-content-safezone').classList.add('active');
+                
+                // Initialize map beautifully
+                if (window.initSafeZoneLeafletMap) {
+                    window.initSafeZoneLeafletMap();
+                }
+            }
+        };
+
+        // Structured database matching navana_security_registry.md (Region 1: Occidente y Bajío)
+        const safeZoneDatabase = {
+            "QRO": {
+                stateName: "Querétaro",
+                subtitle: "Región 1: Occidente y Bajío • Hub de Seguridad y Estabilidad",
+                generalStatus: "Altamente viable para expansión de clusters premium. Seguridad vial y certidumbre institucional óptimas.",
+                municipalities: [
+                    { name: "Querétaro (Capital)", p1: "9/10", p2: "9/10", p3: "10/10", status: "verde", dictamen: "Aprobado para oficinas OpCo y clusters suburbanos." },
+                    { name: "Corregidora", p1: "9/10", p2: "9/10", p3: "9/10", status: "verde", dictamen: "Excelente. Nivel de vida e infraestructura altos." },
+                    { name: "El Marqués", p1: "8/10", p2: "9/10", p3: "9/10", status: "verde", dictamen: "Aprobado. Enfoque en corredores residenciales e industriales." },
+                    { name: "Tequisquiapan", p1: "8/10", p2: "8/10", p3: "9/10", status: "verde", dictamen: "Altamente recomendado para clusters vinícolas eco-luxury." },
+                    { name: "San Juan del Río", p1: "6/10", p2: "7/10", p3: "8/10", status: "amarillo", dictamen: "Condicionado a seguridad perimetral de carreteras (federal 57)." }
+                ]
+            },
+            "NAY": {
+                stateName: "Nayarit",
+                subtitle: "Región 1: Occidente y Bajío • Corredor Turístico Pacífico Norte",
+                generalStatus: "Frontera costera muy segura con alta tracción eco-turística internacional. Zonas interiores estables.",
+                municipalities: [
+                    { name: "Bahía de Banderas", p1: "9/10", p2: "9/10", p3: "10/10", status: "verde", dictamen: "Prioridad 1 para clusters de playa (Punta de Mita / Sayulita)." },
+                    { name: "Compostela", p1: "8/10", p2: "8/10", p3: "9/10", status: "verde", dictamen: "Muy recomendado para proyectos de playa y selva baja." },
+                    { name: "San Blas", p1: "7/10", p2: "7/10", p3: "8/10", status: "verde", dictamen: "Aprobado. Potencial para cabañas eco-luxury costeras rústicas." },
+                    { name: "Tepic", p1: "7/10", p2: "7/10", p3: "8/10", status: "verde", dictamen: "Seguro. Viable para logística interna OpCo." }
+                ]
+            },
+            "JAL": {
+                stateName: "Jalisco",
+                subtitle: "Región 1: Occidente y Bajío • Eje Estratégico Multimodal",
+                generalStatus: "Alto contraste. Costa norte sumamente segura y atractiva; zonas fronterizas con Michoacán/Zacatecas presentan alta peligrosidad.",
+                municipalities: [
+                    { name: "Puerto Vallarta", p1: "9/10", p2: "8/10", p3: "9/10", status: "verde", dictamen: "Aprobado de manera absoluta para eco-resorts premium." },
+                    { name: "Zapopan", p1: "8/10", p2: "8/10", p3: "9/10", status: "verde", dictamen: "Aprobado para clusters suburbanos de alto poder adquisitivo." },
+                    { name: "Tlaquepaque / Tonalá", p1: "6/10", p2: "7/10", p3: "7/10", status: "amarillo", dictamen: "Condicionado. Monitoreo constante de extorsión local." },
+                    { name: "Tepatitlán (Los Altos)", p1: "5/10", p2: "6/10", p3: "6/10", status: "amarillo", dictamen: "Condicionado. Presencia intermitente de grupos organizados en carreteras." },
+                    { name: "Lagos de Moreno", p1: "3/10", p2: "3/10", p3: "4/10", status: "rojo", dictamen: "NO-GO absoluto. Alto riesgo de conflicto y conectividad vial fracturada." },
+                    { name: "Frontera Michoacán (Jilotlán)", p1: "2/10", p2: "3/10", p3: "2/10", status: "rojo", dictamen: "NO-GO absoluto. Conflicto social activo y nula certidumbre." }
+                ]
+            },
+            "GTO": {
+                stateName: "Guanajuato",
+                subtitle: "Región 1: Occidente y Bajío • Corredor Industrial y del Vino",
+                generalStatus: "Fuerte división norte/sur. El norte (corredor San Miguel de Allende) es sumamente seguro; el sur industrial tiene alta violencia armada.",
+                municipalities: [
+                    { name: "San Miguel de Allende", p1: "9/10", p2: "8/10", p3: "9/10", status: "verde", dictamen: "Zona prioritaria para clusters boutique de diseño." },
+                    { name: "Guanajuato (Capital)", p1: "8/10", p2: "8/10", p3: "8/10", status: "verde", dictamen: "Aprobado. Destino cultural de alto interés." },
+                    { name: "León", p1: "6/10", p2: "8/10", p3: "7/10", status: "amarillo", dictamen: "Condicionado. Viable con filtros estrictos de extorsión." },
+                    { name: "Celaya", p1: "2/10", p2: "4/10", p3: "3/10", status: "rojo", dictamen: "NO-GO absoluto. Índice crítico de extorsión al suelo y violencia." },
+                    { name: "Salamanca / Irapuato", p1: "3/10", p2: "5/10", p3: "4/10", status: "rojo", dictamen: "NO-GO absoluto. Inviabilidad operativa por conflicto social." }
+                ]
+            },
+            "MICH": {
+                stateName: "Michoacán",
+                subtitle: "Región 1: Occidente y Bajío • Sierra y Fronteras Agrícolas",
+                generalStatus: "Alta peligrosidad por disputas de suelo agrario en zonas interiores. Solo la capital y áreas turísticas cerradas presentan viabilidad condicionada.",
+                municipalities: [
+                    { name: "Morelia (Capital)", p1: "6/10", p2: "7/10", p3: "7/10", status: "amarillo", dictamen: "Condicionado. Monitorear extorsiones periféricas." },
+                    { name: "Pátzcuaro", p1: "5/10", p2: "6/10", p3: "6/10", status: "amarillo", dictamen: "Condicionado. Destino atractivo pero requiere seguridad armada perimetral." },
+                    { name: "Uruapan", p1: "2/10", p2: "3/10", p3: "2/10", status: "rojo", dictamen: "NO-GO absoluto. Conflicto social crítico por control de aguacate." },
+                    { name: "Apatzingán (Tierra Caliente)", p1: "1/10", p2: "2/10", p3: "1/10", status: "rojo", dictamen: "NO-GO absoluto. Riesgo de vida extremo y nula conectividad vial segura." }
+                ]
+            },
+            "COL": {
+                stateName: "Colima",
+                subtitle: "Región 1: Occidente y Bajío • Eje Logístico Portuario",
+                generalStatus: "Inestabilidad focalizada por control de puerto marítimo. Nivel de riesgo condicionado alto.",
+                municipalities: [
+                    { name: "Manzanillo (Turístico)", p1: "6/10", p2: "7/10", p3: "6/10", status: "amarillo", dictamen: "Condicionado estrictamente a áreas hoteleras consolidadas." },
+                    { name: "Colima (Capital)", p1: "4/10", p2: "6/10", p3: "4/10", status: "rojo", dictamen: "NO-GO provisional por picos históricos de homicidios y extorsiones." }
+                ]
+            }
+        };
+
+        // Interactive state click handler
+        // Initialize Leaflet Map inside the dashboard
+        window.initSafeZoneLeafletMap = function() {
+            if (safezoneMap) {
+                // Already initialized, force resize recalculation
+                setTimeout(() => { safezoneMap.invalidateSize(); }, 200);
+                return;
+            }
+
+            console.log("Initializing Leaflet Real GIS Map integration...");
+            
+            // Standard centered coordinates for Mexico Republic
+            safezoneMap = L.map('safezone-leaflet-map', {
+                center: [24.5, -102.5],
+                zoom: 5.5,
+                minZoom: 4,
+                maxZoom: 16
+            });
+
+            // CartoDB Dark Matter tiles (Sleek dark theme)
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+                subdomains: 'abcd',
+                maxZoom: 19
+            }).addTo(safezoneMap);
+
+            safezoneMarkersGroup = L.layerGroup().addTo(safezoneMap);
+
+            // Fetch live Google Sheet data in real-time, then render
+            fetchLiveGoogleSheetData();
+        };
+
+        // Fetch live CSV records directly from Google Sheets
+        function fetchLiveGoogleSheetData() {
+            const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRMiFyBn86Jv2fQ9_kA01aJbZ5Pgj2qeG1fKwQx76oqYARL3J01_Mm3pbBzFvdRg6CEybrYYzxhtJ8r/pub?gid=0&single=true&output=csv";
+            
+            console.log("☁️ Fetching live territorial dataset from Google Sheets...");
+            
+            Papa.parse(sheetUrl, {
+                download: true,
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    console.log("✨ Successfully received live records from Google Sheets:", results.data ? results.data.length : 0);
+                    if (results.data && results.data.length > 0) {
+                        rebuildDatabaseFromGoogleSheet(results.data);
+                    } else {
+                        plotAllSafeZoneMarkers();
+                    }
+                },
+                error: function(err) {
+                    console.warn("⚠️ Failed to parse Google Sheet, using local fallback:", err);
+                    plotAllSafeZoneMarkers();
+                }
+            });
+        }
+
+        // Dynamically rebuild the safeZoneDatabase matching Google Sheets rows
+        function rebuildDatabaseFromGoogleSheet(rows) {
+            const newDb = {};
+            
+            rows.forEach(row => {
+                const state = (row["Estado"] || "").trim();
+                const municipality = (row["Municipio"] || "").trim();
+                if (!state || !municipality) return;
+
+                const p1 = row["Pilar 1 (Suelo/Extorsión)"] || "Bajo (9/10)";
+                const p2 = row["Pilar 2 (Vial/Carretera)"] || "Bajo (9/10)";
+                const p3 = row["Pilar 3 (Social/Certeza)"] || "Bajo (10/10)";
+                const status = (row["Semáforo (Status)"] || "🟢 VERDE").toLowerCase().includes("verde") ? "verde" : 
+                               ((row["Semáforo (Status)"] || "🟡 AMARILLO").toLowerCase().includes("amarillo") ? "amarillo" : "rojo");
+                const dictamen = row["Dictamen & Justificación Estratégica"] || "";
+                const fuentes = row["Fuentes / Evidencias Encontradas"] || "";
+                const rawLat = String(row["Latitud"] || "").replace(/['"]/g, '').trim();
+                const rawLng = String(row["Longitud"] || "").replace(/['"]/g, '').trim();
+                const lat = parseFloat(rawLat);
+                const lng = parseFloat(rawLng);
+
+                // Use normalized state name as unique key
+                const stateKey = state.toUpperCase();
+
+                if (!newDb[stateKey]) {
+                    newDb[stateKey] = {
+                        stateName: state,
+                        subtitle: `Auditoría Territorial de Seguridad • Control de Riesgos NAVANA`,
+                        generalStatus: `Auditoría territorial activa para el estado de ${state}. Datos sincronizados en vivo con Google Sheets.`,
+                        municipalities: []
+                    };
+                }
+
+                newDb[stateKey].municipalities.push({
+                    name: municipality,
+                    p1: p1,
+                    p2: p2,
+                    p3: p3,
+                    status: status,
+                    dictamen: dictamen,
+                    fuentes: fuentes,
+                    latlng: (!isNaN(lat) && !isNaN(lng)) ? [lat, lng] : null
+                });
+            });
+
+            // Overwrite database reference and render
+            Object.assign(safeZoneDatabase, newDb);
+            plotAllSafeZoneMarkers(true);
+        }
+
+        // Custom marker rendering based on security semaphores
+        function plotAllSafeZoneMarkers(useDynamicCoords = false) {
+            if (!safezoneMap || !safezoneMarkersGroup) return;
+            safezoneMarkersGroup.clearLayers();
+
+            // Coordinates lookup for Region 1 municipalities
+            const coordsDB = {
+                "Querétaro (Capital)": [20.5881, -100.3889],
+                "Corregidora": [20.5317, -100.4433],
+                "El Marqués": [20.6139, -100.2789],
+                "Tequisquiapan": [20.5217, -99.8903],
+                "San Juan del Río": [20.3889, -100.0050],
+                "Bahía de Banderas": [20.7511, -105.2858],
+                "Compostela": [21.1556, -105.2153],
+                "San Blas": [21.5381, -105.2853],
+                "Tepic": [21.5039, -104.8947],
+                "Puerto Vallarta": [20.6534, -105.2253],
+                "Zapopan": [20.7204, -103.3919],
+                "Tlaquepaque / Tonalá": [20.6228, -103.3139],
+                "Tepatitlán (Los Altos)": [20.8169, -102.7606],
+                "Lagos de Moreno": [21.3533, -101.9300],
+                "Frontera Michoacán (Jilotlán)": [19.3492, -102.9733],
+                "San Miguel de Allende": [20.9139, -100.7439],
+                "Guanajuato (Capital)": [21.0181, -101.2575],
+                "León": [21.1219, -101.6825],
+                "Celaya": [20.5217, -100.8139],
+                "Salamanca / Irapuato": [20.5719, -101.2008],
+                "Morelia (Capital)": [19.7006, -101.1853],
+                "Pátzcuaro": [19.5147, -101.6094],
+                "Uruapan": [19.4125, -102.0525],
+                "Apatzingán (Tierra Caliente)": [19.0856, -102.3556],
+                "Manzanillo (Turístico)": [19.0522, -104.3158],
+                "Colima (Capital)": [19.2433, -103.7250]
+            };
+
+            Object.keys(safeZoneDatabase).forEach(stateKey => {
+                const stateData = safeZoneDatabase[stateKey];
+                stateData.municipalities.forEach(m => {
+                    let latlng = (useDynamicCoords && m.latlng) ? m.latlng : coordsDB[m.name];
+                    if (!latlng) return;
+
+                    // Set marker color based on status
+                    let markerColor = "#dc3545"; // rojo default
+                    if (m.status === 'verde') markerColor = "#28a745";
+                    if (m.status === 'amarillo') markerColor = "#ffc107";
+
+                    const customCircle = L.circleMarker(latlng, {
+                        radius: 8,
+                        fillColor: markerColor,
+                        color: "#fff",
+                        weight: 1.5,
+                        opacity: 1,
+                        fillOpacity: 0.85
+                    });
+
+                    // Add rich detailed popup on click
+                    const popupContent = `
+                        <div style="text-align: left; font-family: var(--nv-font-body); font-size:12px;">
+                            <strong style="font-size:14px; text-transform:uppercase; color: var(--nv-accent);">${m.name}</strong><br/>
+                            <span style="font-size:10px; color:#aaa; text-transform:uppercase;">${stateData.stateName}</span>
+                            <hr style="border-top:1px solid #333; margin: 8px 0;"/>
+                            <strong>Semáforo:</strong> <span style="color:${markerColor}; font-weight:bold; text-transform:uppercase;">${m.status === 'verde' ? 'Aprobado' : (m.status === 'amarillo' ? 'Condicionado' : 'No-Go')}</span><br/>
+                            <strong>P1 (Suelo):</strong> ${m.p1} | <strong>P2 (Vial):</strong> ${m.p2} | <strong>P3 (Social):</strong> ${m.p3}<br/>
+                            <p style="margin: 6px 0 0 0; color:#eee; font-style:italic; font-size:11px;">"${m.dictamen}"</p>
+                        </div>
+                    `;
+
+                    customCircle.bindPopup(popupContent);
+
+                    // Hook up event to select state on sidebar when clicking markers
+                    customCircle.on('click', function() {
+                        selectSafeZoneState(stateKey, stateData.stateName);
+                    });
+
+                    customCircle.addTo(safezoneMarkersGroup);
+                });
+            });
+        }
+
+        window.selectSafeZoneState = function(stateId, stateName) {
+            const stateData = safeZoneDatabase[stateId];
+            const contentPanel = document.getElementById("safezone-content-panel");
+            const backBtn = document.getElementById("safezone-back-btn");
+            const titleEl = document.getElementById("selected-state-title");
+            const subtitleEl = document.getElementById("selected-state-subtitle");
+
+            if (!stateData) {
+                // If not mapped yet, display placeholder warning
+                backBtn.style.display = "inline-block";
+                titleEl.innerText = stateName;
+                subtitleEl.innerText = "Estado sin evaluar en la Fase Actual";
+                
+                contentPanel.innerHTML = `
+                    <div class="callout" style="border-left-color: var(--navana-terracotta); background-color: rgba(220, 53, 69, 0.05); margin-top: 10px;">
+                        <p><strong>Fase 1 de Auditoría Territorial:</strong></p>
+                        <p style="font-size: 13px; margin-top: 5px; line-height: 1.6;">
+                            El estado de <strong>${stateName}</strong> pertenece a una región que actualmente se encuentra en cola para el análisis estratégico (Fase 2 o Fase 3). 
+                            No es viable autorizar inversión en esta zona hasta que se complete el análisis de los 3 pilares de seguridad.
+                        </p>
+                    </div>
+                    <button class="dash-close-btn" style="width: 100%; margin-top: 16px;" onclick="resetSafeZoneStateSelection()">Ver Resumen General</button>
+                `;
+                return;
+            }
+
+            // Zoom map to state region coordinates if map exists
+            const stateCenters = {
+                "QUERÉTARO": [20.75, -99.95, 9],
+                "BAJA CALIFORNIA": [30.84, -115.28, 7],
+                "BAJA CALIFORNIA SUR": [25.5, -111.5, 7],
+                "SONORA": [29.8, -110.8, 7],
+                "CHIHUAHUA": [28.6, -106.1, 7],
+                "COAHUILA": [27.0, -101.7, 7],
+                "NUEVO LEÓN": [25.6, -99.8, 7],
+                "TAMAULIPAS": [24.3, -98.8, 7],
+                "QRO": [20.8, -99.9, 9],
+                "NAY": [21.5, -105.0, 8],
+                "JAL": [20.5, -103.5, 8],
+                "GTO": [21.0, -101.0, 8],
+                "MICH": [19.5, -101.8, 8],
+                "COL": [19.1, -104.0, 8]
+            };
+            if (safezoneMap) {
+                const sc = stateCenters[stateId.toUpperCase()];
+                if (sc) {
+                    safezoneMap.setView([sc[0], sc[1]], sc[2] || 8, { animate: true });
+                } else {
+                    const validCoords = stateData.municipalities.filter(m => m.latlng).map(m => m.latlng);
+                    if (validCoords.length > 0) {
+                        safezoneMap.fitBounds(L.latLngBounds(validCoords), { padding: [40, 40], maxZoom: 9 });
+                    }
+                }
+            }
+
+            // If mapped, build interactive table
+            backBtn.style.display = "inline-block";
+            titleEl.innerText = stateData.stateName;
+            subtitleEl.innerText = stateData.subtitle;
+
+            let html = `
+                <p style="margin: 0 0 16px 0; font-size: 13px; line-height: 1.6; color: var(--nv-ink);">${stateData.generalStatus}</p>
+                <div class="table-container" style="margin-bottom: 24px;">
+                    <table class="safezone-table">
+                        <thead>
+                            <tr>
+                                <th>Municipio</th>
+                                <th title="Pilar 1: Suelo y Extorsión">P1</th>
+                                <th title="Pilar 2: Conectividad Vial">P2</th>
+                                <th title="Pilar 3: Conflicto Social">P3</th>
+                                <th>Semáforo</th>
+                                <th>Dictamen Estratégico</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            stateData.municipalities.forEach(m => {
+                const badgeClass = m.status; // verde, amarillo, rojo
+                const badgeLabel = m.status === 'verde' ? 'Aprobado' : (m.status === 'amarillo' ? 'Condicionado' : 'No-Go');
+                
+                html += `
+                    <tr>
+                        <td style="font-weight: bold; color: var(--nv-ink-hi);">${m.name}</td>
+                        <td>${m.p1}</td>
+                        <td>${m.p2}</td>
+                        <td>${m.p3}</td>
+                        <td><span class="safezone-badge ${badgeClass}">${badgeLabel}</span></td>
+                        <td style="font-size: 12px; color: var(--nv-ink);">${m.dictamen}</td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <button class="dash-close-btn" style="flex: 1;" onclick="resetSafeZoneStateSelection()">Atrás</button>
+                    <button class="dash-close-btn" style="flex: 2; font-weight: bold; background-color: var(--nv-accent); color: #000; border-color: var(--nv-accent);" onclick="downloadSafeZoneExcel()">Exportar Datos (.csv)</button>
+                </div>
+            `;
+
+            contentPanel.innerHTML = html;
+        };
+
+        // Reset state selection on map
+        window.resetSafeZoneStateSelection = function() {
+            if (safezoneMap) {
+                safezoneMap.setView([21.8, -101.5], 6);
+            }
+            document.getElementById("safezone-back-btn").style.display = "none";
+            document.getElementById("selected-state-title").innerText = "Estados Mapeados";
+            document.getElementById("selected-state-subtitle").innerText = "Región 1: Occidente y Bajío";
+
+            const contentPanel = document.getElementById("safezone-content-panel");
+            contentPanel.innerHTML = `
+                <p style="margin: 0 0 16px 0; color: var(--nv-ink-muted); font-size: 13.5px; line-height: 1.6;">Haz clic en cualquiera de las marcas de posición del mapa geográfico real de la izquierda para desplegar la auditoría de seguridad a nivel municipal. Toda la información ha sido clasificada con base en los informes del Secretariado Ejecutivo de Seguridad Pública, noticias territoriales y los 3 Pilares de NAVANA.</p>
+                
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--nv-line-soft); border-radius: var(--nv-radius-md); padding: 16px; margin-bottom: 16px;">
+                    <h4 style="margin: 0 0 8px 0; font-family: var(--nv-font-display); font-size: 13px; color: var(--nv-accent); text-transform: uppercase; letter-spacing: 1px;">📊 Resumen de la Región 1:</h4>
+                    <ul style="margin: 0; padding-left: 20px; font-size: 12.5px; line-height: 1.6; color: var(--nv-ink);">
+                        <li><strong>Querétaro & Guanajuato Norte:</strong> Zonas recomendadas para clusters vinícolas y de montaña.</li>
+                        <li><strong>Nayarit & Jalisco Costa:</strong> Ideales para eco-luxury de playa (Punta de Mita / Sayulita).</li>
+                        <li><strong>Zonas Críticas (Rojo):</strong> Fronteras interiores de Jalisco-Michoacán y el corredor industrial sur de Guanajuato (Celaya).</li>
+                    </ul>
+                </div>
+                
+                <button class="dash-close-btn" style="width: 100%; font-weight: bold; background-color: var(--nv-accent); color: #000; border-color: var(--nv-accent);" onclick="downloadSafeZoneExcel()">📊 Descargar Hoja de Excel (.csv) para Google Sheets</button>
+            `;
+        };
+
+        // Download entire mapped safety catalog as structured Excel-friendly CSV
+        window.downloadSafeZoneExcel = function() {
+            // Build CSV rows
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; // Include BOM for proper Excel Spanish accents support
+            csvContent += "Estado,Municipio,Pilar 1: Extorsión/Suelo,Pilar 2: Conectividad Vial,Pilar 3: Conflicto Social,Semáforo,Dictamen Estratégico\n";
+
+            Object.keys(safeZoneDatabase).forEach(stateKey => {
+                const state = safeZoneDatabase[stateKey];
+                state.municipalities.forEach(m => {
+                    const statusLabel = m.status === 'verde' ? 'Aprobado' : (m.status === 'amarillo' ? 'Condicionado' : 'No-Go');
+                    const cleanDictamen = m.dictamen.replace(/"/g, '""'); // Escape quotes
+                    const cleanName = m.name.replace(/"/g, '""');
+                    const cleanState = state.stateName.replace(/"/g, '""');
+                    
+                    csvContent += `"${cleanState}","${cleanName}","${m.p1}","${m.p2}","${m.p3}","${statusLabel}","${cleanDictamen}"\n`;
+                });
+            });
+
+            // Create download anchor and trigger browser download flow
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "navana_safezone_registry_region1.csv");
+            document.body.appendChild(link);
+            link.click();
+        };
+    </script>
+
+</body>
+</html>
+
+

@@ -3,61 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NAVANA SafeZone • Mapa de Inteligencia y Seguridad Territorial México</title>
-    <link rel="icon" type="image/png" href="logo_gold.png">
+    <title>NAVANA · Inteligencia Territorial & Viabilidad de Seguridad México</title>
+    <meta name="description" content="Plataforma de inteligencia territorial, análisis geoespacial y viabilidad de seguridad para prospección y despliegue de cabañas de diseño NAVANA en México.">
+    <meta name="theme-color" content="#1A1410">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/navana-isotipo.svg">
 
     <!-- Leaflet GIS Engine -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     
-    <!-- PapaParse CDN for live streaming Google Sheets CSV -->
+    <!-- PapaParse for real-time Google Sheets CSV streaming -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js" integrity="sha512-dfX5uYVXzyU8+KHAVK3bIp70HSzW8ODp7VNykbeIPGf7wgN23gYKgvUMcAtK6fL2gK97pD60G1q20fwgUFYig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    <!-- Seed Dataset for Instant Local / Offline Rendering -->
+    <!-- Seed Dataset for Instant Local / Offline Rendering (2,491 records) -->
     <script src="navana_seed_data.js"></script>
 
-    <!-- Typography -->
+    <!-- Fonts: Ranade (Display / Headlines) & Space Grotesk (Body / UI) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://api.fontshare.com/v2/css?f[]=ranade@300,400,500,700&display=swap" rel="stylesheet">
 
     <style>
+        /* ============================================================
+           NAVANA DESIGN SYSTEM — EXACT DESIGN TOKENS
+           Inspirado en www.navanacabins.com & Navana Design Kit
+           ============================================================ */
+        @font-face {
+            font-family: 'Ranade';
+            src: url('fonts/Ranade-Medium.otf') format('opentype');
+            font-weight: 400 500;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Ranade';
+            src: url('fonts/Ranade-Bold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Space Grotesk';
+            src: url('fonts/SpaceGrotesk-VariableFont_wght.ttf') format('truetype');
+            font-weight: 300 700;
+            font-style: normal;
+            font-display: swap;
+        }
+
         :root {
-            /* Brand Identity Palette */
+            /* Superficies (Tema Oscuro Carbón Navana) */
+            --nv-bg: #1A1410;
+            --nv-bg-deep: #14100D;
+            --nv-bg-elevated: #1E1C18;
+            --nv-bg-raised: #25221C;
+            --nv-bg-card: rgba(30, 28, 24, 0.88);
+            --nv-glass: rgba(26, 20, 16, 0.82);
+
+            /* Tinta */
+            --nv-ink-hi: #E8E2D6;
+            --nv-ink: #DCD7C9;
+            --nv-ink-muted: #8A7B65;
+            --nv-ink-faint: rgba(220, 215, 201, 0.58);
+            --nv-ink-ghost: rgba(220, 215, 201, 0.18);
+
+            /* Acentos de Marca */
             --nv-terracotta: #8B2E1B;
+            --nv-terracotta-text: #D67A62;
             --nv-olive: #6B6826;
             --nv-sand: #A8956A;
             --nv-slate: #607384;
             --nv-earth: #5C4C32;
             --nv-cream: #DED9CB;
+            --nv-bronze: #84724D;
+            --nv-stone: #B8AE9C;
 
-            /* Luxury Dark Product Theme */
-            --nv-bg: #1A1410;
-            --nv-bg-deep: #14100D;
-            --nv-bg-elevated: #1F1B16;
-            --nv-bg-raised: #28231C;
+            /* Semáforos Rediseñados de Lujo */
+            --sem-green-bg: rgba(61, 120, 86, 0.18);
+            --sem-green-border: rgba(94, 158, 116, 0.4);
+            --sem-green-text: #6DC28C;
+            --sem-green-marker: #458B60;
 
-            /* Inks */
-            --nv-ink-hi: #F2ECE1;
-            --nv-ink: #DDD7C9;
-            --nv-ink-muted: #8E816E;
-            --nv-accent: #C5A059;
-            --nv-accent-hover: #E3C382;
+            --sem-yellow-bg: rgba(196, 151, 70, 0.18);
+            --sem-yellow-border: rgba(212, 175, 55, 0.4);
+            --sem-yellow-text: #E5BE6B;
+            --sem-yellow-marker: #C49746;
 
-            /* Borders */
+            --sem-red-bg: rgba(139, 46, 27, 0.22);
+            --sem-red-border: rgba(214, 122, 98, 0.4);
+            --sem-red-text: #F08E77;
+            --sem-red-marker: #A83B24;
+
+            /* Tipografía */
+            --nv-font-display: 'Ranade', 'Times New Roman', serif;
+            --nv-font-body: 'Space Grotesk', -apple-system, sans-serif;
+
+            /* Líneas y Sombras */
             --nv-line: rgba(255, 255, 255, 0.08);
             --nv-line-soft: rgba(255, 255, 255, 0.05);
             --nv-line-strong: rgba(255, 255, 255, 0.16);
-
-            /* Semaphores */
-            --sem-green: #10B981;
-            --sem-yellow: #F59E0B;
-            --sem-red: #EF4444;
-
-            /* Fonts */
-            --font-display: 'Ranade', 'Times New Roman', serif;
-            --font-body: 'Space Grotesk', -apple-system, sans-serif;
+            --nv-shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.6);
+            --nv-shadow-card: 0 12px 32px rgba(0, 0, 0, 0.45);
 
             --ease: cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -69,998 +117,1053 @@
         }
 
         body {
-            font-family: var(--font-body);
-            background-color: var(--nv-bg-deep);
+            font-family: var(--nv-font-body);
+            background-color: var(--nv-bg);
             color: var(--nv-ink);
-            height: 100vh;
             width: 100vw;
+            height: 100vh;
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
+            position: relative;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* TOP NAVIGATION & SYNC BAR */
-        .topbar {
+        /* FULLSCREEN MAP CANVAS */
+        #map-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
             background-color: var(--nv-bg-deep);
-            border-bottom: 1px solid var(--nv-line);
-            padding: 12px 24px;
+        }
+
+        /* CUSTOM LEAFLET STYLING TO BLEND WITH NAVANA AESTHETIC */
+        .leaflet-container {
+            background-color: var(--nv-bg-deep) !important;
+            font-family: var(--nv-font-body) !important;
+        }
+        .leaflet-bar {
+            border: 1px solid var(--nv-line) !important;
+            border-radius: 12px !important;
+            overflow: hidden;
+            box-shadow: var(--nv-shadow-card) !important;
+        }
+        .leaflet-bar a {
+            background-color: var(--nv-bg-elevated) !important;
+            color: var(--nv-ink) !important;
+            border-bottom: 1px solid var(--nv-line-soft) !important;
+            transition: all 0.2s ease;
+        }
+        .leaflet-bar a:hover {
+            background-color: var(--nv-bg-raised) !important;
+            color: var(--nv-ink-hi) !important;
+        }
+        .leaflet-control-zoom {
+            bottom: 30px !important;
+            left: 24px !important;
+            top: auto !important;
+            right: auto !important;
+        }
+        .leaflet-control-layers {
+            display: none !important; /* Replaced by our custom luxury pill switcher */
+        }
+        .leaflet-control-attribution {
+            background: rgba(26, 20, 16, 0.75) !important;
+            color: var(--nv-ink-muted) !important;
+            font-size: 10px !important;
+            backdrop-filter: blur(8px);
+            border-top-left-radius: 8px;
+            padding: 2px 8px !important;
+        }
+        .leaflet-control-attribution a {
+            color: var(--nv-sand) !important;
+            text-decoration: none;
+        }
+
+        /* TOOLTIP ON HOVER */
+        .leaflet-tooltip.custom-map-tooltip {
+            background: rgba(26, 20, 16, 0.92) !important;
+            border: 1px solid var(--nv-line-strong) !important;
+            border-radius: 10px !important;
+            color: var(--nv-ink) !important;
+            padding: 8px 12px !important;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5) !important;
+            backdrop-filter: blur(12px);
+        }
+        .leaflet-tooltip-top:before {
+            border-top-color: rgba(26, 20, 16, 0.92) !important;
+        }
+
+        /* ============================================================
+           FLOATING TOP DOCK (EDITORIAL & SLEEK ARCHITECTURE)
+           ============================================================ */
+        .top-dock {
+            position: absolute;
+            top: 18px;
+            left: 20px;
+            right: 20px;
+            z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 16px;
-            z-index: 1000;
-            flex-shrink: 0;
+            gap: 14px;
+            pointer-events: none;
+            transition: right 0.35s var(--ease);
         }
 
-        .brand-group {
+        @media (min-width: 1200px) {
+            body.drawer-open .top-dock {
+                right: 480px;
+            }
+        }
+
+        .top-dock > * {
+            pointer-events: auto;
+        }
+
+        /* Glass Pill Containers */
+        .glass-pill {
+            background: var(--nv-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--nv-line);
+            border-radius: 9999px;
+            padding: 6px 16px;
+            box-shadow: var(--nv-shadow-card);
             display: flex;
             align-items: center;
+            gap: 12px;
+            transition: all 0.3s var(--ease);
+        }
+
+        .glass-pill:hover {
+            border-color: rgba(255, 255, 255, 0.14);
+        }
+
+        /* BRAND PILL (LEFT) */
+        .brand-pill {
+            padding: 8px 18px;
             gap: 14px;
+            text-decoration: none;
+            color: inherit;
         }
-
-        .brand-logo-img {
-            width: 32px;
-            height: 32px;
-            object-fit: contain;
+        .brand-iso {
+            width: 24px;
+            height: 18px;
+            color: var(--nv-cream);
+            display: block;
         }
-
-        .brand-title-wrap {
+        .brand-text-block {
             display: flex;
             flex-direction: column;
         }
-
-        .brand-name {
-            font-family: var(--font-display);
-            font-size: 19px;
-            font-weight: 700;
-            letter-spacing: 3px;
+        .brand-title {
+            font-family: var(--nv-font-display);
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: -0.02em;
             color: var(--nv-ink-hi);
             line-height: 1.1;
-        }
-
-        .brand-sub {
-            font-size: 10.5px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--nv-accent);
-            font-weight: 500;
-        }
-
-        /* LIVE SYNC BADGE */
-        .sync-badge {
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            gap: 8px;
-            background: rgba(16, 185, 129, 0.08);
-            border: 1px solid rgba(16, 185, 129, 0.25);
-            padding: 5px 12px;
-            border-radius: 9999px;
-            font-size: 11.5px;
-            color: #34D399;
-            font-weight: 500;
+            gap: 6px;
         }
-
-        .sync-pulse {
-            width: 7px;
-            height: 7px;
+        .brand-title-dot {
+            width: 4px;
+            height: 4px;
             border-radius: 50%;
-            background-color: #10B981;
-            box-shadow: 0 0 8px #10B981;
-            animation: pulse-ring 2s infinite ease-out;
+            background-color: var(--nv-accent);
         }
-
-        @keyframes pulse-ring {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-        }
-
-        /* TOP ACTIONS */
-        .top-actions {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .btn-action {
-            background: var(--nv-bg-elevated);
-            border: 1px solid var(--nv-line-strong);
-            color: var(--nv-ink-hi);
-            padding: 7px 14px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-family: var(--font-body);
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.2s var(--ease);
-        }
-
-        .btn-action:hover {
-            background: var(--nv-bg-raised);
-            border-color: var(--nv-accent);
-            color: var(--nv-accent-hover);
-        }
-
-        .btn-action.primary {
-            background: linear-gradient(135deg, var(--nv-terracotta), #A33520);
-            border: none;
-            color: #FFF !important;
-            box-shadow: 0 4px 12px rgba(139, 46, 27, 0.35);
-        }
-
-        .btn-action.primary:hover {
-            filter: brightness(1.12);
-            transform: translateY(-1px);
-        }
-
-        /* SUBHEADER KPI & CONTROLS */
-        .controls-bar {
-            background: var(--nv-bg);
-            border-bottom: 1px solid var(--nv-line);
-            padding: 10px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            flex-wrap: wrap;
-            z-index: 999;
-            flex-shrink: 0;
-        }
-
-        /* KPI METRIC CARDS */
-        .kpi-group {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .kpi-card {
-            display: flex;
-            align-items: baseline;
-            gap: 6px;
-        }
-
-        .kpi-num {
-            font-family: var(--font-display);
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--nv-ink-hi);
-        }
-
-        .kpi-num.green { color: var(--sem-green); }
-        .kpi-num.yellow { color: var(--sem-yellow); }
-        .kpi-num.red { color: var(--sem-red); }
-
-        .kpi-label {
-            font-size: 11px;
+        .brand-subtitle {
+            font-size: 10.5px;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
             color: var(--nv-ink-muted);
+            font-weight: 500;
         }
 
-        .kpi-divider {
-            width: 1px;
-            height: 18px;
-            background: var(--nv-line);
-        }
-
-        /* FILTER CONTROLS */
-        .filters-group {
+        /* METRICS CHIP */
+        .kpi-chip {
             display: flex;
             align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
+            gap: 6px;
+            font-size: 11.5px;
+            font-weight: 500;
+            color: var(--nv-ink-hi);
+            padding: 4px 10px;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--nv-line-soft);
+        }
+        .kpi-chip-num {
+            font-family: var(--nv-font-body);
+            font-weight: 700;
+            color: var(--nv-sand);
+            font-variant-numeric: tabular-nums;
         }
 
-        .search-box {
+        /* FILTER ISLAND (CENTER) */
+        .filter-dock {
+            padding: 4px 8px;
+            gap: 6px;
+            flex: 1;
+            max-width: 620px;
+            justify-content: center;
+        }
+
+        .search-wrap {
             position: relative;
             display: flex;
             align-items: center;
+            flex: 1;
+            max-width: 180px;
         }
-
         .search-icon {
             position: absolute;
             left: 10px;
+            width: 13px;
+            height: 13px;
             color: var(--nv-ink-muted);
             pointer-events: none;
         }
-
         .search-input {
-            background: var(--nv-bg-elevated);
-            border: 1px solid var(--nv-line);
-            border-radius: 8px;
-            padding: 7px 12px 7px 32px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--nv-line-soft);
+            border-radius: 9999px;
+            padding: 6px 10px 6px 28px;
             color: var(--nv-ink-hi);
-            font-size: 12.5px;
-            font-family: var(--font-body);
-            width: 230px;
-            transition: all 0.2s;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: var(--nv-accent);
-            width: 270px;
-            background: var(--nv-bg-raised);
-        }
-
-        .state-select {
-            background: var(--nv-bg-elevated);
-            border: 1px solid var(--nv-line);
-            border-radius: 8px;
-            padding: 7px 12px;
-            color: var(--nv-ink-hi);
-            font-size: 12.5px;
-            font-family: var(--font-body);
-            cursor: pointer;
-            outline: none;
-        }
-
-        .state-select:focus {
-            border-color: var(--nv-accent);
-        }
-
-        .pill-group {
-            display: flex;
-            background: var(--nv-bg-elevated);
-            padding: 3px;
-            border-radius: 8px;
-            border: 1px solid var(--nv-line);
-        }
-
-        .pill-btn {
-            background: transparent;
-            border: none;
-            color: var(--nv-ink-muted);
+            font-family: var(--nv-font-body);
             font-size: 11.5px;
-            font-family: var(--font-body);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+        .search-input:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--nv-accent);
+        }
+        .search-input::placeholder {
+            color: var(--nv-ink-muted);
+        }
+
+        .select-custom {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--nv-line-soft);
+            color: var(--nv-ink);
+            padding: 6px 24px 6px 12px;
+            border-radius: 9999px;
+            font-family: var(--nv-font-body);
+            font-size: 11.5px;
             font-weight: 500;
-            padding: 4px 10px;
-            border-radius: 6px;
             cursor: pointer;
-            transition: all 0.2s;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6' fill='none'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%238A7B65' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            transition: all 0.2s ease;
+            max-width: 145px;
+        }
+        .select-custom:focus {
+            border-color: var(--nv-accent);
+            color: var(--nv-ink-hi);
+        }
+        .select-custom option {
+            background-color: var(--nv-bg-elevated);
+            color: var(--nv-ink);
+            padding: 8px;
+        }
+
+        /* STATUS FILTER CHIPS */
+        .status-chips-wrap {
             display: flex;
             align-items: center;
             gap: 4px;
         }
-
-        .pill-btn.active {
-            background: var(--nv-bg-raised);
+        .chip-filter {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--nv-ink-muted);
+            font-family: var(--nv-font-body);
+            font-size: 11.5px;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 9999px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s var(--ease);
+            white-space: nowrap;
+        }
+        .chip-filter:hover {
+            color: var(--nv-ink);
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .chip-filter.active {
+            background: rgba(255, 255, 255, 0.08);
             color: var(--nv-ink-hi);
+            border-color: var(--nv-line-strong);
+        }
+        .chip-filter.active.green {
+            background: var(--sem-green-bg);
+            border-color: var(--sem-green-border);
+            color: var(--sem-green-text);
+        }
+        .chip-filter.active.yellow {
+            background: var(--sem-yellow-bg);
+            border-color: var(--sem-yellow-border);
+            color: var(--sem-yellow-text);
+        }
+        .chip-filter.active.red {
+            background: var(--sem-red-bg);
+            border-color: var(--sem-red-border);
+            color: var(--sem-red-text);
+        }
+
+        .dot-indicator {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .dot-indicator.green { background-color: var(--sem-green-marker); box-shadow: 0 0 6px var(--sem-green-marker); }
+        .dot-indicator.yellow { background-color: var(--sem-yellow-marker); box-shadow: 0 0 6px var(--sem-yellow-marker); }
+        .dot-indicator.red { background-color: var(--sem-red-marker); box-shadow: 0 0 6px var(--sem-red-marker); }
+
+        /* ACTION DOCK (RIGHT) */
+        .action-dock {
+            gap: 8px;
+            padding: 5px 8px;
+        }
+        .btn-dock {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--nv-ink);
+            font-family: var(--nv-font-body);
+            font-size: 12px;
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 9999px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s var(--ease);
+            text-decoration: none;
+        }
+        .btn-dock:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--nv-ink-hi);
+        }
+        .btn-dock.primary {
+            background: var(--nv-sand);
+            color: var(--nv-bg-deep);
             font-weight: 600;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+        .btn-dock.primary:hover {
+            background: var(--nv-stone);
         }
 
-        .pill-btn[data-filter="verde"].active { color: var(--sem-green); }
-        .pill-btn[data-filter="amarillo"].active { color: var(--sem-yellow); }
-        .pill-btn[data-filter="rojo"].active { color: var(--sem-red); }
-
-        /* MAIN CONTENT AREA: MAP + DRAWER */
-        .workspace {
-            position: relative;
-            flex: 1;
-            width: 100%;
-            height: 100%;
-            min-height: 0;
-            overflow: hidden;
-            display: flex;
-        }
-
-        /* MAP VIEW */
-        #map-canvas {
-            flex: 1;
-            height: 100%;
-            width: 100%;
-            min-height: 0;
-            background: #0f0d0b;
-        }
-
-        /* CARTODB DARK MATTER BASE STYLES */
-        .leaflet-container {
-            background: #120F0D !important;
-            font-family: var(--font-body) !important;
-        }
-
-        .leaflet-popup-content-wrapper {
-            background: var(--nv-bg-elevated) !important;
-            color: var(--nv-ink) !important;
-            border: 1px solid var(--nv-line-strong) !important;
-            border-radius: 12px !important;
-            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6) !important;
-            padding: 6px !important;
-        }
-
-        .leaflet-popup-tip {
-            background: var(--nv-bg-elevated) !important;
-        }
-
-        .leaflet-control-zoom {
-            border: 1px solid var(--nv-line) !important;
-            border-radius: 8px !important;
-            overflow: hidden;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.5) !important;
-        }
-
-        .leaflet-control-zoom a {
-            background-color: var(--nv-bg-elevated) !important;
-            color: var(--nv-ink-hi) !important;
-            border-bottom: 1px solid var(--nv-line) !important;
-            width: 32px !important;
-            height: 32px !important;
-            line-height: 32px !important;
-        }
-
-        .leaflet-control-zoom a:hover {
-            background-color: var(--nv-bg-raised) !important;
-            color: var(--nv-accent) !important;
-        }
-
-        /* SIDE DRAWER INSPECTOR */
-        .inspector-drawer {
+        /* LAYER SWITCHER DOCK (BOTTOM-LEFT FLOATING) */
+        .bottom-dock {
             position: absolute;
-            top: 16px;
-            right: 16px;
-            bottom: 16px;
-            width: 420px;
-            max-width: calc(100vw - 32px);
-            background: rgba(30, 26, 21, 0.94);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            bottom: 24px;
+            left: 24px;
+            z-index: 1000;
+            display: flex;
+            gap: 6px;
+            pointer-events: auto;
+        }
+        .layer-btn {
+            background: var(--nv-glass);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--nv-line);
+            border-radius: 9999px;
+            color: var(--nv-ink-muted);
+            font-size: 11.5px;
+            font-family: var(--nv-font-body);
+            font-weight: 500;
+            padding: 6px 14px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: var(--nv-shadow-card);
+            transition: all 0.2s ease;
+        }
+        .layer-btn:hover {
+            color: var(--nv-ink);
+            border-color: rgba(255, 255, 255, 0.16);
+        }
+        .layer-btn.active {
+            background: rgba(255, 255, 255, 0.12);
+            color: var(--nv-ink-hi);
+            border-color: var(--nv-sand);
+        }
+
+        /* SYNC PULSE BADGE */
+        .pulse-live {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #10B981;
+            box-shadow: 0 0 8px #10B981;
+            animation: pulse-dot 2s infinite ease-out;
+        }
+        @keyframes pulse-dot {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.15); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+
+        /* ============================================================
+           DETAIL DRAWER / FLOATING CARD (RIGHT SLIDE-OVER)
+           ============================================================ */
+        .inspector-panel {
+            position: absolute;
+            top: 20px;
+            bottom: 20px;
+            right: 20px;
+            width: 440px;
+            max-width: calc(100vw - 40px);
+            z-index: 1050;
+            background: var(--nv-bg-card);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
             border: 1px solid var(--nv-line-strong);
-            border-radius: 16px;
-            z-index: 1001;
+            border-radius: 24px;
+            box-shadow: var(--nv-shadow-lg);
             display: flex;
             flex-direction: column;
-            box-shadow: -8px 0 32px rgba(0, 0, 0, 0.65);
-            transform: translateX(calc(100% + 24px));
-            transition: transform 0.35s var(--ease);
             overflow: hidden;
+            transform: translateX(calc(100% + 40px));
+            transition: transform 0.4s var(--ease);
+            pointer-events: auto;
         }
-
-        .inspector-drawer.open {
+        .inspector-panel.open {
             transform: translateX(0);
         }
 
-        .drawer-header {
-            padding: 20px 24px 16px;
-            border-bottom: 1px solid var(--nv-line);
+        .panel-header {
+            padding: 24px 24px 16px;
+            border-bottom: 1px solid var(--nv-line-soft);
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
-            gap: 12px;
-            background: rgba(255, 255, 255, 0.015);
+            gap: 16px;
+            position: relative;
         }
-
-        .drawer-title-group {
-            flex: 1;
+        .panel-title-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
-
-        .drawer-tag-state {
+        .panel-overline {
             font-size: 11px;
-            font-weight: 600;
+            letter-spacing: 0.15em;
             text-transform: uppercase;
-            letter-spacing: 2px;
             color: var(--nv-accent);
-            margin-bottom: 4px;
+            font-weight: 600;
         }
-
-        .drawer-muni-name {
-            font-family: var(--font-display);
-            font-size: 22px;
-            font-weight: 700;
+        .panel-title {
+            font-family: var(--nv-font-display);
+            font-size: 26px;
+            font-weight: 500;
+            letter-spacing: -0.025em;
             color: var(--nv-ink-hi);
-            line-height: 1.2;
+            line-height: 1.15;
         }
-
-        .drawer-close-btn {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--nv-line);
+        .btn-close-panel {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--nv-line-soft);
             color: var(--nv-ink-muted);
             width: 32px;
             height: 32px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            border-radius: 50%;
             cursor: pointer;
-            font-size: 16px;
-            transition: all 0.2s;
+            display: grid;
+            place-items: center;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
         }
-
-        .drawer-close-btn:hover {
-            background: var(--nv-bg-raised);
+        .btn-close-panel:hover {
+            background: rgba(255, 255, 255, 0.1);
             color: var(--nv-ink-hi);
-            border-color: var(--nv-accent);
         }
 
-        .drawer-body {
+        .panel-body {
             padding: 20px 24px;
             overflow-y: auto;
-            flex: 1;
             display: flex;
             flex-direction: column;
             gap: 20px;
         }
+        .panel-body::-webkit-scrollbar {
+            width: 4px;
+        }
+        .panel-body::-webkit-scrollbar-thumb {
+            background: var(--nv-line-strong);
+            border-radius: 4px;
+        }
 
-        /* STATUS BADGE */
-        .status-hero {
+        /* Status Hero Badge in Drawer */
+        .status-hero-card {
+            border-radius: 16px;
+            padding: 16px 18px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 16px;
-            border-radius: 10px;
-            border: 1px solid transparent;
+            gap: 12px;
         }
-
-        .status-hero.verde {
-            background: rgba(16, 185, 129, 0.1);
-            border-color: rgba(16, 185, 129, 0.3);
+        .status-hero-card.verde {
+            background: var(--sem-green-bg);
+            border: 1px solid var(--sem-green-border);
         }
-
-        .status-hero.amarillo {
-            background: rgba(245, 158, 11, 0.1);
-            border-color: rgba(245, 158, 11, 0.3);
+        .status-hero-card.amarillo {
+            background: var(--sem-yellow-bg);
+            border: 1px solid var(--sem-yellow-border);
         }
-
-        .status-hero.rojo {
-            background: rgba(239, 68, 68, 0.1);
-            border-color: rgba(239, 68, 68, 0.3);
+        .status-hero-card.rojo {
+            background: var(--sem-red-bg);
+            border: 1px solid var(--sem-red-border);
         }
-
-        .status-hero-label {
+        .status-hero-title {
             font-size: 13.5px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 0.06em;
         }
+        .status-hero-card.verde .status-hero-title { color: var(--sem-green-text); }
+        .status-hero-card.amarillo .status-hero-title { color: var(--sem-yellow-text); }
+        .status-hero-card.rojo .status-hero-title { color: var(--sem-red-text); }
 
-        .status-hero.verde .status-hero-label { color: var(--sem-green); }
-        .status-hero.amarillo .status-hero-label { color: var(--sem-yellow); }
-        .status-hero.rojo .status-hero-label { color: var(--sem-red); }
-
-        .status-badge-sub {
+        .status-hero-sub {
             font-size: 11px;
             color: var(--nv-ink-muted);
+            margin-top: 2px;
         }
 
-        /* 3 PILARS BREAKDOWN */
-        .pillars-section {
+        /* Assessment Card */
+        .quote-card {
+            background: rgba(255, 255, 255, 0.02);
+            border-left: 2px solid var(--nv-sand);
+            border-radius: 0 12px 12px 0;
+            padding: 14px 18px;
+        }
+        .quote-label {
+            font-size: 10.5px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--nv-accent);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .quote-text {
+            font-size: 13px;
+            color: var(--nv-ink);
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        /* 3 Pillars Score Bars */
+        .pillars-block {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
-
-        .section-title {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--nv-accent);
-            font-weight: 700;
-        }
-
-        .pillar-card {
+        .pillar-row {
             background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--nv-line);
-            border-radius: 10px;
-            padding: 12px 14px;
+            border: 1px solid var(--nv-line-soft);
+            border-radius: 12px;
+            padding: 12px 16px;
         }
-
         .pillar-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 8px;
         }
-
         .pillar-name {
-            font-size: 12.5px;
+            font-size: 12px;
             font-weight: 600;
             color: var(--nv-ink-hi);
         }
-
         .pillar-score {
-            font-size: 12px;
+            font-size: 11.5px;
             font-weight: 700;
-            color: var(--nv-accent);
+            font-variant-numeric: tabular-nums;
         }
-
         .pillar-bar-bg {
-            height: 6px;
+            height: 4px;
             background: rgba(255, 255, 255, 0.06);
-            border-radius: 999px;
+            border-radius: 9999px;
             overflow: hidden;
         }
-
         .pillar-bar-fill {
             height: 100%;
-            border-radius: 999px;
-            background: var(--nv-accent);
+            border-radius: 9999px;
             transition: width 0.6s var(--ease);
         }
+        .pillar-bar-fill.green { background: var(--sem-green-marker); }
+        .pillar-bar-fill.yellow { background: var(--sem-yellow-marker); }
+        .pillar-bar-fill.red { background: var(--sem-red-marker); }
 
-        .pillar-bar-fill.green { background: var(--sem-green); }
-        .pillar-bar-fill.yellow { background: var(--sem-yellow); }
-        .pillar-bar-fill.red { background: var(--sem-red); }
-
-        /* DICTAMEN CARD */
-        .detail-card {
+        /* Location Coordinates Card */
+        .geo-card {
             background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--nv-line);
-            border-radius: 10px;
-            padding: 14px;
-        }
-
-        .detail-text {
-            font-size: 13px;
-            line-height: 1.6;
-            color: var(--nv-ink);
-            font-style: italic;
-        }
-
-        .evidence-text {
-            font-size: 12px;
-            line-height: 1.5;
-            color: var(--nv-accent-hover);
-            margin-top: 6px;
-            display: flex;
-            align-items: flex-start;
-            gap: 6px;
-        }
-
-        /* COORDINATES & ACTIONS */
-        .geo-footer {
+            border: 1px solid var(--nv-line-soft);
+            border-radius: 14px;
+            padding: 14px 18px;
             display: flex;
             flex-direction: column;
             gap: 10px;
-            padding-top: 10px;
-            border-top: 1px solid var(--nv-line);
         }
-
-        .geo-coords-tag {
+        .geo-coords-val {
             font-family: monospace;
-            font-size: 11.5px;
-            color: var(--nv-ink-muted);
-            background: rgba(0,0,0,0.25);
-            padding: 6px 10px;
-            border-radius: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .btn-gmaps {
-            background: rgba(197, 160, 89, 0.12);
-            border: 1px solid rgba(197, 160, 89, 0.35);
-            color: var(--nv-accent-hover);
-            padding: 8px 14px;
+            font-size: 12.5px;
+            color: var(--nv-ink-hi);
+            background: rgba(0, 0, 0, 0.25);
+            padding: 6px 12px;
             border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            text-align: center;
-            text-decoration: none;
-            cursor: pointer;
             display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .geo-actions-row {
+            display: flex;
+            gap: 8px;
+        }
+        .btn-geo-action {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: 9999px;
+            border: 1px solid var(--nv-line-strong);
+            background: transparent;
+            color: var(--nv-ink);
+            font-family: var(--nv-font-body);
+            font-size: 11.5px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            transition: all 0.2s;
+            gap: 6px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .btn-geo-action:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--nv-ink-hi);
+            border-color: var(--nv-sand);
         }
 
-        .btn-gmaps:hover {
-            background: rgba(197, 160, 89, 0.25);
-            color: #FFF;
+        /* Sources Card */
+        .sources-card {
+            padding: 12px 0 0;
+            border-top: 1px solid var(--nv-line-soft);
+            font-size: 11px;
+            color: var(--nv-ink-muted);
+            line-height: 1.5;
         }
 
-        /* DATA TABLE & NATIONAL COVERAGE MODAL VIEWS */
-        #table-modal, #coverage-modal, .modal-backdrop {
+        /* ============================================================
+           MODALS (TABLE & COVERAGE)
+           ============================================================ */
+        .modal-backdrop {
             position: fixed;
             inset: 0;
-            background: rgba(10, 8, 6, 0.85);
-            backdrop-filter: blur(14px);
+            background: rgba(14, 11, 8, 0.88);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             z-index: 2000;
             display: none;
             align-items: center;
             justify-content: center;
             padding: 24px;
         }
-
-        .table-modal-card, .modal-box {
+        .modal-window {
             background: var(--nv-bg-elevated);
             border: 1px solid var(--nv-line-strong);
-            border-radius: 16px;
-            width: 1200px;
-            max-width: 95vw;
-            height: 85vh;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 1300px;
+            max-height: 88vh;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            box-shadow: var(--nv-shadow-lg);
             overflow: hidden;
+            animation: modalFadeIn 0.25s var(--ease);
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .modal-header {
-            padding: 18px 24px;
-            border-bottom: 1px solid var(--nv-line);
+            padding: 20px 28px;
+            border-bottom: 1px solid var(--nv-line-soft);
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 16px;
         }
-
         .modal-title {
-            font-family: var(--font-display);
+            font-family: var(--nv-font-display);
             font-size: 20px;
-            color: var(--nv-ink-hi);
-            letter-spacing: 1px;
-        }
-
-        .table-wrapper {
-            flex: 1;
-            overflow: auto;
-            padding: 0;
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 12.5px;
-            text-align: left;
-        }
-
-        .data-table th {
-            position: sticky;
-            top: 0;
-            background: var(--nv-bg-deep);
-            color: var(--nv-accent);
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--nv-line-strong);
-            z-index: 10;
-        }
-
-        .data-table td {
-            padding: 10px 16px;
-            border-bottom: 1px solid var(--nv-line-soft);
-            color: var(--nv-ink);
-        }
-
-        .data-table tr:hover td {
-            background: rgba(255, 255, 255, 0.025);
-        }
-
-        .badge-pill {
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 10.5px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: inline-block;
-        }
-
-        .badge-pill.verde { background: rgba(16, 185, 129, 0.15); color: var(--sem-green); border: 1px solid rgba(16, 185, 129, 0.3); }
-        .badge-pill.amarillo { background: rgba(245, 158, 11, 0.15); color: var(--sem-yellow); border: 1px solid rgba(245, 158, 11, 0.3); }
-        .badge-pill.rojo { background: rgba(239, 68, 68, 0.15); color: var(--sem-red); border: 1px solid rgba(239, 68, 68, 0.3); }
-
-        /* NOTIFICATION TOAST */
-        .toast {
-            position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: var(--nv-bg-elevated);
-            border: 1px solid var(--nv-accent);
-            color: var(--nv-ink-hi);
-            padding: 10px 20px;
-            border-radius: 999px;
-            font-size: 13px;
             font-weight: 500;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+            color: var(--nv-ink-hi);
             display: flex;
             align-items: center;
             gap: 10px;
+        }
+        .modal-body {
+            padding: 24px 28px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        /* Data Table Styling */
+        .navana-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 12.5px;
+        }
+        .navana-table th {
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--nv-ink-muted);
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--nv-line-strong);
+            position: sticky;
+            top: 0;
+            background: var(--nv-bg-elevated);
+            z-index: 10;
+        }
+        .navana-table td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--nv-line-soft);
+            color: var(--nv-ink);
+        }
+        .navana-table tr:hover td {
+            background-color: var(--nv-bg-raised);
+        }
+
+        /* Status Badge Pills */
+        .badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 9px;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .badge-pill.verde {
+            background: var(--sem-green-bg);
+            border: 1px solid var(--sem-green-border);
+            color: var(--sem-green-text);
+        }
+        .badge-pill.amarillo {
+            background: var(--sem-yellow-bg);
+            border: 1px solid var(--sem-yellow-border);
+            color: var(--sem-yellow-text);
+        }
+        .badge-pill.rojo {
+            background: var(--sem-red-bg);
+            border: 1px solid var(--sem-red-border);
+            color: var(--sem-red-text);
+        }
+
+        /* TOAST NOTIFICATION */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--nv-bg-raised);
+            border: 1px solid var(--nv-sand);
+            color: var(--nv-ink-hi);
+            padding: 10px 22px;
+            border-radius: 9999px;
+            font-size: 12.5px;
+            font-weight: 500;
+            box-shadow: var(--nv-shadow-lg);
             z-index: 3000;
             opacity: 0;
             transition: all 0.35s var(--ease);
             pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-
         .toast.show {
             transform: translateX(-50%) translateY(0);
             opacity: 1;
+        }
+
+        /* RESPONSIVE QUERIES */
+        @media (max-width: 1024px) {
+            .top-dock {
+                flex-direction: column;
+                align-items: stretch;
+                top: 12px;
+                left: 12px;
+                right: 12px;
+                gap: 8px;
+            }
+            .filter-dock {
+                max-width: 100%;
+                flex-wrap: wrap;
+                border-radius: 16px;
+                padding: 10px;
+            }
+            .action-dock {
+                justify-content: center;
+            }
+            .inspector-panel {
+                top: auto;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                width: 100%;
+                max-width: 100%;
+                height: 65vh;
+                border-radius: 24px 24px 0 0;
+                transform: translateY(100%);
+            }
+            .inspector-panel.open {
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- TOP BAR -->
-    <header class="topbar">
-        <div class="brand-group">
-            <img src="logo_gold.png" alt="NAVANA" class="brand-logo-img">
-            <div class="brand-title-wrap">
-                <span class="brand-name">NAVANA</span>
-                <span class="brand-sub">SafeZone • Inteligencia Territorial</span>
-            </div>
-        </div>
+    <!-- GIS LEAFLET MAP CANVAS -->
+    <div id="map-canvas"></div>
 
-        <div class="sync-badge">
-            <div class="sync-pulse"></div>
-            <span id="sync-status-text">Google Sheets Conectado en Tiempo Real</span>
-        </div>
+    <!-- FLOATING TOP DOCK -->
+    <header class="top-dock">
+        <!-- BRAND PILL (LEFT) -->
+        <a href="javascript:void(0)" onclick="resetViewToNational()" class="glass-pill brand-pill" title="Centrar Mapa Nacional">
+            <svg class="brand-iso" viewBox="0 38 245 84" fill="currentColor" aria-label="Navana Isotipo">
+                <path d="M2.66634 104.329C3.79041 103.137 4.92477 101.955 6.06871 100.783C11.0694 95.6908 50.3429 55.0267 53.2197 55.3865C55.0036 55.6097 57.1898 57.5938 58.5165 58.7587C68.2923 67.3419 77.1703 77.438 86.3831 86.6614C91.7602 92.0442 99.2692 97.6846 103.427 103.963C104.496 105.576 104.362 106.497 104.048 108.287C93.5565 119.268 96.6641 116.544 85.3251 107.779C76.8047 100.974 62.2704 90.2762 51.0772 91.8979C35.1084 94.2115 24.2033 106.404 12.3748 115.72C9.62687 117.885 3.11422 109.3 2.06771 107.199C1.52849 106.116 2.17722 105.397 2.66634 104.329Z"></path>
+                <path d="M140.666 104.329C141.79 103.137 142.925 101.955 144.069 100.783C149.069 95.6908 188.343 55.0267 191.22 55.3865C193.004 55.6097 195.19 57.5938 196.517 58.7587C206.292 67.3419 215.17 77.438 224.383 86.6614C229.76 92.0442 237.269 97.6846 241.427 103.963C242.496 105.576 242.362 106.497 242.048 108.287C231.556 119.268 234.664 116.544 223.325 107.779C214.805 100.974 200.27 90.2762 189.077 91.8979C173.108 94.2115 162.203 106.404 150.375 115.72C147.627 117.885 141.114 109.3 140.068 107.199C139.528 106.116 140.177 105.397 140.666 104.329Z"></path>
+                <path d="M172.812 55.1488C171.688 56.341 170.553 57.5229 169.409 58.6952C164.409 63.7874 125.135 104.451 122.258 104.092C120.475 103.869 118.288 101.884 116.962 100.719C107.186 92.1363 98.3079 82.0402 89.095 72.8168C83.718 67.434 76.209 61.7936 72.0507 55.5156C70.9826 53.9019 71.1163 52.9807 71.4298 51.1915C81.9217 40.2101 78.8141 42.9346 90.1531 51.6992C98.6734 58.5041 113.208 69.202 124.401 67.5803C140.37 65.2667 151.275 53.0747 163.103 43.7584C165.851 41.5936 172.364 50.1785 173.41 52.2792C173.95 53.3618 173.301 54.0808 172.812 55.1488Z"></path>
+            </svg>
+            <div class="brand-text-block">
+                <span class="brand-title">NAVANA <span class="brand-title-dot"></span></span>
+                <span class="brand-subtitle">Inteligencia Territorial</span>
+            </div>
+            <div class="kpi-chip" title="Cobertura Nacional Total">
+                <span class="kpi-chip-num" id="kpi-total">2,491</span>
+                <span>Zonas · 32 Estados</span>
+            </div>
+        </a>
 
-        <div class="top-actions">
-            <button class="btn-action" onclick="fetchLiveGoogleSheetData(true)">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="23 4 23 10 17 10"></polyline>
-                    <polyline points="1 20 1 14 7 14"></polyline>
-                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-                </svg>
-                <span id="sync-btn-label">Sincronizar</span>
-            </button>
-            <button class="btn-action" onclick="openTableModal()">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="3" y1="9" x2="21" y2="9"></line>
-                    <line x1="3" y1="15" x2="21" y2="15"></line>
-                    <line x1="9" y1="3" x2="9" y2="21"></line>
-                </svg>
-                Ver Tabla
-            </button>
-            <button class="btn-action" onclick="openCoverageModal()" style="border-color: rgba(197, 160, 89, 0.4); color: var(--nv-accent);">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                    <polyline points="2 17 12 22 22 17"></polyline>
-                    <polyline points="2 12 12 17 22 12"></polyline>
-                </svg>
-                <span id="coverage-btn-label">📊 Cobertura (32/32)</span>
-            </button>
-            <a href="https://docs.google.com/spreadsheets/d/1usR3tPA3R_7L4tbni1qz1Er0T7aLzLZ7Y3V2p1KlWws" target="_blank" class="btn-action">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                    <polyline points="15 3 21 3 21 9"></polyline>
-                    <line x1="10" y1="14" x2="21" y2="3"></line>
-                </svg>
-                Abrir Sheet
-            </a>
-            <a href="index.html" class="btn-action primary">
-                ⬅️ Expediente NAVANA
-            </a>
-        </div>
-    </header>
-
-    <!-- KPI STATS & FILTERS BAR -->
-    <div class="controls-bar">
-        <div class="kpi-group">
-            <div class="kpi-card">
-                <span class="kpi-num" id="kpi-total">263</span>
-                <span class="kpi-label">Ubicaciones</span>
-            </div>
-            <div class="kpi-divider"></div>
-            <div class="kpi-card">
-                <span class="kpi-num green" id="kpi-green">24</span>
-                <span class="kpi-label">🟢 Aprobados</span>
-            </div>
-            <div class="kpi-divider"></div>
-            <div class="kpi-card">
-                <span class="kpi-num yellow" id="kpi-yellow">195</span>
-                <span class="kpi-label">🟡 Condicionados</span>
-            </div>
-            <div class="kpi-divider"></div>
-            <div class="kpi-card">
-                <span class="kpi-num red" id="kpi-red">44</span>
-                <span class="kpi-label">🔴 No-Go</span>
-            </div>
-            <div class="kpi-divider"></div>
-            <div class="kpi-card">
-                <span class="kpi-num" id="kpi-states">7</span>
-                <span class="kpi-label">Estados Mapeados</span>
-            </div>
-        </div>
-
-        <div class="filters-group">
-            <div class="search-box">
-                <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
+        <!-- FILTER DOCK (CENTER) -->
+        <div class="glass-pill filter-dock">
+            <!-- Search Input -->
+            <div class="search-wrap">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 <input type="text" id="filter-search" class="search-input" placeholder="Buscar municipio o estado..." oninput="applyFilters()">
             </div>
 
-            <select id="filter-state" class="state-select" onchange="applyFilters()">
-                <option value="ALL">Todos los Estados</option>
+            <!-- State Selector Dropdown -->
+            <select id="filter-state" class="select-custom" onchange="applyFilters()">
+                <option value="ALL">Todos los Estados (32)</option>
             </select>
 
-            <div class="pill-group">
-                <button class="pill-btn active" data-filter="ALL" onclick="setSemaphoreFilter('ALL')">Todos</button>
-                <button class="pill-btn" data-filter="verde" onclick="setSemaphoreFilter('verde')">🟢 Aprobados</button>
-                <button class="pill-btn" data-filter="amarillo" onclick="setSemaphoreFilter('amarillo')">🟡 Condicionados</button>
-                <button class="pill-btn" data-filter="rojo" onclick="setSemaphoreFilter('rojo')">🔴 No-Go</button>
-            </div>
-
-            <div class="pill-group" style="margin-left: 4px;">
-                <button class="pill-btn active" id="btn-layer-google" onclick="switchBaseLayer('google')" title="Google Maps Híbrido Satelital">🛰️ Google Satélite</button>
-                <button class="pill-btn" id="btn-layer-roadmap" onclick="switchBaseLayer('roadmap')" title="Google Maps Calles">🗺️ Google Calles</button>
-                <button class="pill-btn" id="btn-layer-dark" onclick="switchBaseLayer('dark')" title="Esri Dark Canvas">🌑 Modo Oscuro</button>
+            <!-- Status Chips Filter -->
+            <div class="status-chips-wrap">
+                <button class="chip-filter active" data-filter="ALL" onclick="setSemaphoreFilter('ALL')">Todos</button>
+                <button class="chip-filter green" data-filter="verde" onclick="setSemaphoreFilter('verde')">
+                    <span class="dot-indicator green"></span> Viables (<span id="kpi-green">703</span>)
+                </button>
+                <button class="chip-filter yellow" data-filter="amarillo" onclick="setSemaphoreFilter('amarillo')">
+                    <span class="dot-indicator yellow"></span> Condicionados (<span id="kpi-yellow">1,570</span>)
+                </button>
+                <button class="chip-filter red" data-filter="rojo" onclick="setSemaphoreFilter('rojo')">
+                    <span class="dot-indicator red"></span> No-Go (<span id="kpi-red">218</span>)
+                </button>
             </div>
         </div>
+
+        <!-- ACTION DOCK (RIGHT) -->
+        <div class="glass-pill action-dock">
+            <button class="btn-dock" onclick="openTableModal()">
+                <span>📋</span> <span>Catálogo</span>
+            </button>
+            <button class="btn-dock" onclick="openCoverageModal()">
+                <span>🗺️</span> <span>Cobertura (32/32)</span>
+            </button>
+            <button class="btn-dock" onclick="fetchLiveGoogleSheetData(true)" title="Sincronizar en vivo con Google Sheets">
+                <span class="pulse-live"></span> <span id="sync-btn-label">Sincronizar</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- FLOATING BASEMAP SWITCHER (BOTTOM-LEFT) -->
+    <div class="bottom-dock">
+        <button class="layer-btn active" id="btn-layer-google" onclick="switchBaseLayer('google')">
+            <span>🛰️</span> <span>Satelital</span>
+        </button>
+        <button class="layer-btn" id="btn-layer-dark" onclick="switchBaseLayer('dark')">
+            <span>🌑</span> <span>Carbón</span>
+        </button>
+        <button class="layer-btn" id="btn-layer-roadmap" onclick="switchBaseLayer('roadmap')">
+            <span>🗺️</span> <span>Calles</span>
+        </button>
     </div>
 
-    <!-- MAIN MAP WORKSPACE -->
-    <main class="workspace">
-        <div id="map-canvas"></div>
+    <!-- INSPECTOR DRAWER / DETAIL SLIDE-OVER -->
+    <aside class="inspector-panel" id="inspector-drawer">
+        <div class="panel-header">
+            <div class="panel-title-group">
+                <span class="panel-overline" id="drawer-state">ESTADO</span>
+                <h2 class="panel-title" id="drawer-muni">Municipio</h2>
+            </div>
+            <button class="btn-close-panel" onclick="closeInspector()" title="Cerrar Ficha Técnica">✕</button>
+        </div>
 
-        <!-- INSPECTOR DRAWER -->
-        <aside class="inspector-drawer" id="inspector-drawer">
-            <div class="drawer-header">
-                <div class="drawer-title-group">
-                    <div class="drawer-tag-state" id="drawer-state">ESTADO DE MÉXICO</div>
-                    <div class="drawer-muni-name" id="drawer-muni">Municipio</div>
+        <div class="panel-body">
+            <!-- Status Card -->
+            <div class="status-hero-card" id="drawer-status-card">
+                <div>
+                    <div class="status-hero-title" id="drawer-status-label">🟢 Viabilidad Alta (Aprobado)</div>
+                    <div class="status-hero-sub" id="drawer-status-sub">Aprobado para prospección e inversión territorial directa.</div>
                 </div>
-                <button class="drawer-close-btn" onclick="closeInspector()">✕</button>
             </div>
 
-            <div class="drawer-body">
-                <!-- Status Hero -->
-                <div class="status-hero verde" id="drawer-status-hero">
-                    <div>
-                        <div class="status-hero-label" id="drawer-status-label">🟢 Aprobado (Viable)</div>
-                        <div class="status-badge-sub" id="drawer-status-sub">Apto para desarrollo eco-luxury directo</div>
+            <!-- Strategic Assessment Quote -->
+            <div class="quote-card">
+                <div class="quote-label">Dictamen & Justificación Estratégica</div>
+                <div class="quote-text" id="drawer-dictamen">"Cargando dictamen estratégico..."</div>
+            </div>
+
+            <!-- 3 Security Pillars Meters -->
+            <div class="pillars-block">
+                <div class="pillar-row">
+                    <div class="pillar-header">
+                        <span class="pillar-name">Pilar 1 · Suelo & Riesgo de Extorsión</span>
+                        <span class="pillar-score" id="drawer-p1-val">Bajo (9/10)</span>
+                    </div>
+                    <div class="pillar-bar-bg">
+                        <div class="pillar-bar-fill green" id="drawer-p1-bar" style="width: 90%;"></div>
                     </div>
                 </div>
 
-                <!-- 3 Pillars Breakdown -->
-                <div class="pillars-section">
-                    <span class="section-title">Evaluación Técnica de los 3 Pilares</span>
-
-                    <div class="pillar-card">
-                        <div class="pillar-header">
-                            <span class="pillar-name">Pilar 1: Suelo y Extorsión</span>
-                            <span class="pillar-score" id="drawer-p1-val">Bajo (9/10)</span>
-                        </div>
-                        <div class="pillar-bar-bg">
-                            <div class="pillar-bar-fill green" id="drawer-p1-bar" style="width: 90%;"></div>
-                        </div>
+                <div class="pillar-row">
+                    <div class="pillar-header">
+                        <span class="pillar-name">Pilar 2 · Movilidad Vial & Carreteras</span>
+                        <span class="pillar-score" id="drawer-p2-val">Bajo (9/10)</span>
                     </div>
-
-                    <div class="pillar-card">
-                        <div class="pillar-header">
-                            <span class="pillar-name">Pilar 2: Conectividad Vial</span>
-                            <span class="pillar-score" id="drawer-p2-val">Bajo (9/10)</span>
-                        </div>
-                        <div class="pillar-bar-bg">
-                            <div class="pillar-bar-fill green" id="drawer-p2-bar" style="width: 90%;"></div>
-                        </div>
-                    </div>
-
-                    <div class="pillar-card">
-                        <div class="pillar-header">
-                            <span class="pillar-name">Pilar 3: Conflicto Social</span>
-                            <span class="pillar-score" id="drawer-p3-val">Bajo (10/10)</span>
-                        </div>
-                        <div class="pillar-bar-bg">
-                            <div class="pillar-bar-fill green" id="drawer-p3-bar" style="width: 100%;"></div>
-                        </div>
+                    <div class="pillar-bar-bg">
+                        <div class="pillar-bar-fill green" id="drawer-p2-bar" style="width: 90%;"></div>
                     </div>
                 </div>
 
-                <!-- Dictamen Estratégico -->
-                <div class="detail-card">
-                    <span class="section-title">Dictamen Estratégico NAVANA</span>
-                    <p class="detail-text" id="drawer-dictamen" style="margin-top: 8px;">
-                        Dictamen detallado de seguridad y viabilidad territorial.
-                    </p>
-                </div>
-
-                <!-- Fuentes Oficiales SESNSP / INEGI -->
-                <div class="detail-card">
-                    <span class="section-title">Fuentes Oficiales y Evidencia</span>
-                    <div class="evidence-text" id="drawer-fuentes">
-                        <span>🏛️</span>
-                        <span id="drawer-fuentes-val">Secretariado Ejecutivo del Sistema Nacional de Seguridad Pública</span>
+                <div class="pillar-row">
+                    <div class="pillar-header">
+                        <span class="pillar-name">Pilar 3 · Certeza Social & Comunitaria</span>
+                        <span class="pillar-score" id="drawer-p3-val">Bajo (10/10)</span>
+                    </div>
+                    <div class="pillar-bar-bg">
+                        <div class="pillar-bar-fill green" id="drawer-p3-bar" style="width: 100%;"></div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Geo Coordinates & Google Maps -->
-                <div class="geo-footer">
-                    <div class="geo-coords-tag">
-                        <span>GPS: <span id="drawer-coords">20.5881, -100.3889</span></span>
-                        <span style="cursor: pointer; color: var(--nv-accent);" onclick="copyCoordinates()">📋 Copiar</span>
-                    </div>
-                    <a href="#" target="_blank" class="btn-gmaps" id="drawer-gmaps-link">
-                        📍 Abrir en Google Maps Satélite ↗
+            <!-- Geographic Coordinates & Actions -->
+            <div class="geo-card">
+                <div style="font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--nv-ink-muted); font-weight: 600;">Georreferencia & Coordenadas</div>
+                <div class="geo-coords-val">
+                    <span id="drawer-coords">23.6345, -102.5528</span>
+                    <button onclick="copyCoordinates()" class="btn-dock" style="padding: 2px 8px; font-size: 10.5px; border-color: var(--nv-line-strong);">📋 Copiar</button>
+                </div>
+                <div class="geo-actions-row">
+                    <a id="drawer-gmaps-link" href="#" target="_blank" class="btn-geo-action">
+                        <span>↗</span> <span>Abrir en Google Maps</span>
                     </a>
                 </div>
             </div>
-        </aside>
-    </main>
 
-    <!-- FULL DATA TABLE MODAL -->
-    <div id="table-modal">
-        <div class="table-modal-card">
+            <!-- Sources & Auditing Evidence -->
+            <div class="sources-card">
+                <strong style="color: var(--nv-ink-hi); display: block; margin-bottom: 4px;">Auditoría Oficial:</strong>
+                <span id="drawer-fuentes-val">Secretariado Ejecutivo del Sistema Nacional de Seguridad Pública (SESNSP) / Guardia Nacional</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- FULLSCREEN DATA CATALOG MODAL -->
+    <div class="modal-backdrop" id="table-modal">
+        <div class="modal-window">
             <div class="modal-header">
-                <div class="modal-title">Base de Datos Territorial NAVANA (Sincronizada con Google Sheets)</div>
+                <div class="modal-title">
+                    <svg style="width: 20px; height: 16px; color: var(--nv-sand);" viewBox="0 38 245 84" fill="currentColor"><path d="M2.66634 104.329C3.79041 103.137 4.92477 101.955 6.06871 100.783C11.0694 95.6908 50.3429 55.0267 53.2197 55.3865C55.0036 55.6097 57.1898 57.5938 58.5165 58.7587C68.2923 67.3419 77.1703 77.438 86.3831 86.6614C91.7602 92.0442 99.2692 97.6846 103.427 103.963C104.496 105.576 104.362 106.497 104.048 108.287C93.5565 119.268 96.6641 116.544 85.3251 107.779C76.8047 100.974 62.2704 90.2762 51.0772 91.8979C35.1084 94.2115 24.2033 106.404 12.3748 115.72C9.62687 117.885 3.11422 109.3 2.06771 107.199C1.52849 106.116 2.17722 105.397 2.66634 104.329Z"></path></svg>
+                    <span>Catálogo Nacional de Viabilidad Territorial (<span id="modal-table-count">2,491</span>)</span>
+                </div>
                 <div style="display: flex; gap: 10px; align-items: center;">
-                    <button class="btn-action" onclick="exportFilteredCSV()">📥 Descargar CSV</button>
-                    <button class="drawer-close-btn" onclick="closeTableModal()">✕</button>
+                    <button onclick="exportFilteredCSV()" class="btn-dock primary">📥 Descargar CSV</button>
+                    <button onclick="closeTableModal()" class="btn-close-panel">✕</button>
                 </div>
             </div>
-            <div class="table-wrapper">
-                <table class="data-table">
+            <div class="modal-body">
+                <table class="navana-table">
                     <thead>
                         <tr>
                             <th>Estado</th>
-                            <th>Municipio</th>
-                            <th>Semáforo</th>
-                            <th>P1 (Suelo)</th>
-                            <th>P2 (Vial)</th>
-                            <th>P3 (Social)</th>
+                            <th>Municipio / Nodo</th>
+                            <th>Viabilidad</th>
+                            <th>Pilar 1 (Suelo)</th>
+                            <th>Pilar 2 (Vial)</th>
+                            <th>Pilar 3 (Social)</th>
                             <th>Latitud</th>
                             <th>Longitud</th>
                             <th>Dictamen Estratégico</th>
-                            <th>Fuentes</th>
+                            <th>Acción</th>
                         </tr>
                     </thead>
                     <tbody id="table-tbody">
-                        <!-- Populated by JS -->
+                        <!-- Injected via JavaScript -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <!-- NATIONAL COVERAGE MODAL -->
-    <div class="modal-backdrop" id="coverage-modal" style="display: none;">
-        <div class="modal-box" style="max-width: 950px; max-height: 88vh; display: flex; flex-direction: column;">
+    <!-- COVERAGE MODAL -->
+    <div class="modal-backdrop" id="coverage-modal">
+        <div class="modal-window" style="max-width: 980px;">
             <div class="modal-header">
-                <div>
-                    <h2 class="modal-title" style="display: flex; align-items: center; gap: 12px;">
-                        <span>🇲🇽 Cobertura Territorial de México</span>
-                        <span class="badge-pill" style="background: rgba(197, 160, 89, 0.15); color: var(--nv-accent); border: 1px solid rgba(197, 160, 89, 0.35); font-size: 11px;" id="cov-modal-badge">8 / 32 Estados (25.0%)</span>
-                    </h2>
-                    <p style="font-size: 12px; color: var(--nv-ink-muted); margin-top: 4px;">Auditoría integral de seguridad y viabilidad territorial de Norte a Sur</p>
+                <div class="modal-title">
+                    <span>Cobertura Territorial Nacional</span>
+                    <span class="badge-pill verde" id="cov-modal-badge">32 / 32 Estados (100%)</span>
                 </div>
-                <button class="drawer-close-btn" onclick="closeCoverageModal()">✕</button>
+                <button onclick="closeCoverageModal()" class="btn-close-panel">✕</button>
             </div>
-            
-            <div style="padding: 22px 24px; overflow-y: auto; flex: 1;">
-                <!-- PROGRESS BARS -->
-                <div style="background: var(--nv-bg-deep); border: 1px solid var(--nv-line); border-radius: 12px; padding: 18px 20px; margin-bottom: 24px;">
-                    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px;">
-                        <span style="font-size: 12px; font-weight: 700; color: var(--nv-ink-hi); text-transform: uppercase; letter-spacing: 1px;">Avance Nacional de Municipios Auditados</span>
-                        <span style="font-size: 13px; font-weight: 700; color: var(--nv-accent); font-family: var(--font-display);" id="cov-progress-label">301 / 2,478 Municipios (12.1%)</span>
+            <div class="modal-body" style="display: flex; flex-direction: column; gap: 24px;">
+                <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--nv-line-soft); border-radius: 16px; padding: 20px 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-size: 13px; font-weight: 600; color: var(--nv-ink-hi);">Auditoría Territorial Completada</span>
+                        <span style="font-size: 13px; font-weight: 700; color: var(--nv-sand);">2,491 de 2,478 municipios/nodos</span>
                     </div>
-                    <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.06); border-radius: 999px; overflow: hidden;">
-                        <div id="cov-progress-bar" style="width: 12.1%; height: 100%; background: linear-gradient(90deg, var(--sem-green), var(--nv-accent)); border-radius: 999px; transition: width 0.6s ease;"></div>
+                    <div style="height: 6px; background: rgba(255, 255, 255, 0.08); border-radius: 9999px; overflow: hidden;">
+                        <div style="width: 100%; height: 100%; background: var(--sem-green-marker);"></div>
                     </div>
                 </div>
 
-                <!-- 8 ESTADOS AUDITADOS -->
-                <div style="margin-bottom: 28px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                        <h3 style="font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--sem-green); font-weight: 700; display: flex; align-items: center; gap: 8px; margin: 0;">
-                            <span>🟢 Estados Auditados y Activos en el Mapa</span>
-                            <span id="cov-completed-count" style="font-size: 11px; color: var(--nv-ink-muted); font-weight: 500;">(8 de 32)</span>
-                        </h3>
-                    </div>
-                    <div id="cov-completed-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 10px;">
-                        <!-- Injected via JS -->
-                    </div>
-                </div>
-
-                <!-- 24 ESTADOS FALTANTES -->
                 <div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-                        <h3 style="font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--sem-yellow); font-weight: 700; display: flex; align-items: center; gap: 8px; margin: 0;">
-                            <span>⏳ Estados Faltantes por Escanear</span>
-                            <span id="cov-missing-count" style="font-size: 11px; color: var(--nv-ink-muted); font-weight: 500;">(24 estados • 2,177 municipios)</span>
-                        </h3>
-                    </div>
-                    <div id="cov-missing-container" style="display: flex; flex-direction: column; gap: 16px;">
+                    <h3 style="font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--nv-accent); margin-bottom: 14px; font-weight: 600;">Estados Auditoría Integral (32 de 32)</h3>
+                    <div id="cov-completed-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;">
                         <!-- Injected via JS -->
                     </div>
                 </div>
@@ -1069,48 +1172,60 @@
     </div>
 
     <!-- TOAST NOTIFICATION -->
-    <div class="toast" id="toast-msg">✨ Sincronización completada</div>
+    <div class="toast" id="toast-msg">✨ Actualización completada</div>
 
-    <!-- APPLICATION LOGIC -->
+    <!-- JAVASCRIPT APPLICATION CORE -->
     <script>
-        // Google Sheet Public CSV Endpoint
+        // Google Sheet CSV Sync Endpoint
         const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRMiFyBn86Jv2fQ9_kA01aJbZ5Pgj2qeG1fKwQx76oqYARL3J01_Mm3pbBzFvdRg6CEybrYYzxhtJ8r/pub?gid=0&single=true&output=csv";
 
-        // Global State
+        // Global App State
         let rawDataset = [];
         let filteredDataset = [];
         let leafletMap = null;
         let markersGroup = null;
         let currentSemaphoreFilter = 'ALL';
         let activeSelectedMuni = null;
+        let activeBaseLayer = null;
+        let baseLayers = {};
 
-        // Coordinates lookup for major states centers for smooth zoom
+        // State Geographic Focus Centers
         const STATE_CENTERS = {
-            "QUERÉTARO": [20.75, -99.95, 9],
             "BAJA CALIFORNIA": [30.84, -115.28, 7],
             "BAJA CALIFORNIA SUR": [25.5, -111.5, 7],
             "SONORA": [29.8, -110.8, 7],
             "CHIHUAHUA": [28.6, -106.1, 7],
             "COAHUILA": [27.0, -101.7, 7],
             "NUEVO LEÓN": [25.6, -99.8, 7],
-            "TAMAULIPAS": [24.3, -98.8, 7]
+            "TAMAULIPAS": [24.3, -98.8, 7],
+            "QUERÉTARO": [20.75, -99.95, 9],
+            "JALISCO": [20.5, -103.5, 8],
+            "GUANAJUATO": [21.0, -101.0, 8],
+            "NAYARIT": [21.5, -105.0, 8],
+            "MICHOACÁN": [19.5, -101.8, 8],
+            "COLIMA": [19.1, -104.0, 9],
+            "YUCATÁN": [20.8, -89.0, 8],
+            "QUINTANA ROO": [19.5, -88.0, 8]
         };
 
-        // Initialize Application on DOM Ready
         window.addEventListener('DOMContentLoaded', () => {
             initLeafletMap();
             loadInitialData();
         });
 
-        // Ensure Leaflet resizes properly on any window change
         window.addEventListener('resize', () => {
             if (leafletMap) leafletMap.invalidateSize();
         });
 
-        let activeBaseLayer = null;
-        let baseLayers = {};
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeInspector();
+                closeTableModal();
+                closeCoverageModal();
+            }
+        });
 
-        // Initialize Leaflet Map with Google Maps & Multi-Source GIS Engine
+        // Initialize GIS Engine with Leaflet
         function initLeafletMap() {
             leafletMap = L.map('map-canvas', {
                 center: [23.6, -102.5],
@@ -1118,45 +1233,32 @@
                 minZoom: 4,
                 maxZoom: 19,
                 zoomControl: true,
-                preferCanvas: false // Uses SVG renderer: avoids canvas boundary clipping issues in southern states
+                preferCanvas: false
             });
 
-            // Tile layers (Google Maps Satellite Hybrid, Google Streets, Esri Dark, OpenStreetMap)
+            // Modern basemaps
             baseLayers = {
                 "google": L.tileLayer('https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
                     subdomains: '0123',
                     maxZoom: 20,
                     attribution: '&copy; Google Maps Satelital'
                 }),
+                "dark": L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+                    maxZoom: 16,
+                    attribution: '&copy; Esri World Dark'
+                }),
                 "roadmap": L.tileLayer('https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
                     subdomains: '0123',
                     maxZoom: 20,
                     attribution: '&copy; Google Maps Calles'
-                }),
-                "dark": L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-                    maxZoom: 16,
-                    attribution: '&copy; Esri World Dark Gray'
-                }),
-                "osm": L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    maxZoom: 19,
-                    attribution: '&copy; OpenStreetMap'
                 })
             };
 
-            // Set default base layer to Google Maps Satélite (Híbrido con carreteras y nombres)
+            // Default to high-contrast realistic satellite
             switchBaseLayer('google');
-
-            // Add standard Leaflet layer switcher control in top-right
-            L.control.layers({
-                "🛰️ Google Satelital": baseLayers.google,
-                "🗺️ Google Calles": baseLayers.roadmap,
-                "🌑 Modo Oscuro": baseLayers.dark,
-                "🌐 OpenStreetMap": baseLayers.osm
-            }, null, { position: 'topright' }).addTo(leafletMap);
 
             markersGroup = L.featureGroup().addTo(leafletMap);
 
-            // Close inspector when clicking on empty map area
             leafletMap.on('click', (e) => {
                 if (e.originalEvent.target.id === 'map-canvas' || e.originalEvent.target.classList.contains('leaflet-container')) {
                     closeInspector();
@@ -1165,10 +1267,9 @@
 
             setTimeout(() => {
                 if (leafletMap) leafletMap.invalidateSize();
-            }, 250);
+            }, 300);
         }
 
-        // Switch base map layer seamlessly
         function switchBaseLayer(type) {
             if (activeBaseLayer && leafletMap && leafletMap.hasLayer(activeBaseLayer)) {
                 leafletMap.removeLayer(activeBaseLayer);
@@ -1180,13 +1281,13 @@
                     if (activeBaseLayer.bringToBack) activeBaseLayer.bringToBack();
                 }
             }
-            ['google', 'roadmap', 'dark'].forEach(k => {
+            ['google', 'dark', 'roadmap'].forEach(k => {
                 const el = document.getElementById(`btn-layer-${k}`);
                 if (el) el.classList.toggle('active', k === type);
             });
         }
 
-        // Load dataset (Instant local seed render -> Live Google Sheets refresh in background)
+        // Data Loading: Instant Local Seed -> Silent Google Sheets Sync
         async function loadInitialData() {
             if (window.NAVANA_SEED_DATA && window.NAVANA_SEED_DATA.length > 0) {
                 await loadLocalSeedData(true);
@@ -1194,7 +1295,6 @@
             fetchLiveGoogleSheetData(false);
         }
 
-        // Fetch Live Google Sheets CSV
         async function fetchLiveGoogleSheetData(isManual = false) {
             const btnLabel = document.getElementById("sync-btn-label");
             if (isManual && btnLabel) btnLabel.innerText = "Cargando...";
@@ -1207,15 +1307,13 @@
                 
                 if (results.data && results.data.length > 0) {
                     processRawRows(results.data);
-                    const statusText = document.getElementById("sync-status-text");
-                    if (statusText) statusText.innerText = `Google Sheets Sincronizado (${results.data.length} Zonas)`;
                     if (isManual) showToast(`✨ Sincronizadas ${results.data.length} zonas en vivo desde Google Sheets`);
                     return results.data;
                 } else {
-                    throw new Error("CSV vacío o sin registros válidos");
+                    throw new Error("CSV vacío");
                 }
             } catch (err) {
-                console.warn("⚠️ Google Sheets fetch failed, loading local seed fallback:", err);
+                console.warn("⚠️ Google Sheets fetch fallback to local seed:", err);
                 if (!rawDataset || rawDataset.length === 0) {
                     await loadLocalSeedData(false);
                 }
@@ -1224,7 +1322,6 @@
             }
         }
 
-        // Fallback / Instant: Load local JS seed
         async function loadLocalSeedData(isSilent = false) {
             try {
                 let data = window.NAVANA_SEED_DATA;
@@ -1244,15 +1341,12 @@
                     "Longitud": d.lng,
                     "Fuentes / Evidencias Encontradas": d.fuentes
                 })));
-                const statusEl = document.getElementById("sync-status-text");
-                if (statusEl) statusEl.innerText = `Registro Territorial Activo (${rawDataset.length} Zonas)`;
                 if (!isSilent) showToast(`💾 Cargadas ${rawDataset.length} ubicaciones territoriales`);
             } catch (e) {
-                console.error("Critical: Could not load fallback dataset:", e);
+                console.error("Critical fallback failed:", e);
             }
         }
 
-        // Process raw rows and normalize coordinates
         function processRawRows(rows) {
             rawDataset = [];
             const statesSet = new Set();
@@ -1264,13 +1358,11 @@
 
                 statesSet.add(estado);
 
-                // Clean and parse Lat/Lon
                 const rawLat = String(row["Latitud"] || "").replace(/['"]/g, '').trim();
                 const rawLng = String(row["Longitud"] || "").replace(/['"]/g, '').trim();
                 const lat = parseFloat(rawLat);
                 const lng = parseFloat(rawLng);
 
-                // Determine semaphore
                 const semRaw = (row["Semáforo (Status)"] || "🟢 VERDE").toUpperCase();
                 let status = "verde";
                 if (semRaw.includes("ROJO")) status = "rojo";
@@ -1294,24 +1386,16 @@
                 });
             });
 
-            // Populate State Dropdown
             populateStateDropdown(Array.from(statesSet).sort());
-
-            // Update KPI metrics
             updateKPIMetrics();
-
-            // Apply filters & plot markers
             applyFilters();
-
-            // Refresh coverage stats
-            renderCoverageModal();
+            renderCoverageGrid();
         }
 
-        // Populate State selector
         function populateStateDropdown(states) {
             const select = document.getElementById("filter-state");
             const currentVal = select.value;
-            select.innerHTML = '<option value="ALL">Todos los Estados</option>';
+            select.innerHTML = '<option value="ALL">Todos los Estados (32)</option>';
             states.forEach(st => {
                 const count = rawDataset.filter(d => d.estado.toUpperCase() === st.toUpperCase()).length;
                 const opt = document.createElement("option");
@@ -1324,109 +1408,91 @@
             }
         }
 
-        // Calculate and update KPIs
         function updateKPIMetrics() {
             const total = rawDataset.length;
             const green = rawDataset.filter(d => d.status === 'verde').length;
             const yellow = rawDataset.filter(d => d.status === 'amarillo').length;
             const red = rawDataset.filter(d => d.status === 'rojo').length;
-            const states = new Set(rawDataset.map(d => d.estado)).size;
 
-            document.getElementById("kpi-total").innerText = total;
-            document.getElementById("kpi-green").innerText = green;
-            document.getElementById("kpi-yellow").innerText = yellow;
-            document.getElementById("kpi-red").innerText = red;
-            document.getElementById("kpi-states").innerText = states;
+            document.getElementById("kpi-total").innerText = total.toLocaleString('es-MX');
+            document.getElementById("kpi-green").innerText = green.toLocaleString('es-MX');
+            document.getElementById("kpi-yellow").innerText = yellow.toLocaleString('es-MX');
+            document.getElementById("kpi-red").innerText = red.toLocaleString('es-MX');
+            document.getElementById("modal-table-count").innerText = total.toLocaleString('es-MX');
         }
 
-        // Set Semaphore Filter Pills
         function setSemaphoreFilter(status) {
             currentSemaphoreFilter = status;
-            document.querySelectorAll(".pill-btn").forEach(btn => {
+            document.querySelectorAll(".chip-filter").forEach(btn => {
                 btn.classList.toggle("active", btn.getAttribute("data-filter") === status);
             });
             applyFilters();
         }
 
-        // Apply Search, State and Semaphore Filters
         function applyFilters() {
             const searchQuery = document.getElementById("filter-search").value.toLowerCase().trim();
             const selectedState = document.getElementById("filter-state").value;
 
             filteredDataset = rawDataset.filter(item => {
-                // Semaphore filter
-                if (currentSemaphoreFilter !== 'ALL' && item.status !== currentSemaphoreFilter) {
-                    return false;
-                }
-                // State filter
-                if (selectedState !== 'ALL' && item.estado.toUpperCase() !== selectedState.toUpperCase()) {
-                    return false;
-                }
-                // Text search query
+                if (currentSemaphoreFilter !== 'ALL' && item.status !== currentSemaphoreFilter) return false;
+                if (selectedState !== 'ALL' && item.estado.toUpperCase() !== selectedState.toUpperCase()) return false;
                 if (searchQuery) {
-                    const matchText = `${item.municipio} ${item.estado} ${item.dictamen} ${item.fuentes}`.toLowerCase();
+                    const matchText = `${item.municipio} ${item.estado} ${item.dictamen}`.toLowerCase();
                     if (!matchText.includes(searchQuery)) return false;
                 }
                 return true;
             });
 
-            // Plot markers on map
             plotFilteredMarkers();
-
-            // Render Table Modal Body
             renderTableRows();
 
-            // Smooth zoom to state center if a specific state is selected
             if (selectedState !== 'ALL') {
                 const centerData = STATE_CENTERS[selectedState.toUpperCase()];
                 if (centerData) {
                     leafletMap.setView([centerData[0], centerData[1]], centerData[2], { animate: true });
                 } else if (markersGroup.getLayers().length > 0) {
-                    leafletMap.fitBounds(markersGroup.getBounds(), { padding: [40, 40], maxZoom: 10 });
+                    leafletMap.fitBounds(markersGroup.getBounds(), { padding: [50, 50], maxZoom: 10 });
                 }
             } else if (markersGroup.getLayers().length > 0 && !searchQuery) {
-                // Seamless full national coverage without cutting off any border, coast, or state
-                leafletMap.fitBounds(markersGroup.getBounds(), { padding: [25, 25] });
+                leafletMap.fitBounds(markersGroup.getBounds(), { padding: [30, 30] });
             }
             if (leafletMap && leafletMap.invalidateSize) leafletMap.invalidateSize();
         }
 
-        // Plot Markers onto Leaflet Map
         function plotFilteredMarkers() {
             if (!leafletMap || !markersGroup) return;
             markersGroup.clearLayers();
 
-            const colorMap = {
-                verde: '#10B981',
-                amarillo: '#F59E0B',
-                rojo: '#EF4444'
+            const styleMap = {
+                verde: { fill: '#458B60', stroke: '#8ED4A2' },
+                amarillo: { fill: '#C49746', stroke: '#F3D27E' },
+                rojo: { fill: '#A83B24', stroke: '#E2745D' }
             };
 
             filteredDataset.forEach(item => {
                 if (!item.lat || !item.lng) return;
 
-                const color = colorMap[item.status] || '#10B981';
+                const styling = styleMap[item.status] || styleMap.verde;
 
-                // Elegant circleMarker with glowing border
                 const marker = L.circleMarker([item.lat, item.lng], {
-                    radius: 7,
-                    fillColor: color,
-                    color: '#FFF',
+                    radius: 6.5,
+                    fillColor: styling.fill,
+                    color: styling.stroke,
                     weight: 1.5,
                     opacity: 0.95,
-                    fillOpacity: 0.85
+                    fillOpacity: 0.88
                 });
 
-                // Tooltip on hover
                 marker.bindTooltip(`
-                    <div style="font-family: var(--font-body); font-size: 11.5px; line-height: 1.3;">
+                    <div style="font-family: var(--nv-font-body); font-size: 11.5px; line-height: 1.35;">
                         <strong style="color: #FFF;">${item.municipio}</strong><br/>
-                        <span style="color: #A8956A; font-size: 10px; text-transform: uppercase;">${item.estado}</span><br/>
-                        <span style="color: ${color}; font-weight: bold; text-transform: uppercase;">${item.status === 'verde' ? '🟢 Aprobado' : (item.status === 'amarillo' ? '🟡 Condicionado' : '🔴 No-Go')}</span>
+                        <span style="color: var(--nv-sand); font-size: 10px; text-transform: uppercase;">${item.estado}</span><br/>
+                        <span style="color: ${styling.stroke}; font-weight: bold; font-size: 10px; text-transform: uppercase;">
+                            ${item.status === 'verde' ? '🟢 Viable' : (item.status === 'amarillo' ? '🟡 Condicionado' : '🔴 Restringido')}
+                        </span>
                     </div>
                 `, { direction: 'top', offset: [0, -6], className: 'custom-map-tooltip' });
 
-                // Click opens Inspector Drawer and centers map
                 marker.on('click', () => {
                     openInspector(item);
                     leafletMap.setView([item.lat, item.lng], Math.max(leafletMap.getZoom(), 9), { animate: true });
@@ -1436,31 +1502,28 @@
             });
         }
 
-        // Open Inspector Drawer with full Technical Dossier
         function openInspector(item) {
             activeSelectedMuni = item;
 
             document.getElementById("drawer-state").innerText = item.estado.toUpperCase();
             document.getElementById("drawer-muni").innerText = item.municipio;
 
-            // Status Hero
-            const hero = document.getElementById("drawer-status-hero");
-            const heroLabel = document.getElementById("drawer-status-label");
-            const heroSub = document.getElementById("drawer-status-sub");
-            hero.className = `status-hero ${item.status}`;
+            const card = document.getElementById("drawer-status-card");
+            const label = document.getElementById("drawer-status-label");
+            const sub = document.getElementById("drawer-status-sub");
 
+            card.className = `status-hero-card ${item.status}`;
             if (item.status === 'verde') {
-                heroLabel.innerText = "🟢 Aprobado (Alta Viabilidad)";
-                heroSub.innerText = "Entorno blindado, libre tránsito de gama alta y alta certeza legal.";
+                label.innerText = "🟢 Viabilidad Alta (Aprobado)";
+                sub.innerText = "Entorno seguro, libre tránsito de gama alta y alta certeza legal para despliegue.";
             } else if (item.status === 'amarillo') {
-                heroLabel.innerText = "🟡 Condicionado (Filtro Privado)";
-                heroSub.innerText = "Viable únicamente dentro de fraccionamientos residenciales cerrados con seguridad 24/7.";
+                label.innerText = "🟡 Viabilidad Condicionada";
+                sub.innerText = "Viable prioritariamente dentro de entornos privados o con control de acceso perimetral.";
             } else {
-                heroLabel.innerText = "🔴 No-Go (Riesgo Crítico)";
-                heroSub.innerText = "Prohibida la adquisición o prospección de tierra. Alta incidencia delictiva.";
+                label.innerText = "🔴 Restringido (No-Go)";
+                sub.innerText = "No recomendado para prospección o adquisición territorial por incidencia delictiva.";
             }
 
-            // Extract numeric scores for bars
             const parseScore = (str) => {
                 const match = str.match(/(\d+)\/10/);
                 return match ? parseInt(match[1]) : 7;
@@ -1482,55 +1545,63 @@
             document.getElementById("drawer-p3-bar").style.width = `${s3 * 10}%`;
             document.getElementById("drawer-p3-bar").className = `pillar-bar-fill ${s3 >= 8 ? 'green' : (s3 >= 6 ? 'yellow' : 'red')}`;
 
-            // Dictamen & Fuentes
             document.getElementById("drawer-dictamen").innerText = `"${item.dictamen}"`;
             document.getElementById("drawer-fuentes-val").innerText = item.fuentes || "Secretariado Ejecutivo del Sistema Nacional de Seguridad Pública (SESNSP)";
 
-            // Geo Coordinates & Google Maps Link
             if (item.lat && item.lng) {
                 document.getElementById("drawer-coords").innerText = `${item.lat.toFixed(4)}, ${item.lng.toFixed(4)}`;
                 document.getElementById("drawer-gmaps-link").href = `https://www.google.com/maps/search/?api=1&query=${item.lat},${item.lng}`;
-                document.getElementById("drawer-gmaps-link").style.display = "flex";
+                document.getElementById("drawer-gmaps-link").style.display = "inline-flex";
             } else {
                 document.getElementById("drawer-coords").innerText = "Coordenadas pendientes";
                 document.getElementById("drawer-gmaps-link").style.display = "none";
             }
 
             document.getElementById("inspector-drawer").classList.add("open");
+            document.body.classList.add("drawer-open");
         }
 
-        // Close Inspector Drawer
         function closeInspector() {
             document.getElementById("inspector-drawer").classList.remove("open");
+            document.body.classList.remove("drawer-open");
             activeSelectedMuni = null;
         }
 
-        // Copy GPS coordinates to clipboard
         function copyCoordinates() {
             if (!activeSelectedMuni || !activeSelectedMuni.lat) return;
-            const str = `${activeSelectedMuni.lat}, ${activeSelectedMuni.lng}`;
+            const str = `${activeSelectedMuni.lat.toFixed(6)}, ${activeSelectedMuni.lng.toFixed(6)}`;
             navigator.clipboard.writeText(str).then(() => {
                 showToast(`📋 Coordenadas copiadas: ${str}`);
             });
         }
 
-        // Render Table Modal Rows (Optimized batch rendering)
+        function resetViewToNational() {
+            document.getElementById("filter-search").value = "";
+            document.getElementById("filter-state").value = "ALL";
+            setSemaphoreFilter('ALL');
+            if (markersGroup.getLayers().length > 0) {
+                leafletMap.fitBounds(markersGroup.getBounds(), { padding: [30, 30] });
+            }
+        }
+
         function renderTableRows() {
             const tbody = document.getElementById("table-tbody");
             if (!tbody) return;
 
             tbody.innerHTML = filteredDataset.map(row => `
                 <tr>
-                    <td style="font-weight: 600; color: var(--nv-ink-hi);">${row.estado}</td>
-                    <td style="font-weight: bold; color: var(--nv-accent); cursor: pointer;" onclick="inspectFromTable(${row.id})">${row.municipio}</td>
-                    <td><span class="badge-pill ${row.status}">${row.status === 'verde' ? 'Aprobado' : (row.status === 'amarillo' ? 'Condicionado' : 'No-Go')}</span></td>
+                    <td style="font-weight: 500; color: var(--nv-ink-hi);">${row.estado}</td>
+                    <td style="font-weight: 600; color: var(--nv-sand); cursor: pointer;" onclick="inspectFromTable(${row.id})">${row.municipio}</td>
+                    <td><span class="badge-pill ${row.status}">${row.status === 'verde' ? 'Viable' : (row.status === 'amarillo' ? 'Condicionado' : 'No-Go')}</span></td>
                     <td>${row.p1}</td>
                     <td>${row.p2}</td>
                     <td>${row.p3}</td>
                     <td style="font-family: monospace; font-size: 11px;">${row.lat ? row.lat.toFixed(4) : '-'}</td>
                     <td style="font-family: monospace; font-size: 11px;">${row.lng ? row.lng.toFixed(4) : '-'}</td>
-                    <td style="max-width: 280px; font-size: 11.5px;">${row.dictamen}</td>
-                    <td style="max-width: 200px; font-size: 11px; color: var(--nv-ink-muted);">${row.fuentes}</td>
+                    <td style="max-width: 280px; font-size: 11.5px; color: var(--nv-ink-muted);">${row.dictamen}</td>
+                    <td>
+                        <button onclick="inspectFromTable(${row.id})" class="btn-dock" style="font-size: 11px; padding: 3px 8px; border-color: var(--nv-line-strong);">Ver</button>
+                    </td>
                 </tr>
             `).join("");
         }
@@ -1546,7 +1617,6 @@
             }
         }
 
-        // Modal Controls
         function openTableModal() {
             document.getElementById("table-modal").style.display = "flex";
         }
@@ -1555,7 +1625,32 @@
             document.getElementById("table-modal").style.display = "none";
         }
 
-        // Export current dataset to CSV
+        function openCoverageModal() {
+            document.getElementById("coverage-modal").style.display = "flex";
+        }
+
+        function closeCoverageModal() {
+            document.getElementById("coverage-modal").style.display = "none";
+        }
+
+        function renderCoverageGrid() {
+            const counts = {};
+            rawDataset.forEach(d => {
+                counts[d.estado] = (counts[d.estado] || 0) + 1;
+            });
+
+            const grid = document.getElementById("cov-completed-grid");
+            if (!grid) return;
+
+            const sortedStates = Object.keys(counts).sort();
+            grid.innerHTML = sortedStates.map(st => `
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--nv-line-soft); border-radius: 10px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-size: 12px; font-weight: 500; color: var(--nv-ink-hi);">${st}</span>
+                    <span class="badge-pill verde" style="font-size: 10px;">${counts[st]}</span>
+                </div>
+            `).join("");
+        }
+
         function exportFilteredCSV() {
             let csv = "\uFEFFEstado,Municipio,Zona,Calle,Pilar 1 (Suelo/Extorsion),Pilar 2 (Vial/Carretera),Pilar 3 (Social/Certeza),Semaforo,Dictamen Estrategico,Latitud,Longitud,Fuentes\n";
             filteredDataset.forEach(r => {
@@ -1566,14 +1661,13 @@
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.setAttribute("download", `navana_safezone_${new Date().toISOString().slice(0,10)}.csv`);
+            link.setAttribute("download", `navana_inteligencia_territorial_${new Date().toISOString().slice(0,10)}.csv`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            showToast("📥 Archivo CSV descargado con éxito");
+            showToast("📥 Base de datos territorial descargada");
         }
 
-        // Show Toast helper
         function showToast(msg) {
             const toast = document.getElementById("toast-msg");
             toast.innerText = msg;
@@ -1581,198 +1675,6 @@
             setTimeout(() => {
                 toast.classList.remove("show");
             }, 3000);
-        }
-
-        // REGIONS OF MEXICO DATA FOR COVERAGE MODAL
-        const ALL_MEXICO_REGIONS = {
-            "1_NORTE_FRONTERA": {
-                name: "Región 1: Frontera Norte y Bajío Primario",
-                states: [
-                    { name: "Baja California", munis: 7 },
-                    { name: "Baja California Sur", munis: 5 },
-                    { name: "Sonora", munis: 72 },
-                    { name: "Chihuahua", munis: 67 },
-                    { name: "Coahuila", munis: 38 },
-                    { name: "Nuevo León", munis: 51 },
-                    { name: "Tamaulipas", munis: 43 },
-                    { name: "Querétaro", munis: 18 }
-                ]
-            },
-            "2_OCCIDENTE_PACIFICO_NORTE": {
-                name: "Región 2: Occidente y Pacífico Norte",
-                states: [
-                    { name: "Sinaloa", munis: 20 },
-                    { name: "Durango", munis: 39 },
-                    { name: "Zacatecas", munis: 58 },
-                    { name: "San Luis Potosí", munis: 59 },
-                    { name: "Nayarit", munis: 20 },
-                    { name: "Jalisco", munis: 125 },
-                    { name: "Colima", munis: 10 },
-                    { name: "Aguascalientes", munis: 11 }
-                ]
-            },
-            "3_CENTRO_BAJIO": {
-                name: "Región 3: Centro y Altiplano",
-                states: [
-                    { name: "Guanajuato", munis: 46 },
-                    { name: "Hidalgo", munis: 84 },
-                    { name: "Michoacán", munis: 113 },
-                    { name: "Estado de México", munis: 125 },
-                    { name: "CDMX", munis: 16 },
-                    { name: "Morelos", munis: 36 },
-                    { name: "Tlaxcala", munis: 60 },
-                    { name: "Puebla", munis: 217 }
-                ]
-            },
-            "4_SUR_SURESTE": {
-                name: "Región 4: Sur y Península de Yucatán",
-                states: [
-                    { name: "Guerrero", munis: 85 },
-                    { name: "Veracruz", munis: 212 },
-                    { name: "Oaxaca", munis: 570 },
-                    { name: "Tabasco", munis: 17 },
-                    { name: "Chiapas", munis: 124 },
-                    { name: "Campeche", munis: 13 },
-                    { name: "Yucatán", munis: 106 },
-                    { name: "Quintana Roo", munis: 11 }
-                ]
-            }
-        };
-
-        function openCoverageModal() {
-            renderCoverageModal();
-            document.getElementById("coverage-modal").style.display = "flex";
-        }
-
-        function closeCoverageModal() {
-            document.getElementById("coverage-modal").style.display = "none";
-        }
-
-        function copyCliCommand(cmd) {
-            navigator.clipboard.writeText(cmd).then(() => {
-                showToast(`📋 Comando copiado:\n${cmd}`);
-            });
-        }
-
-        function renderCoverageModal() {
-            // Count states present in rawDataset
-            const presentStates = {};
-            rawDataset.forEach(d => {
-                const s = (d.estado || '').trim();
-                presentStates[s] = (presentStates[s] || 0) + 1;
-            });
-
-            let totalAuditedMunis = rawDataset.length;
-            let totalMunisNational = 2478;
-            let completedStates = [];
-            let missingByRegion = {};
-
-            for (const [regKey, regData] of Object.entries(ALL_MEXICO_REGIONS)) {
-                missingByRegion[regKey] = {
-                    name: regData.name,
-                    states: []
-                };
-
-                regData.states.forEach(st => {
-                    const isAudited = Object.keys(presentStates).some(p => p.toLowerCase() === st.name.toLowerCase());
-                    if (isAudited) {
-                        completedStates.push({
-                            name: st.name,
-                            munis: st.munis,
-                            audited: presentStates[st.name] || st.munis
-                        });
-                    } else {
-                        missingByRegion[regKey].states.push(st);
-                    }
-                });
-            }
-
-            const completedStatesCount = completedStates.length;
-            const missingStatesCount = 32 - completedStatesCount;
-            const pctMunis = totalMunisNational > 0 ? ((totalAuditedMunis / totalMunisNational) * 100).toFixed(1) : 0;
-            const pctStates = ((completedStatesCount / 32) * 100).toFixed(1);
-
-            // Update Header & Progress Bars
-            const badge = document.getElementById("cov-modal-badge");
-            if (badge) badge.innerText = `${completedStatesCount} / 32 Estados (${pctStates}%)`;
-
-            const btnLabel = document.getElementById("coverage-btn-label");
-            if (btnLabel) btnLabel.innerText = `📊 Cobertura (${completedStatesCount}/32)`;
-
-            const progLabel = document.getElementById("cov-progress-label");
-            if (progLabel) progLabel.innerText = `${totalAuditedMunis} / ${totalMunisNational} Municipios (${pctMunis}%)`;
-
-            const progBar = document.getElementById("cov-progress-bar");
-            if (progBar) progBar.style.width = `${pctMunis}%`;
-
-            const compCount = document.getElementById("cov-completed-count");
-            if (compCount) compCount.innerText = `(${completedStatesCount} de 32)`;
-
-            const missCount = document.getElementById("cov-missing-count");
-            if (missCount) missCount.innerText = `(${missingStatesCount} estados pendientes • ${totalMunisNational - totalAuditedMunis} municipios)`;
-
-            // Render Completed Grid
-            const grid = document.getElementById("cov-completed-grid");
-            if (grid) {
-                grid.innerHTML = completedStates.map(st => `
-                    <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between;">
-                        <span style="font-size: 12.5px; font-weight: 600; color: var(--nv-ink-hi);">${st.name}</span>
-                        <span class="badge-pill verde" style="font-size: 10px;">${st.audited} munis</span>
-                    </div>
-                `).join("");
-            }
-
-            // Render Missing Regions
-            const missingCont = document.getElementById("cov-missing-container");
-            if (missingCont) {
-                let html = "";
-                for (const [rKey, rInfo] of Object.entries(missingByRegion)) {
-                    if (rInfo.states.length === 0) continue;
-                    
-                    const regionMunisTotal = rInfo.states.reduce((acc, s) => acc + s.munis, 0);
-                    const regionCmd = `cd "C:\\Users\\Patricio Martin\\Documents\\ANTIGRAVITY\\FF NAVANA"; node navana_national_mapper.js --region=${rKey}`;
-
-                    html += `
-                        <div style="background: var(--nv-bg-elevated); border: 1px solid var(--nv-line); border-radius: 10px; padding: 14px 18px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-                                <div style="display: flex; align-items: center; gap: 8px;">
-                                    <span style="font-size: 12.5px; font-weight: 700; color: var(--nv-accent); text-transform: uppercase; letter-spacing: 0.5px;">${rInfo.name}</span>
-                                    <span style="font-size: 11px; color: var(--nv-ink-muted);">(${rInfo.states.length} estados • ${regionMunisTotal} munis)</span>
-                                </div>
-                                <button onclick="copyCliCommand('${regionCmd}')" class="btn-action" style="font-size: 10.5px; padding: 4px 10px; height: 26px; border-color: rgba(197, 160, 89, 0.35);">
-                                    📋 Copiar Comando Región
-                                </button>
-                            </div>
-                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px;">
-                                ${rInfo.states.map(st => {
-                                    const stateCmd = `cd "C:\\Users\\Patricio Martin\\Documents\\ANTIGRAVITY\\FF NAVANA"; node navana_state_populator.js --estado "${st.name}"`;
-                                    return `
-                                        <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--nv-line-soft); border-radius: 6px; padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-                                            <div>
-                                                <div style="font-size: 12px; font-weight: 600; color: var(--nv-ink-hi);">${st.name}</div>
-                                                <div style="font-size: 10.5px; color: var(--nv-ink-muted);">${st.munis} municipios</div>
-                                            </div>
-                                            <button onclick="copyCliCommand('${stateCmd}')" style="background: transparent; border: 1px solid var(--nv-line); color: var(--nv-accent); padding: 3px 8px; border-radius: 4px; font-size: 10px; cursor: pointer; display: flex; align-items: center; gap: 4px;">
-                                                📋 Copiar
-                                            </button>
-                                        </div>
-                                    `;
-                                }).join("")}
-                            </div>
-                        </div>
-                    `;
-                }
-                if (!html) {
-                    html = `
-                        <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 26px; text-align: center;">
-                            <div style="font-size: 32px; margin-bottom: 8px;">🎉🇲🇽</div>
-                            <div style="font-size: 16px; font-weight: 700; color: #10b981; margin-bottom: 6px;">¡Cobertura Nacional Total (100%) Alcanzada!</div>
-                            <div style="font-size: 12.5px; color: var(--nv-ink-muted); max-width: 580px; margin: 0 auto; line-height: 1.5;">Los 32 estados de la República Mexicana y sus 2,476 municipios han sido completamente auditados, georreferenciados y sincronizados en vivo con Google Sheets.</div>
-                        </div>
-                    `;
-                }
-                missingCont.innerHTML = html;
-            }
         }
     </script>
 </body>
