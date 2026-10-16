@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NAVANA · Investor Data Room | Pre-Seed Round</title>
-    <meta name="description" content="Data Room Confidencial para Inversionistas Pre-Seed de NAVANA S.A.P.I. de C.V.">
+    <title>NAVANA · Investor Data Room | Repositorio Oficial</title>
+    <meta name="description" content="Repositorio confidencial de documentos y due diligence para inversionistas Pre-Seed de NAVANA S.A.P.I. de C.V.">
     <meta name="theme-color" content="#1A1410">
 
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="logo_gold.png">
 
     <!-- Fonts: Ranade + Space Grotesk -->
@@ -19,21 +18,18 @@
     <style>
         :root {
             --nv-bg: #1A1410;
-            --nv-bg-deep: #14100D;
             --nv-bg-elevated: #221D18;
-            --nv-bg-raised: #2A241E;
+            --nv-bg-hover: #29231D;
             --nv-line: rgba(220, 215, 201, 0.08);
-            --nv-line-strong: rgba(220, 215, 201, 0.16);
+            --nv-line-strong: rgba(220, 215, 201, 0.18);
             
             --nv-ink-hi: #F0EBE1;
             --nv-ink: #DCD7C9;
             --nv-ink-muted: #8E8170;
             
             --nv-accent: #84724D;
-            --nv-accent-hover: #B8AE9C;
-            --nv-terracotta: #8B2E1B;
-            --nv-olivo: #6B6826;
             --nv-sand: #A8956A;
+            --nv-cream: #DED9CB;
             
             --nv-font-display: 'Ranade', serif, -apple-system, sans-serif;
             --nv-font-body: 'Space Grotesk', -apple-system, sans-serif;
@@ -49,803 +45,471 @@
             background-color: var(--nv-bg);
             color: var(--nv-ink);
             font-family: var(--nv-font-body);
-            line-height: 1.6;
+            line-height: 1.5;
             -webkit-font-smoothing: antialiased;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
         }
 
-        /* Ambient Glow & Background Grain */
-        body::before {
-            content: '';
-            position: fixed;
-            top: -200px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 1000px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(132, 114, 77, 0.12) 0%, rgba(26, 20, 16, 0) 70%);
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        /* Top Bar */
-        .top-bar {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            background: rgba(26, 20, 16, 0.85);
-            border-bottom: 1px solid var(--nv-line);
-            padding: 16px 32px;
+        /* Top Header */
+        header {
+            padding: 24px 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid var(--nv-line);
         }
 
-        .brand-wrapper {
+        .brand-box {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 14px;
         }
 
         .brand-logo {
-            height: 28px;
+            height: 26px;
             width: auto;
         }
 
-        .data-room-badge {
+        .brand-title {
+            font-family: var(--nv-font-display);
+            font-size: 19px;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            color: var(--nv-ink-hi);
+        }
+
+        .tag-pill {
             font-size: 11px;
             font-weight: 600;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
             padding: 4px 10px;
             border-radius: 999px;
-            background: rgba(132, 114, 77, 0.15);
+            background: rgba(168, 149, 106, 0.12);
             color: var(--nv-sand);
-            border: 1px solid rgba(132, 114, 77, 0.3);
+            border: 1px solid rgba(168, 149, 106, 0.25);
             display: flex;
             align-items: center;
             gap: 6px;
         }
 
-        .pulse-dot {
+        .dot {
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background-color: #10B981;
-            box-shadow: 0 0 8px #10B981;
+            background: #10B981;
+            box-shadow: 0 0 6px #10B981;
         }
 
-        .user-tag {
+        .meta-access {
             font-size: 13px;
             color: var(--nv-ink-muted);
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
-        .user-tag strong {
+        .meta-access strong {
             color: var(--nv-ink-hi);
         }
 
-        /* Main Container */
+        /* Container */
         .container {
-            max-width: 1200px;
+            max-width: 960px;
             width: 100%;
             margin: 0 auto;
-            padding: 48px 24px 100px;
-            position: relative;
-            z-index: 1;
+            padding: 48px 24px 40px;
         }
 
-        /* Header Hero */
-        .hero {
-            margin-bottom: 40px;
+        /* Header Info */
+        .page-header {
+            margin-bottom: 36px;
         }
 
         .eyebrow {
-            font-size: 12px;
+            font-size: 11.5px;
             font-weight: 600;
             letter-spacing: 0.15em;
             text-transform: uppercase;
             color: var(--nv-sand);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .eyebrow::before {
-            content: '';
-            width: 24px;
-            height: 1px;
-            background-color: var(--nv-accent);
-        }
-
-        .hero h1 {
-            font-family: var(--nv-font-display);
-            font-size: clamp(2.2rem, 4.5vw, 3.8rem);
-            font-weight: 400;
-            line-height: 1.1;
-            color: var(--nv-ink-hi);
-            margin-bottom: 16px;
-            letter-spacing: -0.02em;
-        }
-
-        .hero h1 span {
-            background: linear-gradient(135deg, #F0EBE1 0%, #A8956A 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            font-size: 16px;
-            color: var(--nv-ink-muted);
-            max-width: 720px;
-        }
-
-        /* Ronda Highlight Card */
-        .round-card {
-            background: var(--nv-bg-elevated);
-            border: 1px solid var(--nv-line-strong);
-            border-radius: 16px;
-            padding: 32px;
-            margin-bottom: 48px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .round-grid {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr 1fr 1fr;
-            gap: 24px;
-            margin-bottom: 32px;
-        }
-
-        @media (max-width: 900px) {
-            .round-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .round-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .metric-block {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .metric-label {
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--nv-ink-muted);
-        }
-
-        .metric-val {
-            font-size: clamp(1.8rem, 2.5vw, 2.4rem);
-            font-weight: 600;
-            color: var(--nv-ink-hi);
-            line-height: 1.1;
-            font-feature-settings: "tnum";
-        }
-
-        .metric-sub {
-            font-size: 13px;
-            color: var(--nv-ink-muted);
-        }
-
-        /* Progress Bar */
-        .progress-container {
-            border-top: 1px solid var(--nv-line);
-            padding-top: 24px;
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
             margin-bottom: 10px;
         }
 
-        .progress-header span strong {
+        h1 {
+            font-family: var(--nv-font-display);
+            font-size: clamp(2rem, 3.8vw, 3rem);
+            font-weight: 400;
             color: var(--nv-ink-hi);
-        }
-
-        .progress-bar-bg {
-            height: 10px;
-            background: rgba(255,255,255,0.06);
-            border-radius: 999px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            width: 32.6%; /* $4.0M / $12.26M */
-            background: linear-gradient(90deg, #A8956A 0%, #DCD7C9 100%);
-            border-radius: 999px;
-            position: relative;
-        }
-
-        .progress-milestones {
-            display: flex;
-            justify-content: space-between;
-            font-size: 11px;
-            color: var(--nv-ink-muted);
-            margin-top: 8px;
-        }
-
-        .milestone-active {
-            color: var(--nv-sand);
-            font-weight: 600;
-        }
-
-        /* Tabs Navigation */
-        .tabs-nav {
-            display: flex;
-            gap: 8px;
-            border-bottom: 1px solid var(--nv-line);
-            margin-bottom: 36px;
-            overflow-x: auto;
-            padding-bottom: 2px;
-        }
-
-        .tab-btn {
-            background: transparent;
-            border: none;
-            color: var(--nv-ink-muted);
-            font-family: var(--nv-font-body);
-            font-size: 14px;
-            font-weight: 500;
-            padding: 12px 20px;
-            border-radius: 8px 8px 0 0;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-            position: relative;
-        }
-
-        .tab-btn:hover {
-            color: var(--nv-ink);
-            background: rgba(255,255,255,0.03);
-        }
-
-        .tab-btn.active {
-            color: var(--nv-ink-hi);
-            font-weight: 600;
-        }
-
-        .tab-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background-color: var(--nv-accent);
-        }
-
-        /* Tab Content Panels */
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Content Cards & Grids */
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-        }
-
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-        }
-
-        @media (max-width: 800px) {
-            .grid-2, .grid-3 {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .card {
-            background: var(--nv-bg-elevated);
-            border: 1px solid var(--nv-line);
-            border-radius: 12px;
-            padding: 28px;
-            transition: transform 0.2s, border-color 0.2s;
-        }
-
-        .card:hover {
-            border-color: var(--nv-line-strong);
-        }
-
-        .card-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--nv-ink-hi);
+            line-height: 1.15;
             margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
         }
 
-        .card p {
-            font-size: 14px;
+        .subtitle {
+            font-size: 15px;
+            color: var(--nv-ink-muted);
+            max-width: 680px;
+        }
+
+        /* Round Quick Bar */
+        .terms-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px 36px;
+            padding: 16px 20px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--nv-line);
+            border-radius: 10px;
+            margin-bottom: 40px;
+        }
+
+        .term-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .term-k {
+            font-size: 10.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--nv-ink-muted);
+            font-weight: 600;
+        }
+
+        .term-v {
+            font-size: 15px;
+            color: var(--nv-ink-hi);
+            font-weight: 600;
+        }
+
+        /* Repository Section */
+        .repo-title {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
             color: var(--nv-ink-muted);
             margin-bottom: 16px;
         }
 
-        /* Action Buttons */
-        .btn {
+        .repo-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .doc-card {
+            background: var(--nv-bg-elevated);
+            border: 1px solid var(--nv-line);
+            border-radius: 12px;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .doc-card:hover {
+            border-color: var(--nv-line-strong);
+            background: var(--nv-bg-hover);
+            transform: translateY(-1px);
+        }
+
+        .doc-info {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .doc-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: rgba(168, 149, 106, 0.1);
+            border: 1px solid rgba(168, 149, 106, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .doc-meta h3 {
+            font-size: 15.5px;
+            font-weight: 600;
+            color: var(--nv-ink-hi);
+            margin-bottom: 3px;
+        }
+
+        .doc-meta p {
+            font-size: 13px;
+            color: var(--nv-ink-muted);
+        }
+
+        .doc-tags {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-top: 4px;
+        }
+
+        .format-badge {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.06);
+            color: var(--nv-sand);
+            text-transform: uppercase;
+        }
+
+        .doc-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .btn-action {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 12px 24px;
-            border-radius: 999px;
-            font-family: var(--nv-font-body);
-            font-size: 14px;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
             font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
             cursor: pointer;
+            border: none;
+            font-family: var(--nv-font-body);
+        }
+
+        .btn-view {
+            background: rgba(255,255,255,0.05);
+            color: var(--nv-ink);
+            border: 1px solid var(--nv-line-strong);
+        }
+
+        .btn-view:hover {
+            background: rgba(255,255,255,0.1);
+            color: var(--nv-ink-hi);
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, #DCD7C9 0%, #B8AE9C 100%);
+            color: var(--nv-bg);
+        }
+
+        .btn-download:hover {
+            opacity: 0.95;
+            box-shadow: 0 0 12px rgba(184, 174, 156, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--nv-line);
+            padding: 28px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--nv-ink-muted);
+            margin-top: 40px;
+        }
+
+        .footer-cta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-cta {
+            background: transparent;
+            color: var(--nv-sand);
+            border: 1px solid rgba(168, 149, 106, 0.3);
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 12.5px;
+            font-weight: 600;
             text-decoration: none;
             transition: all 0.2s;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #DCD7C9 0%, #B8AE9C 100%);
-            color: var(--nv-bg);
-            border: none;
+        .btn-cta:hover {
+            background: rgba(168, 149, 106, 0.1);
+            border-color: var(--nv-sand);
         }
 
-        .btn-primary:hover {
-            box-shadow: 0 0 20px rgba(184, 174, 156, 0.4);
-            transform: translateY(-1px);
-        }
-
-        .btn-secondary {
-            background: rgba(255,255,255,0.04);
-            color: var(--nv-ink);
-            border: 1px solid var(--nv-line-strong);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255,255,255,0.08);
-            border-color: var(--nv-ink);
-        }
-
-        /* Tables inside cards */
-        .spec-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13.5px;
-            margin-top: 12px;
-        }
-
-        .spec-table td {
-            padding: 12px 14px;
-            border-bottom: 1px solid var(--nv-line);
-        }
-
-        .spec-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .spec-table td:first-child {
-            color: var(--nv-ink-muted);
-            font-weight: 500;
-            width: 45%;
-        }
-
-        .spec-table td:last-child {
-            color: var(--nv-ink-hi);
-            font-weight: 600;
-            text-align: right;
-        }
-
-        /* Floating CTA Dock */
-        .floating-dock {
-            position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(30, 26, 22, 0.9);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--nv-line-strong);
-            padding: 12px 24px;
-            border-radius: 999px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            box-shadow: 0 16px 36px rgba(0,0,0,0.5);
-            z-index: 99;
-        }
-
-        .dock-text {
-            font-size: 13.5px;
-            color: var(--nv-ink-muted);
-        }
-
-        .dock-text strong {
-            color: var(--nv-ink-hi);
-        }
-
-        /* Modal preview */
-        .modal-bg {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(8px);
-            z-index: 200;
-            justify-content: center;
-            align-items: center;
-            padding: 24px;
-        }
-
-        .modal-card {
-            background: var(--nv-bg-elevated);
-            border: 1px solid var(--nv-line-strong);
-            border-radius: 16px;
-            max-width: 650px;
-            width: 100%;
-            max-height: 85vh;
-            overflow-y: auto;
-            padding: 32px;
-            position: relative;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: transparent;
-            border: none;
-            color: var(--nv-ink-muted);
-            font-size: 24px;
-            cursor: pointer;
+        @media (max-width: 680px) {
+            header, footer {
+                padding: 16px 20px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .doc-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .doc-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+            .terms-bar {
+                flex-direction: column;
+                gap: 16px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- Top Navigation Bar -->
-    <header class="top-bar">
-        <div class="brand-wrapper">
+    <!-- Header -->
+    <header>
+        <div class="brand-box">
             <img src="logo_gold.png" alt="NAVANA" class="brand-logo" onerror="this.style.display='none'">
-            <span style="font-family: var(--nv-font-display); font-size: 20px; font-weight: 500; letter-spacing: 0.05em; color: var(--nv-ink-hi);">NAVANA</span>
-            <div class="data-room-badge">
-                <span class="pulse-dot"></span>
+            <span class="brand-title">NAVANA</span>
+            <div class="tag-pill">
+                <span class="dot"></span>
                 Investor Data Room
             </div>
         </div>
-
-        <div class="user-tag">
-            <span>Acceso Verificado:</span>
-            <strong>Fondo / Inversionista Calificado</strong>
+        <div class="meta-access">
+            Acceso: <strong>Fondo / Inversionista Calificado</strong>
         </div>
     </header>
 
-    <!-- Main Container -->
+    <!-- Main -->
     <main class="container">
         
-        <!-- Hero Section -->
-        <section class="hero">
-            <div class="eyebrow">Ronda Pre-Seed · Octubre 2026</div>
-            <h1>Capital para el clúster piloto y <span>300 cabañas a 5 años</span></h1>
-            <p>Acceso centralizado a los documentos de evaluación, proyecciones financieras, especificaciones arquitectónicas y estructura legal del instrumento SAFE de NAVANA S.A.P.I. de C.V.</p>
-        </section>
+        <div class="page-header">
+            <div class="eyebrow">Ronda Pre-Seed · Due Diligence & Archivos Oficiales</div>
+            <h1>Repositorio de Inversión NAVANA</h1>
+            <p class="subtitle">Documentación oficial, corrida financiera auditada, ficha técnica de activos y contrato SAFE para la evaluación de la ronda semilla de Navana S.A.P.I. de C.V.</p>
+        </div>
 
-        <!-- Round Overview Card -->
-        <div class="round-card">
-            <div class="round-grid">
-                <div class="metric-block">
-                    <span class="metric-label">Monto de la Ronda</span>
-                    <span class="metric-val">$12.26 M</span>
-                    <span class="metric-sub">MXN · US$700,571 USD</span>
-                </div>
-                <div class="metric-block">
-                    <span class="metric-label">Valuation Cap Post-Money</span>
-                    <span class="metric-val">US$3.5 M</span>
-                    <span class="metric-sub">$61,250,000 MXN</span>
-                </div>
-                <div class="metric-block">
-                    <span class="metric-label">Equity Ofrecido</span>
-                    <span class="metric-val" style="color: var(--nv-sand);">20%</span>
-                    <span class="metric-sub">Fully Diluted (post-ESOP 5%)</span>
-                </div>
-                <div class="metric-block">
-                    <span class="metric-label">Ticket Mínimo</span>
-                    <span class="metric-val">$1.0 M</span>
-                    <span class="metric-sub">MXN en adelante (~1.6% por ticket)</span>
-                </div>
+        <!-- Términos Rápidos en 1 línea -->
+        <div class="terms-bar">
+            <div class="term-item">
+                <span class="term-k">Monto Ronda</span>
+                <span class="term-v">$12,260,000 MXN</span>
             </div>
-
-            <!-- Progress Bar with Escrow Milestone -->
-            <div class="progress-container">
-                <div class="progress-header">
-                    <span>Estado del Fondo: <strong>$4,000,000 MXN comprometidos (32.6%)</strong></span>
-                    <span style="color: var(--nv-sand); font-weight: 600;">Meta Escrow: $4.0 MDP alcanzada</span>
-                </div>
-                <div class="progress-bar-bg">
-                    <div class="progress-bar-fill"></div>
-                </div>
-                <div class="progress-milestones">
-                    <span>$0 MDP (Apertura)</span>
-                    <span class="milestone-active">▲ $4.0 MDP (Gatillo Arranque 4 Cabañas)</span>
-                    <span>$12.26 MDP (Cierre Completo)</span>
-                </div>
+            <div class="term-item">
+                <span class="term-k">Valuation Cap</span>
+                <span class="term-v">US$3.5 M</span>
+            </div>
+            <div class="term-item">
+                <span class="term-k">Participación</span>
+                <span class="term-v">20.00% al Cap</span>
+            </div>
+            <div class="term-item">
+                <span class="term-k">Ticket Mínimo</span>
+                <span class="term-v">Desde $1.0 M MXN</span>
+            </div>
+            <div class="term-item">
+                <span class="term-k">Cierre Mínimo (Escrow)</span>
+                <span class="term-v" style="color: var(--nv-sand);">$4.0 MDP (Gatillo 4 Cabañas)</span>
             </div>
         </div>
 
-        <!-- Tabs Navigation -->
-        <nav class="tabs-nav">
-            <button class="tab-btn active" onclick="openTab('tab-onepager', this)">01. Resumen Ejecutivo (One-Pager)</button>
-            <button class="tab-btn" onclick="openTab('tab-financial', this)">02. Modelo Financiero (5 Años)</button>
-            <button class="tab-btn" onclick="openTab('tab-architecture', this)">03. Ubicación & Cabañas</button>
-            <button class="tab-btn" onclick="openTab('tab-legal', this)">04. Legal & Instrumento SAFE</button>
-        </nav>
+        <!-- Repositorio de Documentos -->
+        <div class="repo-title">Documentos Oficiales Disponibles (4)</div>
 
-        <!-- TAB 1: ONE PAGER -->
-        <div id="tab-onepager" class="tab-content active">
-            <div class="grid-2">
-                <div class="card">
-                    <div class="card-title">
-                        <span>Tesis de Inversión NAVANA</span>
-                        <span style="font-size: 11px; padding: 3px 8px; border-radius: 4px; background: rgba(168,149,106,0.15); color: var(--nv-sand);">Asset-Light</span>
-                    </div>
-                    <p>La hotelería tradicional fracasa al congelar el 70% del capital comprando tierra. NAVANA se asocia con dueños de terrenos privilegiados mediante un <strong>Revenue Share del 10%</strong>, convirtiendo la tierra en costo 100% variable.</p>
-                    <p>El <strong>87.4% de los fondos ($10.71 MDP)</strong> queda respaldado en infraestructura física modular tangible: 12 cabañas propias de acero aisladas y equipadas que generan flujo operativo desde sus primeros 90 días.</p>
-                    <div style="margin-top: 24px;">
-                        <a href="Plan_Ejecucion_Levantamiento_NAVANA.docx" class="btn btn-secondary" download>
-                            📄 Descargar Plan de Levantamiento (.docx)
-                        </a>
+        <div class="repo-list">
+            
+            <!-- DOC 1: ONE PAGER -->
+            <div class="doc-card">
+                <div class="doc-info">
+                    <div class="doc-icon">📄</div>
+                    <div class="doc-meta">
+                        <h3>01. Executive Summary & One-Pager</h3>
+                        <p>Resumen de 2 páginas con la tesis de inversión, estructura de la ronda y uso de fondos (87.4% en activos).</p>
+                        <div class="doc-tags">
+                            <span class="format-badge">PDF</span>
+                            <span style="font-size: 11.5px; color: var(--nv-ink-muted);">Actualizado Octubre 2026 · Versión Inversionistas</span>
+                        </div>
                     </div>
                 </div>
-
-                <div class="card">
-                    <div class="card-title">Distribución y Uso de Fondos</div>
-                    <table class="spec-table">
-                        <tr>
-                            <td>CAPEX 12 Cabañas Piloto</td>
-                            <td>$10,710,000 MXN (87.4%)</td>
-                        </tr>
-                        <tr>
-                            <td>Runway Operadora (12 meses)</td>
-                            <td>$1,550,000 MXN (12.6%)</td>
-                        </tr>
-                        <tr>
-                            <td>Costo Llave en Mano por Cabaña</td>
-                            <td>$892,500 MXN</td>
-                        </tr>
-                        <tr>
-                            <td>Tiempo de Fabricación y Despliegue</td>
-                            <td>90 días</td>
-                        </tr>
-                        <tr>
-                            <td>Política de Dividendos</td>
-                            <td>100% Reinversión para escala</td>
-                        </tr>
-                        <tr>
-                            <td>Evento de Retorno</td>
-                            <td>Exit Año 5 a 10x EBITDA</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 2: FINANCIAL MODEL -->
-        <div id="tab-financial" class="tab-content">
-            <div class="grid-3" style="margin-bottom: 24px;">
-                <div class="card">
-                    <span class="metric-label">Unit Economics Cabaña</span>
-                    <div class="metric-val" style="margin: 8px 0; font-size: 1.8rem;">$3,000 MXN</div>
-                    <p>Tarifa Promedio Noche (ADR) con ocupación proyectada conservadora del 55%.</p>
-                </div>
-                <div class="card">
-                    <span class="metric-label">EBITDA Anual / Cabaña</span>
-                    <div class="metric-val" style="margin: 8px 0; font-size: 1.8rem;">~$425k MXN</div>
-                    <p>Payback por cabaña de 2.1 años, con margen operativo neto de hospitalidad del 62%.</p>
-                </div>
-                <div class="card">
-                    <span class="metric-label">Exit Proyectado (Año 5)</span>
-                    <div class="metric-val" style="margin: 8px 0; font-size: 1.8rem; color: var(--nv-sand);">22x Múltiplo</div>
-                    <p>Venta institucional de la red a 300 cabañas a múltiplo estándar de 10x EBITDA.</p>
+                <div class="doc-actions">
+                    <a href="https://navana-invest.vercel.app" target="_blank" class="btn-action btn-view">Ver Deck Digital ↗</a>
+                    <a href="Plan_Ejecucion_Levantamiento_NAVANA.docx" class="btn-action btn-download" download>Descargar One-Pager</a>
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-title">
-                    <span>Modelo Financiero Maestro a 5 Años</span>
-                    <a href="300 NEW- Navana_Modelo_5_Aos.xlsx" class="btn btn-primary" download>
-                        📊 Descargar Modelo Completo (.xlsx)
-                    </a>
-                </div>
-                <p>Archivo maestro auditado con proyecciones mensuales, estados de resultados consolidados, corrida de flujos y análisis de sensibilidad de ocupación y ADR.</p>
-            </div>
-        </div>
-
-        <!-- TAB 3: ARCHITECTURE & LOCATION -->
-        <div id="tab-architecture" class="tab-content">
-            <div class="grid-2">
-                <div class="card">
-                    <div class="card-title">Clúster Piloto: San Miguel de Allende</div>
-                    <p>Seleccionado estratégicamente por su alta afluencia de turismo de alto poder adquisitivo (nacional y extranjero), proximidad con CDMX y Querétaro, y estabilidad tarifaria todo el año.</p>
-                    <table class="spec-table">
-                        <tr>
-                            <td>Destino</td>
-                            <td>San Miguel de Allende, GTO</td>
-                        </tr>
-                        <tr>
-                            <td>Modelo de Arrendamiento</td>
-                            <td>10% Revenue Share</td>
-                        </tr>
-                        <tr>
-                            <td>Plazo Contractual</td>
-                            <td>10 Años ratificado ante Notario</td>
-                        </tr>
-                        <tr>
-                            <td>Exclusividad Actual</td>
-                            <td>120 Días bajo LOI Condicionada</td>
-                        </tr>
-                    </table>
-                </div>
-
-                <div class="card">
-                    <div class="card-title">Especificación de Cabañas Modulares</div>
-                    <p>Estructuras de acero semi-permanentes con aislamiento térmico y acústico, interiores en madera de ingeniería y ventanales panorámicos de alta eficiencia.</p>
-                    <table class="spec-table">
-                        <tr>
-                            <td>Área Construida</td>
-                            <td>35 m² habitables + terraza</td>
-                        </tr>
-                        <tr>
-                            <td>Cimentación</td>
-                            <td>Bajo impacto (desmontable en 15 días)</td>
-                        </tr>
-                        <tr>
-                            <td>Equipamiento</td>
-                            <td>100% amueblada, llave en mano</td>
-                        </tr>
-                        <tr>
-                            <td>Garantía de Movilidad</td>
-                            <td>Reubicable a otro predio si fuera necesario</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 4: LEGAL & SAFE -->
-        <div id="tab-legal" class="tab-content">
-            <div class="grid-2">
-                <div class="card">
-                    <div class="card-title">Estructura del SAFE Post-Money</div>
-                    <p>Acuerdo privado de suscripción anticipada de acciones diseñado para proteger los fondos del inversionista y garantizar agilidad en la obra:</p>
-                    <table class="spec-table">
-                        <tr>
-                            <td>Emisora</td>
-                            <td>Navana S.A.P.I. de C.V.</td>
-                        </tr>
-                        <tr>
-                            <td>Valuation Cap</td>
-                            <td>US$3,500,000 ($61.25 MDP)</td>
-                        </tr>
-                        <tr>
-                            <td>Conversión</td>
-                            <td>Obligatoria a 18 meses o al terminar el piloto</td>
-                        </tr>
-                        <tr>
-                            <td>Condición de Escrow</td>
-                            <td>Mínimo $4,000,000 MXN para liberar fondos</td>
-                        </tr>
-                        <tr>
-                            <td>Cesión / Venta Secundaria</td>
-                            <td>Sujeta a visto bueno de los fundadores (ROFR)</td>
-                        </tr>
-                    </table>
-                </div>
-
-                <div class="card">
-                    <div class="card-title">Documentos Legales Disponibles</div>
-                    <p>Puedes consultar o descargar los borradores oficiales para revisión con tu equipo legal:</p>
-                    <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
-                        <button class="btn btn-secondary" onclick="openModal('modal-safe')">
-                            📜 Ver Términos del Contrato SAFE
-                        </button>
-                        <button class="btn btn-secondary" onclick="openModal('modal-nda')">
-                            🔒 Ver Convenio de Confidencialidad (NDA)
-                        </button>
+            <!-- DOC 2: MODELO FINANCIERO -->
+            <div class="doc-card">
+                <div class="doc-info">
+                    <div class="doc-icon">📊</div>
+                    <div class="doc-meta">
+                        <h3>02. Modelo Financiero Maestro a 5 Años</h3>
+                        <p>Corrida financiera oficial: Unit Economics por cabaña ($3k ADR / 55% ocupación), estados de resultados y proyección a 300 cabañas.</p>
+                        <div class="doc-tags">
+                            <span class="format-badge">EXCEL .XLSX</span>
+                            <span style="font-size: 11.5px; color: var(--nv-ink-muted);">Auditado · Payback 2.1 años · Exit Año 5 a 10x EBITDA</span>
+                        </div>
                     </div>
                 </div>
+                <div class="doc-actions">
+                    <a href="300 NEW- Navana_Modelo_5_Aos.xlsx" class="btn-action btn-download" download>Descargar Excel (.xlsx)</a>
+                </div>
             </div>
+
+            <!-- DOC 3: FICHA ARQUITECTURA -->
+            <div class="doc-card">
+                <div class="doc-info">
+                    <div class="doc-icon">🏡</div>
+                    <div class="doc-meta">
+                        <h3>03. Ficha Técnica de Arquitectura & Piloto San Miguel</h3>
+                        <p>Especificaciones de la cabaña modular de 35 m², renders de diseño, materiales de bajo impacto y contrato del predio a 10 años.</p>
+                        <div class="doc-tags">
+                            <span class="format-badge">DOSSIER</span>
+                            <span style="font-size: 11.5px; color: var(--nv-ink-muted);">12 Cabañas · Desmontables en 15 días · San Miguel de Allende</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="doc-actions">
+                    <a href="https://navana-invest.vercel.app" target="_blank" class="btn-action btn-view">Ver Renders 3D ↗</a>
+                </div>
+            </div>
+
+            <!-- DOC 4: LEGAL & SAFE -->
+            <div class="doc-card">
+                <div class="doc-info">
+                    <div class="doc-icon">⚖️</div>
+                    <div class="doc-meta">
+                        <h3>04. Estructura Legal SAFE Post-Money & NDA</h3>
+                        <p>Plantilla de contrato SAFE con Cap de US$3.5M, conversión obligatoria a 18 meses en acciones Serie Semilla y convenio de confidencialidad.</p>
+                        <div class="doc-tags">
+                            <span class="format-badge">CONTRATO</span>
+                            <span style="font-size: 11.5px; color: var(--nv-ink-muted);">Navana S.A.P.I. de C.V. · Estándar Y Combinator adaptado a MX</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="doc-actions">
+                    <a href="Especificaciones_Slide_05_NAVANA.docx" class="btn-action btn-download" download>Descargar Términos SAFE</a>
+                </div>
+            </div>
+
         </div>
 
     </main>
 
-    <!-- Floating Dock -->
-    <div class="floating-dock">
-        <div class="dock-text">
-            <span>Ronda abierta: </span>
-            <strong>Tickets desde $1,000,000 MXN</strong>
+    <!-- Footer -->
+    <footer>
+        <div>
+            <span>NAVANA S.A.P.I. de C.V. · Información estrictamente confidencial.</span>
         </div>
-        <a href="https://wa.me/5215500000000?text=Hola%20Patricio,%20estoy%20revisando%20el%20Data%20Room%20de%20Navana%20y%20me%20gustaria%20platicar%20sobre%20un%20ticket." target="_blank" class="btn btn-primary">
-            Confirmar Interés / Ticket
-        </a>
-    </div>
-
-    <!-- Modal SAFE Terms -->
-    <div id="modal-safe" class="modal-bg" onclick="closeModalOnBg(event, 'modal-safe')">
-        <div class="modal-card">
-            <button class="modal-close" onclick="closeModal('modal-safe')">&times;</button>
-            <h3 style="color: var(--nv-ink-hi); margin-bottom: 16px; font-family: var(--nv-font-display); font-size: 24px;">Resumen de Términos SAFE Post-Money</h3>
-            <div style="color: var(--nv-ink-muted); font-size: 14px; display: flex; flex-direction: column; gap: 14px; line-height: 1.7;">
-                <p><strong style="color: var(--nv-ink-hi);">1. Naturaleza del Contrato:</strong> Es un instrumento privado de inversión anticipada. Facilita transferir los fondos de manera inmediata para fabricación de cabañas a costo notarial $0 en la apertura.</p>
-                <p><strong style="color: var(--nv-ink-hi);">2. Valuation Cap (US$3.5M):</strong> Fija el techo de valuación máximo. Cada $1,000,000 MXN asegura aproximadamente ~1.63% de participación en Navana S.A.P.I. de C.V.</p>
-                <p><strong style="color: var(--nv-ink-hi);">3. Cierre Mínimo / Escrow ($4 MDP):</strong> Los fondos recaudados se etiquetan para ejecución física de obra al alcanzar $4 MDP (garantizando 4 cabañas). Si no se alcanza dicho umbral, los fondos se reintegran.</p>
-                <p><strong style="color: var(--nv-ink-hi);">4. Conversión Mandatoria:</strong> Convierte de forma obligatoria en acciones Serie Semilla a los 18 meses o al concluir la instalación del clúster piloto en San Miguel de Allende.</p>
-            </div>
+        <div class="footer-cta">
+            <span>¿Dudas sobre el due diligence?</span>
+            <a href="https://wa.me/5215500000000?text=Hola%20Patricio,%20estoy%20revisando%20los%20documentos%20del%20Data%20Room%20de%20Navana." target="_blank" class="btn-cta">
+                Contactar a Fundadores ↗
+            </a>
         </div>
-    </div>
+    </footer>
 
-    <!-- Modal NDA -->
-    <div id="modal-nda" class="modal-bg" onclick="closeModalOnBg(event, 'modal-nda')">
-        <div class="modal-card">
-            <button class="modal-close" onclick="closeModal('modal-nda')">&times;</button>
-            <h3 style="color: var(--nv-ink-hi); margin-bottom: 16px; font-family: var(--nv-font-display); font-size: 24px;">Convenio de Confidencialidad y No Competencia (NDA)</h3>
-            <div style="color: var(--nv-ink-muted); font-size: 14px; display: flex; flex-direction: column; gap: 14px; line-height: 1.7;">
-                <p><strong style="color: var(--nv-ink-hi);">Cláusula de Protección:</strong> Toda la información comercial, modelos financieros, proyecciones de retorno y secretos de negocio contenidos en este Data Room tienen carácter estrictamente confidencial.</p>
-                <p><strong style="color: var(--nv-ink-hi);">No Competencia y No Copia:</strong> El inversionista y sus afiliados reconocen que el modelo modular sobre terrenos de terceros pertenece a Navana y se comprometen a no replicar el modelo en los destinos piloto durante un plazo de 24 meses.</p>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function openTab(tabId, btn) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            
-            document.getElementById(tabId).classList.add('active');
-            btn.classList.add('active');
-        }
-
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'flex';
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-
-        function closeModalOnBg(e, modalId) {
-            if (e.target.id === modalId) {
-                closeModal(modalId);
-            }
-        }
-    </script>
 </body>
 </html>
